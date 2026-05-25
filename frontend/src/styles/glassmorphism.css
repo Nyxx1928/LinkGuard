@@ -1,0 +1,593 @@
+/**
+ * Glassmorphism Effects and Custom Animations
+ * 
+ * This file defines glassmorphism card styles, custom animations,
+ * and backdrop-filter support with fallbacks for the DeFi UI redesign.
+ */
+
+/* ============================================
+   GLASSMORPHISM CARD CLASSES
+   ============================================ */
+
+/**
+ * Base glassmorphism card
+ * Default frosted glass effect for standard content containers
+ */
+.glass-card {
+  background: rgba(17, 24, 39, 0.7); /* neutral-900 with 70% opacity */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  border-radius: 0.75rem; /* 12px */
+  transition: all 200ms ease-in-out;
+}
+
+.glass-card:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+}
+
+/**
+ * Elevated glassmorphism
+ * More prominent glass effect for emphasized content
+ */
+.glass-elevated {
+  background: rgba(31, 41, 55, 0.8); /* neutral-800 with 80% opacity */
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5),
+              0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+  border-radius: 0.75rem;
+  transition: all 200ms ease-in-out;
+}
+
+.glass-elevated:hover {
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.6),
+              0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+  transform: translateY(-2px);
+}
+
+/**
+ * Subtle glassmorphism
+ * Minimal glass effect for background elements
+ */
+.glass-subtle {
+  background: rgba(17, 24, 39, 0.5); /* neutral-900 with 50% opacity */
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.25);
+  border-radius: 0.75rem;
+  transition: all 200ms ease-in-out;
+}
+
+.glass-subtle:hover {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/**
+ * Glassmorphism with brand glow
+ * Glass effect with brand color accent for interactive elements
+ */
+.glass-brand {
+  background: rgba(17, 24, 39, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(56, 189, 248, 0.2); /* brand-400 */
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37),
+              0 0 20px rgba(14, 165, 233, 0.15);
+  border-radius: 0.75rem;
+  transition: all 200ms ease-in-out;
+}
+
+.glass-brand:hover {
+  border-color: rgba(56, 189, 248, 0.4);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5),
+              0 0 30px rgba(14, 165, 233, 0.3);
+}
+
+/**
+ * Glassmorphism navigation bar
+ * Optimized for sticky headers with enhanced blur
+ */
+.glass-nav {
+  background: rgba(3, 7, 18, 0.8); /* neutral-950 with 80% opacity */
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.3);
+}
+
+/* ============================================
+   BACKDROP-FILTER FALLBACKS
+   ============================================ */
+
+/**
+ * Fallback for browsers without backdrop-filter support
+ * Provides solid background as graceful degradation
+ */
+@supports not (backdrop-filter: blur(12px)) {
+  .glass-card,
+  .glass-brand {
+    background: rgba(17, 24, 39, 0.95);
+  }
+
+  .glass-elevated {
+    background: rgba(31, 41, 55, 0.95);
+  }
+
+  .glass-subtle {
+    background: rgba(17, 24, 39, 0.85);
+  }
+
+  .glass-nav {
+    background: rgba(3, 7, 18, 0.98);
+  }
+}
+
+/* ============================================
+   CUSTOM ANIMATIONS
+   ============================================ */
+
+/**
+ * Shimmer animation for skeleton loading states
+ * Creates a subtle shine effect that moves across the element
+ */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.shimmer {
+  animation: shimmer 2s infinite linear;
+  background: linear-gradient(
+    90deg,
+    rgba(31, 41, 55, 0.5) 0%,
+    rgba(55, 65, 81, 0.5) 50%,
+    rgba(31, 41, 55, 0.5) 100%
+  );
+  background-size: 1000px 100%;
+}
+
+/**
+ * Pulse animation for loading indicators
+ * Smooth opacity pulsing effect
+ */
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.pulse-glow {
+  animation: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/**
+ * Glow effect animation
+ * Pulsing glow for emphasis and attention
+ */
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(14, 165, 233, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(14, 165, 233, 0.6);
+  }
+}
+
+.glow-brand {
+  animation: glow 2s ease-in-out infinite;
+}
+
+/**
+ * Fade in animation
+ * Smooth entrance effect for content
+ */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fade-in {
+  animation: fadeIn 300ms ease-in-out;
+}
+
+/**
+ * Slide in from bottom animation
+ * Entrance effect with upward motion
+ */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-in-up {
+  animation: slideInUp 400ms ease-out;
+}
+
+/**
+ * Slide in from right animation
+ * Entrance effect with leftward motion (for drawers)
+ */
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.slide-in-right {
+  animation: slideInRight 300ms ease-out;
+}
+
+/**
+ * Scale in animation
+ * Entrance effect with zoom
+ */
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.scale-in {
+  animation: scaleIn 200ms ease-out;
+}
+
+/**
+ * Spin animation for loading spinners
+ * Continuous rotation
+ */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+/**
+ * Ping animation for notification indicators
+ * Expanding circle effect
+ */
+@keyframes ping {
+  75%, 100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+.ping {
+  animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+/**
+ * Border glow animation
+ * Animated border highlight effect
+ */
+@keyframes borderGlow {
+  0%, 100% {
+    border-color: rgba(56, 189, 248, 0.2);
+  }
+  50% {
+    border-color: rgba(56, 189, 248, 0.6);
+  }
+}
+
+.border-glow {
+  animation: borderGlow 2s ease-in-out infinite;
+}
+
+/* ============================================
+   REDUCED MOTION SUPPORT
+   ============================================ */
+
+/**
+ * Respect user's motion preferences
+ * Disable animations for users who prefer reduced motion
+ */
+@media (prefers-reduced-motion: reduce) {
+  .shimmer,
+  .pulse-glow,
+  .glow-brand,
+  .fade-in,
+  .slide-in-up,
+  .slide-in-right,
+  .scale-in,
+  .spin,
+  .ping,
+  .border-glow {
+    animation: none;
+  }
+
+  .glass-card,
+  .glass-elevated,
+  .glass-subtle,
+  .glass-brand,
+  .glass-nav {
+    transition: none;
+  }
+}
+
+/* ============================================
+   UTILITY CLASSES FOR ANIMATIONS
+   ============================================ */
+
+/**
+ * Animation delay utilities
+ * Stagger animations for sequential elements
+ */
+.animation-delay-100 {
+  animation-delay: 100ms;
+}
+
+.animation-delay-200 {
+  animation-delay: 200ms;
+}
+
+.animation-delay-300 {
+  animation-delay: 300ms;
+}
+
+.animation-delay-400 {
+  animation-delay: 400ms;
+}
+
+.animation-delay-500 {
+  animation-delay: 500ms;
+}
+
+/**
+ * Hover transform utilities
+ * Subtle interactive feedback
+ */
+.hover-lift {
+  transition: transform 200ms ease-in-out;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+}
+
+.hover-scale {
+  transition: transform 200ms ease-in-out;
+}
+
+.hover-scale:hover {
+  transform: scale(1.05);
+}
+
+.hover-scale-sm {
+  transition: transform 200ms ease-in-out;
+}
+
+.hover-scale-sm:hover {
+  transform: scale(1.02);
+}
+
+/* ============================================
+   THEME-SPECIFIC ENHANCEMENTS
+   ============================================ */
+
+/**
+ * Dark theme optimizations
+ * Enhanced glassmorphism for dark backgrounds
+ */
+.dark .glass-card,
+.dark .glass-elevated,
+.dark .glass-subtle,
+.dark .glass-brand,
+.dark .glass-nav {
+  /* Already optimized for dark theme */
+}
+
+/**
+ * Light theme fallback (if implemented)
+ * Adjusted glassmorphism for light backgrounds
+ */
+.light .glass-card {
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+}
+
+.light .glass-elevated {
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
+}
+
+.light .glass-subtle {
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.08);
+}
+
+/* ============================================
+   SKELETON LOADING STATES
+   ============================================ */
+
+/**
+ * Skeleton base class
+ * Used for loading placeholders
+ */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(31, 41, 55, 0.5) 0%,
+    rgba(55, 65, 81, 0.5) 50%,
+    rgba(31, 41, 55, 0.5) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+  border-radius: 0.375rem;
+}
+
+/**
+ * Skeleton variants for different content types
+ */
+.skeleton-text {
+  height: 1rem;
+  width: 100%;
+}
+
+.skeleton-heading {
+  height: 2rem;
+  width: 60%;
+}
+
+.skeleton-circle {
+  border-radius: 50%;
+  aspect-ratio: 1;
+}
+
+.skeleton-card {
+  height: 200px;
+  width: 100%;
+}
+
+/* ============================================
+   GLOW EFFECTS FOR RISK INDICATORS
+   ============================================ */
+
+/**
+ * Risk-specific glow effects
+ * Color-coded glows for security risk levels
+ */
+.glow-safe {
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+}
+
+.glow-safe:hover {
+  box-shadow: 0 0 30px rgba(16, 185, 129, 0.5);
+}
+
+.glow-caution {
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+}
+
+.glow-caution:hover {
+  box-shadow: 0 0 30px rgba(245, 158, 11, 0.5);
+}
+
+.glow-danger {
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+}
+
+.glow-danger:hover {
+  box-shadow: 0 0 30px rgba(239, 68, 68, 0.5);
+}
+
+/* ============================================
+   INTERACTIVE FEEDBACK
+   ============================================ */
+
+/**
+ * Button press effect
+ * Subtle scale down on active state
+ */
+.active-press {
+  transition: transform 100ms ease-in-out;
+}
+
+.active-press:active {
+  transform: scale(0.98);
+}
+
+/**
+ * Focus ring for accessibility
+ * Visible focus indicator for keyboard navigation
+ */
+.focus-ring {
+  outline: none;
+  transition: box-shadow 200ms ease-in-out;
+}
+
+.focus-ring:focus-visible {
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.5);
+}
+
+/* ============================================
+   GRADIENT BACKGROUNDS
+   ============================================ */
+
+/**
+ * Subtle gradient overlays for depth
+ */
+.gradient-dark {
+  background: linear-gradient(
+    135deg,
+    rgba(3, 7, 18, 1) 0%,
+    rgba(17, 24, 39, 1) 100%
+  );
+}
+
+.gradient-dark-radial {
+  background: radial-gradient(
+    circle at top right,
+    rgba(14, 165, 233, 0.1) 0%,
+    rgba(3, 7, 18, 1) 50%
+  );
+}
+
+/**
+ * Brand gradient for hero sections
+ */
+.gradient-brand {
+  background: linear-gradient(
+    135deg,
+    rgba(14, 165, 233, 0.2) 0%,
+    rgba(56, 189, 248, 0.1) 100%
+  );
+}
+
+/* ============================================
+   MAP POPUP STYLING
+   ============================================ */
+
+.maplibregl-popup-content {
+  background: rgba(15, 23, 42, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+  border-radius: 0.75rem;
+  color: #e2e8f0;
+}
+
+.maplibregl-popup-tip {
+  border-top-color: rgba(15, 23, 42, 0.92);
+}
