@@ -8,35 +8,35 @@ describe('ErrorDisplay Component', () => {
       render(<ErrorDisplay type="validation" />);
       
       expect(screen.getByText('Invalid Input Format')).toBeInTheDocument();
-      expect(screen.getByText(/format doesn't match/i)).toBeInTheDocument();
+      expect(screen.getByText(/does not match/i)).toBeInTheDocument();
     });
 
     it('renders network error with default title and message', () => {
       render(<ErrorDisplay type="network" />);
       
       expect(screen.getByText('Connection Issue')).toBeInTheDocument();
-      expect(screen.getByText(/couldn't connect to the server/i)).toBeInTheDocument();
+      expect(screen.getByText(/could not reach the server/i)).toBeInTheDocument();
     });
 
     it('renders rate limit error with default title and message', () => {
       render(<ErrorDisplay type="rateLimit" />);
       
       expect(screen.getByText('Too Many Requests')).toBeInTheDocument();
-      expect(screen.getByText(/wait a moment before trying again/i)).toBeInTheDocument();
+      expect(screen.getByText(/wait and try again/i)).toBeInTheDocument();
     });
 
     it('renders not found error with default title and message', () => {
       render(<ErrorDisplay type="notFound" />);
       
       expect(screen.getByText('Target Not Found')).toBeInTheDocument();
-      expect(screen.getByText(/couldn't find or resolve/i)).toBeInTheDocument();
+      expect(screen.getByText(/could not locate/i)).toBeInTheDocument();
     });
 
     it('renders server error with default title and message', () => {
       render(<ErrorDisplay type="server" />);
       
       expect(screen.getByText('Something Went Wrong')).toBeInTheDocument();
-      expect(screen.getByText(/unexpected error/i)).toBeInTheDocument();
+      expect(screen.getByText(/unexpected error occurred/i)).toBeInTheDocument();
     });
   });
 
@@ -188,12 +188,12 @@ describe('ErrorDisplay Component', () => {
       expect(alert).toHaveClass('custom-class');
     });
 
-    it('applies error-specific background colors', () => {
+    it('applies error-specific border styles', () => {
       render(<ErrorDisplay type="validation" />);
-      expect(screen.getByRole('alert')).toHaveClass('bg-red-50');
+      expect(screen.getByRole('alert')).toHaveClass('border-risk-danger/40');
 
-      render(<ErrorDisplay type="network" />);
-      expect(screen.getByRole('alert')).toHaveClass('bg-red-50');
+      render(<ErrorDisplay type="rateLimit" />);
+      expect(screen.getByRole('alert')).toHaveClass('border-risk-caution/40');
     });
   });
 });

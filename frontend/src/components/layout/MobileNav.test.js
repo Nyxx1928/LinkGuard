@@ -13,8 +13,9 @@ jest.mock(
 );
 
 // Mock shadcn components
-jest.mock('../ui/button', () => ({
-  Button: ({ children, onClick, ...props }) => (
+jest.mock('../ui/Button', () => ({
+  __esModule: true,
+  default: ({ children, onClick, ...props }) => (
     <button onClick={onClick} {...props}>{children}</button>
   )
 }));
