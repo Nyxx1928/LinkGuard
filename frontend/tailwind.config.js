@@ -7,6 +7,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        // Brand colors (cyan/blue for security theme)
         brand: {
           50: '#f0f9ff',
           100: '#e0f2fe',
@@ -18,14 +19,19 @@ module.exports = {
           700: '#0369a1',
           800: '#075985',
           900: '#0c4a6e',
+          950: '#082f49',
         },
+        // Risk semantic colors
         risk: {
           safe: '#10b981',
           'safe-light': '#d1fae5',
+          'safe-dark': '#065f46',
           caution: '#f59e0b',
           'caution-light': '#fef3c7',
+          'caution-dark': '#92400e',
           danger: '#ef4444',
           'danger-light': '#fee2e2',
+          'danger-dark': '#991b1b',
         },
         semantic: {
           success: '#10b981',
@@ -33,6 +39,7 @@ module.exports = {
           error: '#ef4444',
           info: '#3b82f6',
         },
+        // Extended neutral palette for deep dark backgrounds
         neutral: {
           50: '#f9fafb',
           100: '#f3f4f6',
@@ -44,6 +51,7 @@ module.exports = {
           700: '#374151',
           800: '#1f2937',
           900: '#111827',
+          950: '#030712',
         },
       },
       fontFamily: {
@@ -60,6 +68,7 @@ module.exports = {
         '3xl': ['1.875rem', { lineHeight: '2.25rem' }],
         '4xl': ['2.25rem', { lineHeight: '2.5rem' }],
         '5xl': ['3rem', { lineHeight: '1' }],
+        '6xl': ['3.75rem', { lineHeight: '1' }],
       },
       boxShadow: {
         'sm': '0 1px 2px 0 rgb(0 0 0 / 0.05)',
@@ -68,9 +77,17 @@ module.exports = {
         'lg': '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
         'xl': '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)',
         '2xl': '0 25px 50px -12px rgb(0 0 0 / 0.25)',
-        'glow-brand': '0 0 20px rgba(14, 165, 233, 0.3)',
+        'glow-brand': '0 0 20px rgba(56, 189, 248, 0.3)',
+        'glow-brand-lg': '0 0 40px rgba(56, 189, 248, 0.4)',
         'glow-safe': '0 0 20px rgba(16, 185, 129, 0.3)',
         'glow-danger': '0 0 20px rgba(239, 68, 68, 0.3)',
+        'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
+        'glass-lg': '0 8px 32px 0 rgba(0, 0, 0, 0.5)',
+      },
+      backdropBlur: {
+        'xs': '2px',
+        'glass': '12px',
+        'glass-lg': '16px',
       },
       spacing: {
         '18': '4.5rem',
@@ -79,6 +96,16 @@ module.exports = {
       },
       screens: {
         'xs': '475px',
+      },
+      animation: {
+        'shimmer': 'shimmer 2s infinite',
+        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+      },
+      keyframes: {
+        shimmer: {
+          '0%': { backgroundPosition: '200% 0' },
+          '100%': { backgroundPosition: '-200% 0' },
+        },
       },
     },
   },
