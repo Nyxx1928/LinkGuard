@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import PageHeader from '../components/layout/PageHeader';
 import PageContainer from '../components/layout/PageContainer';
+import Footer from '../components/layout/Footer';
 import Button from '../components/ui/Button';
 import ResultCard from '../components/ResultCard';
 import TransparencyPanel from '../components/TransparencyPanel';
@@ -320,6 +321,7 @@ const Landing = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </PageContainer>
   );
 };

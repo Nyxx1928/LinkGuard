@@ -6,7 +6,9 @@ import HistoryList from '../components/HistoryList';
 import BulkLookup from '../components/BulkLookup';
 import LoadingState from '../components/LoadingState';
 import TransparencyPanel from '../components/TransparencyPanel';
-import { PageContainer, PageHeader } from '../components/layout';
+import InsightsPanel from '../components/InsightsPanel';
+import LazyRiskChart from '../components/LazyRiskChart';
+import { PageContainer, PageHeader, Footer } from '../components/layout';
 import { Button, Input, Card } from '../components/ui';
 import { Search, List, Trash2, MapPin, History } from 'lucide-react';
 
@@ -118,6 +120,28 @@ export default function Home({ setIsLoggedIn }) {
         isAuthenticated={true}
         onLogout={handleLogout}
       />
+
+      <div className="mb-8 fade-in">
+        <InsightsPanel
+          title="Recent Analysis Summary"
+          description="Snapshot of recent activity across your workspace."
+          metrics={[
+            { id: 'total', label: 'Total Lookups', value: history.length || 0 },
+            { id: 'latest', label: 'Latest Target', value: currentResult?.target || 'N/A' },
+            { id: 'risk', label: 'Latest Risk', value: currentResult?.risk_level || 'Unknown' },
+          ]}
+          chart={
+            <LazyRiskChart
+              data={[
+                { name: 'Safe', value: 2, fill: '#10b981' },
+                { name: 'Caution', value: 1, fill: '#f59e0b' },
+                { name: 'Danger', value: 1, fill: '#ef4444' },
+                { name: 'Unknown', value: 0, fill: '#94a3b8' },
+              ]}
+            />
+          }
+        />
+      </div>
 
       {/* Mode Toggle */}
       <Card variant="glass" padding="sm" className="inline-flex mb-8">
@@ -309,6 +333,8 @@ export default function Home({ setIsLoggedIn }) {
       {lookupMode === 'bulk' && (
         <BulkLookup />
       )}
+
+      <Footer />
     </PageContainer>
   );
 }

@@ -5,6 +5,7 @@ import ResultCard from '../components/ResultCard';
 import LoadingState from '../components/LoadingState';
 import { PageContainer, PageHeader } from '../components/layout';
 import { Button, Card } from '../components/ui';
+import { AlertCircle } from 'lucide-react';
 
 /**
  * PublicLookup - Public page for viewing shared lookup results.
@@ -121,7 +122,7 @@ const PublicLookup = () => {
         <Card variant="elevated" padding="lg">
           <div className="flex flex-col items-center justify-center text-center">
             <div className="w-16 h-16 bg-risk-danger/10 rounded-full flex items-center justify-center mb-4">
-              <span className="text-4xl">❌</span>
+              <AlertCircle className="h-9 w-9 text-risk-danger" />
             </div>
             <h2 className="text-2xl font-bold text-neutral-900 mb-3">
               Lookup Not Found
