@@ -25,7 +25,7 @@ const PageContainer = ({
 }) => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
-      <div 
+      <main
         className={`
           mx-auto
           ${maxWidth}
@@ -35,7 +35,7 @@ const PageContainer = ({
         `.trim().replace(/\s+/g, ' ')}
       >
         {children}
-      </div>
+      </main>
     </div>
   );
 };
