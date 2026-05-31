@@ -4,8 +4,8 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import StaticMap from './StaticMap';
 import { Card } from './ui';
 
-// Free CARTO Voyager style - clean, modern, no API key needed
-const MAP_STYLE = 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json';
+// CARTO Dark Matter style for dark theme maps
+const MAP_STYLE = 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json';
 
 function checkWebGL() {
   try {
@@ -92,12 +92,11 @@ export default function GeoMap({ lat, lon }) {
               closeOnClick={false}
               className="rounded-lg"
             >
-              <div className="px-3 py-2 min-w-[140px]">
-                {/* Enhanced popup with better typography and spacing */}
-                <div className="text-xs font-semibold text-neutral-700 mb-1">
+              <div className="glass-card px-3 py-2 min-w-[140px]">
+                <div className="text-xs font-semibold text-neutral-200 mb-1">
                   Location Coordinates
                 </div>
-                <div className="font-mono text-sm text-brand-600 font-medium">
+                <div className="font-mono text-sm text-brand-300 font-medium">
                   {lat.toFixed(4)}, {lon.toFixed(4)}
                 </div>
               </div>
@@ -106,11 +105,11 @@ export default function GeoMap({ lat, lon }) {
         </Map>
         
         {/* Coordinate display overlay - always visible for better UX */}
-        <div className="absolute bottom-3 left-3 bg-white/95 backdrop-blur-sm px-3 py-2 rounded-lg shadow-md border border-neutral-200">
-          <div className="text-xs text-neutral-600 font-medium mb-0.5">
+        <div className="absolute bottom-3 left-3 glass-subtle px-3 py-2 rounded-lg border border-white/10">
+          <div className="text-xs text-neutral-300 font-medium mb-0.5">
             Coordinates
           </div>
-          <div className="font-mono text-xs text-neutral-800">
+          <div className="font-mono text-xs text-neutral-100">
             {lat.toFixed(4)}, {lon.toFixed(4)}
           </div>
         </div>
