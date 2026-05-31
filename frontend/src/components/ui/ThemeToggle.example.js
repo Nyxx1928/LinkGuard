@@ -1,4 +1,5 @@
 import React from 'react';
+import { Check } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
 import { Card, CardHeader, CardTitle, CardContent } from './Card';
 
@@ -71,23 +72,23 @@ export default function ThemeToggleExample() {
           </h2>
           <ul className="space-y-3 text-gray-700 dark:text-gray-300">
             <li className="flex items-start gap-2">
-              <span className="text-cyan-600 dark:text-cyan-400">✓</span>
+              <Check className="h-4 w-4 text-cyan-600 dark:text-cyan-400" />
               <span>Smooth transitions between light and dark modes</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-cyan-600 dark:text-cyan-400">✓</span>
+              <Check className="h-4 w-4 text-cyan-600 dark:text-cyan-400" />
               <span>localStorage persistence for user preference</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-cyan-600 dark:text-cyan-400">✓</span>
+              <Check className="h-4 w-4 text-cyan-600 dark:text-cyan-400" />
               <span>Respects system preference on first visit</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-cyan-600 dark:text-cyan-400">✓</span>
+              <Check className="h-4 w-4 text-cyan-600 dark:text-cyan-400" />
               <span>Accessible with proper ARIA labels</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-cyan-600 dark:text-cyan-400">✓</span>
+              <Check className="h-4 w-4 text-cyan-600 dark:text-cyan-400" />
               <span>Professional Moon/Sun icons from lucide-react</span>
             </li>
           </ul>

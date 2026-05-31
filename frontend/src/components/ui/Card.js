@@ -8,18 +8,19 @@ import {
   CardDescription as ShadcnCardDescription,
   CardContent as ShadcnCardContent,
   CardFooter as ShadcnCardFooter,
-} from './card';
+} from './card.jsx';
 
 // Define card variants using class-variance-authority
 const cardVariants = cva(
-  'rounded-xl transition-all duration-200',
+  'rounded-xl transition-all duration-200 text-foreground',
   {
     variants: {
       variant: {
-        default: 'bg-white dark:bg-gray-800 border border-neutral-200 dark:border-gray-700 shadow-md',
-        elevated: 'bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl',
-        outlined: 'bg-transparent border-2 border-neutral-300 dark:border-gray-600',
-        glass: 'bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border border-neutral-200/50 dark:border-gray-700/50 shadow-lg',
+        default: 'glass-card',
+        elevated: 'glass-elevated',
+        subtle: 'glass-subtle',
+        outlined: 'bg-transparent border border-white/10 dark:border-white/5',
+        glass: 'glass-card',
       },
       padding: {
         none: 'p-0',
