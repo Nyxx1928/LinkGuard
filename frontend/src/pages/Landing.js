@@ -61,7 +61,7 @@ const Landing = () => {
     try {
       const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:8000';
       const res = await axios.post(`${apiUrl}/api/analyze/public`, { target });
-      
+
       if (res.data) {
         setCurrentResult(res.data);
         setError('');
@@ -107,7 +107,7 @@ const Landing = () => {
           Validate Links Before You Click
         </h2>
         <p className="text-base sm:text-lg lg:text-xl text-gray-300 max-w-3xl mx-auto mb-6 sm:mb-8 px-4">
-          Protect yourself from malicious links, phishing attempts, and suspicious domains. 
+          Protect yourself from malicious links, phishing attempts, and suspicious domains.
           Get instant security analysis with geographic intelligence and risk assessment.
         </p>
         {/* Mobile: Single column stack, Tablet: 2 columns, Desktop: 3 columns using CSS Grid */}
@@ -297,7 +297,7 @@ const Landing = () => {
             Want to Save Your Lookups?
           </h2>
           <p className="text-gray-300 text-sm sm:text-base lg:text-lg mb-6 max-w-2xl mx-auto px-4">
-            Create a free account to save your lookup history, add custom labels, 
+            Create a free account to save your lookup history, add custom labels,
             and share results with your team. Track patterns and build your security intelligence.
           </p>
           {/* Mobile: Stack vertically, Tablet+: Horizontal */}
