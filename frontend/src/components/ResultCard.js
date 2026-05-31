@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import RiskBadge from './RiskBadge';
 import RiskDisplay from './RiskDisplay';
 import CopyButton from './CopyButton';
-import GeoMap from './GeoMap';
-import { Card } from './ui';
-import { Button } from './ui';
+import LazyGeoMap from './LazyGeoMap';
+import { Button, Card } from './ui';
+import { Check, Server, ShieldAlert, ShieldCheck, Smartphone } from 'lucide-react';
 import {
   countryCodeToFlag,
   timezoneToLocalTime,
@@ -137,40 +137,55 @@ const ResultCard = ({ result, showShareLink = true }) => {
               {geo.proxy !== undefined && (
                 <span
                   className={`
-                    inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium
+                    inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium
                     ${geo.proxy
                       ? 'bg-risk-danger-light text-red-800 border border-red-300'
                       : 'bg-risk-safe-light text-green-800 border border-green-300'
                     }
                   `}
                 >
-                  {geo.proxy ? '⚠️ Proxy Detected' : '✓ No Proxy'}
+                  {geo.proxy ? (
+                    <ShieldAlert className="h-4 w-4" />
+                  ) : (
+                    <ShieldCheck className="h-4 w-4" />
+                  )}
+                  <span>{geo.proxy ? 'Proxy Detected' : 'No Proxy'}</span>
                 </span>
               )}
               {geo.hosting !== undefined && (
                 <span
                   className={`
-                    inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium
+                    inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium
                     ${geo.hosting
                       ? 'bg-risk-caution-light text-yellow-800 border border-yellow-300'
                       : 'bg-neutral-100 text-neutral-700 border border-neutral-300'
                     }
                   `}
                 >
-                  {geo.hosting ? '🖥️ Hosting Provider' : '✓ Not Hosting'}
+                  {geo.hosting ? (
+                    <Server className="h-4 w-4" />
+                  ) : (
+                    <Check className="h-4 w-4" />
+                  )}
+                  <span>{geo.hosting ? 'Hosting Provider' : 'Not Hosting'}</span>
                 </span>
               )}
               {geo.mobile !== undefined && (
                 <span
                   className={`
-                    inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium
+                    inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium
                     ${geo.mobile
                       ? 'bg-blue-50 text-blue-800 border border-blue-300'
                       : 'bg-neutral-100 text-neutral-700 border border-neutral-300'
                     }
                   `}
                 >
-                  {geo.mobile ? '📱 Mobile Connection' : '✓ Not Mobile'}
+                  {geo.mobile ? (
+                    <Smartphone className="h-4 w-4" />
+                  ) : (
+                    <Check className="h-4 w-4" />
+                  )}
+                  <span>{geo.mobile ? 'Mobile Connection' : 'Not Mobile'}</span>
                 </span>
               )}
             </div>
@@ -256,7 +271,7 @@ const ResultCard = ({ result, showShareLink = true }) => {
 
                     {/* Map */}
                     {geo.lat && geo.lon && (
-                      <GeoMap lat={geo.lat} lon={geo.lon} />
+                      <LazyGeoMap lat={geo.lat} lon={geo.lon} />
                     )}
                   </div>
                 </div>
