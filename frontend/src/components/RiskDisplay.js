@@ -1,40 +1,53 @@
 import React from 'react';
 import clsx from 'clsx';
-import { Check, AlertTriangle, Info } from 'lucide-react';
+import { AlertTriangle, Info, ShieldCheck } from 'lucide-react';
+import { Card, Progress } from './ui';
+import RiskBadge from './RiskBadge';
 
-const RiskDisplay = ({ level, score = null, size = 'lg', showScore = true }) => {
+const RiskDisplay = ({
+  level,
+  score = null,
+  confidence = null,
+  size = 'lg',
+  showScore = true,
+  showBadge = true,
+}) => {
   const riskConfig = {
     LOW: {
       label: 'Low Risk',
-      icon: Check,
-      gradient: 'from-green-400 to-green-600',
-      bgColor: 'bg-risk-safe',
-      textColor: 'text-white',
+      icon: ShieldCheck,
+      gradient: 'from-emerald-500/25 via-emerald-500/10 to-emerald-600/30',
+      accent: 'text-emerald-200',
+      progress: 'bg-risk-safe',
       description: 'Normal residential or mobile connection',
+      badge: 'LOW',
     },
     MEDIUM: {
       label: 'Medium Risk',
       icon: AlertTriangle,
-      gradient: 'from-yellow-400 to-yellow-600',
-      bgColor: 'bg-risk-caution',
-      textColor: 'text-white',
+      gradient: 'from-amber-500/25 via-amber-500/10 to-amber-600/30',
+      accent: 'text-amber-200',
+      progress: 'bg-risk-caution',
       description: 'Hosting provider - could be legitimate',
+      badge: 'MEDIUM',
     },
     HIGH: {
       label: 'High Risk',
       icon: AlertTriangle,
-      gradient: 'from-red-400 to-red-600',
-      bgColor: 'bg-risk-danger',
-      textColor: 'text-white',
+      gradient: 'from-red-500/25 via-red-500/10 to-red-600/30',
+      accent: 'text-red-200',
+      progress: 'bg-risk-danger',
       description: 'Proxy or suspicious characteristics',
+      badge: 'HIGH',
     },
     UNKNOWN: {
       label: 'Unknown',
       icon: Info,
-      gradient: 'from-gray-400 to-gray-600',
-      bgColor: 'bg-neutral-500',
-      textColor: 'text-white',
+      gradient: 'from-slate-500/25 via-slate-500/10 to-slate-600/30',
+      accent: 'text-slate-200',
+      progress: 'bg-neutral-400',
       description: 'Unable to determine risk level',
+      badge: 'UNKNOWN',
     },
   };
 
@@ -44,78 +57,84 @@ const RiskDisplay = ({ level, score = null, size = 'lg', showScore = true }) => 
   const sizeStyles = {
     sm: {
       container: 'p-4',
-      icon: 'text-4xl',
-      label: 'text-lg',
-      score: 'text-2xl',
-      description: 'text-sm',
+      iconWrap: 'h-12 w-12',
+      icon: 'h-6 w-6',
+      label: 'text-base',
+      score: 'text-3xl',
+      description: 'text-xs',
     },
     md: {
       container: 'p-6',
-      icon: 'text-5xl',
-      label: 'text-xl',
-      score: 'text-3xl',
-      description: 'text-base',
+      iconWrap: 'h-14 w-14',
+      icon: 'h-7 w-7',
+      label: 'text-lg',
+      score: 'text-4xl',
+      description: 'text-sm',
     },
     lg: {
       container: 'p-8',
-      icon: 'text-6xl',
-      label: 'text-2xl',
-      score: 'text-4xl',
-      description: 'text-lg',
+      iconWrap: 'h-16 w-16',
+      icon: 'h-8 w-8',
+      label: 'text-xl',
+      score: 'text-5xl',
+      description: 'text-base',
     },
   };
 
   const styles = sizeStyles[size] || sizeStyles.lg;
 
   return (
-    <div
-      className={clsx(
-        'rounded-xl shadow-lg transition-smooth',
-        `bg-gradient-to-br ${config.gradient}`,
-        styles.container
-      )}
+    <Card
+      variant="elevated"
+      padding="none"
+      className={clsx('overflow-hidden bg-gradient-to-br', config.gradient)}
     >
-      <div className="flex flex-col items-center text-center">
-        {/* Risk Icon */}
-        <div
-          className={clsx(
-            'w-20 h-20 rounded-full flex items-center justify-center mb-4',
-            'bg-white/20 backdrop-blur-sm',
-            styles.icon
-          )}
-        >
-          <IconComponent className={clsx('w-10 h-10', config.textColor)} />
-        </div>
+      <div className={clsx('relative', styles.container)}>
+        <div className="absolute inset-0 opacity-30 blur-2xl" />
 
-        {/* Risk Label */}
-        <h3 className={clsx('font-bold mb-2', config.textColor, styles.label)}>
-          {config.label}
-        </h3>
-
-        {/* Risk Score */}
-        {showScore && score !== null && (
-          <div className="mb-3">
-            <div className={clsx('font-bold', config.textColor, styles.score)}>
-              {score}
-              <span className="text-xl opacity-80">/100</span>
+        <div className="relative flex flex-col items-center text-center gap-4">
+          <div className="flex w-full items-center justify-between">
+            <div
+              className={clsx(
+                'flex items-center justify-center rounded-full bg-white/10 backdrop-blur-sm',
+                styles.iconWrap
+              )}
+            >
+              <IconComponent className={clsx(styles.icon, config.accent)} />
             </div>
-            <div className="w-full max-w-xs mt-2">
-              <div className="h-2 bg-white/30 rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-white/80 rounded-full transition-all duration-500"
-                  style={{ width: `${score}%` }}
-                />
-              </div>
-            </div>
+            {showBadge && <RiskBadge level={config.badge} />}
           </div>
-        )}
 
-        {/* Description */}
-        <p className={clsx('opacity-90', config.textColor, styles.description)}>
-          {config.description}
-        </p>
+          <div>
+            <p className={clsx('font-semibold text-foreground', styles.label)}>
+              {config.label}
+            </p>
+            <p className={clsx('mt-1 text-muted-foreground', styles.description)}>
+              {config.description}
+            </p>
+          </div>
+
+          {showScore && score !== null && (
+            <div className="w-full space-y-3">
+              <div className={clsx('font-bold text-foreground', styles.score)}>
+                {score}
+                <span className="text-base text-muted-foreground">/100</span>
+              </div>
+              <Progress
+                value={score}
+                className="h-3 bg-white/10"
+                indicatorClassName={config.progress}
+              />
+              {confidence !== null && (
+                <p className="text-xs text-muted-foreground">
+                  Confidence: {confidence}%
+                </p>
+              )}
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </Card>
   );
 };
 
