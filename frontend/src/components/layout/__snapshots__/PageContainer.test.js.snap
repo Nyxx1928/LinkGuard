@@ -1,33 +1,33 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`PageContainer matches snapshot for default props 1`] = `
-<div>
+<DocumentFragment>
   <div
     class="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900"
   >
-    <div
+    <main
       class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12"
     >
       <div>
         Test Content
       </div>
-    </div>
+    </main>
   </div>
-</div>
+</DocumentFragment>
 `;
 
 exports[`PageContainer matches snapshot with custom props 1`] = `
-<div>
+<DocumentFragment>
   <div
     class="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900"
   >
-    <div
+    <main
       class="mx-auto max-w-5xl custom-wrapper"
     >
       <div>
         Custom Content
       </div>
-    </div>
+    </main>
   </div>
-</div>
+</DocumentFragment>
 `;
