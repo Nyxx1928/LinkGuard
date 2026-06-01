@@ -1,10 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../ui/Button';
+import { DropdownNavigation } from '../ui/dropdown-navigation';
 import MobileNav from './MobileNav';
 import Container from './Container';
 import { ThemeToggle } from '../ui/ThemeToggle';
-import { Shield, User } from 'lucide-react';
+import { Shield, User, Search, Globe, BookOpen, FileText, Clock } from 'lucide-react';
 
 /**
  * PageHeader - Consistent header component for all pages
@@ -35,10 +36,77 @@ const PageHeader = ({
   };
 
   const navItems = [
-    { label: 'Dashboard', path: '/home' },
-    { label: 'Analyze', path: '/analyze' },
-    { label: 'History', path: '/history' },
-    { label: 'About', path: '/about' },
+    {
+      id: 1,
+      label: 'Platform',
+      subMenus: [
+        {
+          title: 'Core workflow',
+          items: [
+            {
+              label: 'Analyze Links',
+              description: 'Run a full risk scan instantly.',
+              icon: Search,
+              link: '/analyze',
+            },
+            {
+              label: 'Lookup History',
+              description: 'Review and label saved results.',
+              icon: Clock,
+              link: '/history',
+            },
+            {
+              label: 'Dashboard',
+              description: 'Your security overview at a glance.',
+              icon: Shield,
+              link: '/home',
+            },
+          ],
+        },
+        {
+          title: 'Public tools',
+          items: [
+            {
+              label: 'Public Lookup',
+              description: 'Shareable checks for any target.',
+              icon: Globe,
+              link: '/',
+            },
+            {
+              label: 'About LinkGuard',
+              description: 'Methodology and data sources.',
+              icon: BookOpen,
+              link: '/about',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: 2,
+      label: 'Resources',
+      subMenus: [
+        {
+          title: 'Learn',
+          items: [
+            {
+              label: 'About',
+              description: 'How LinkGuard evaluates risk.',
+              icon: BookOpen,
+              link: '/about',
+            },
+            {
+              label: 'Component Showcase',
+              description: 'Design system and UI patterns.',
+              icon: FileText,
+              link: '/showcase',
+            },
+          ],
+        },
+      ],
+    },
+    { id: 3, label: 'Dashboard', link: '/home' },
+    { id: 4, label: 'Analyze', link: '/analyze' },
   ];
 
   return (
@@ -70,18 +138,10 @@ const PageHeader = ({
           </div>
 
           <div className="hidden sm:flex items-center gap-4">
-            <nav className="flex items-center gap-3 text-sm text-muted-foreground" aria-label="Primary">
-              {navItems.map((item) => (
-                <button
-                  key={item.path}
-                  type="button"
-                  onClick={() => navigate(item.path)}
-                  className="rounded-full px-3 py-1.5 transition-colors hover:text-foreground"
-                >
-                  {item.label}
-                </button>
-              ))}
-            </nav>
+            <DropdownNavigation
+              navItems={navItems}
+              onNavigate={(path) => navigate(path)}
+            />
 
             <ThemeToggle />
 
