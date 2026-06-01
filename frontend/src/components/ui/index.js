@@ -6,4 +6,4 @@ export { ThemeToggle } from './ThemeToggle';
 export { Progress } from './progress';
 export { Tabs, TabsList, TabsTrigger, TabsContent } from './tabs';
 export { Skeleton } from './skeleton';
-export { DropdownNavigation } from './dropdown-navigation';
+export { default as CardNav } from './CardNav';
