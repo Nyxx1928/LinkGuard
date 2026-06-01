@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import PageHeader from '../components/layout/PageHeader';
+import CardNav from '../components/ui/CardNav';
+import MobileNav from '../components/layout/MobileNav';
 import PageContainer from '../components/layout/PageContainer';
 import Footer from '../components/layout/Footer';
 import Button from '../components/ui/Button';
 import ResultCard from '../components/ResultCard';
-import TransparencyPanel from '../components/TransparencyPanel';
 import LoadingState from '../components/LoadingState';
 import { Search, Shield, MapPin, Save, Trash2, AlertTriangle, ChevronDown } from 'lucide-react';
 
@@ -95,17 +95,54 @@ const Landing = () => {
     setError('');
   };
 
+  const cardNavItems = [
+    {
+      label: 'Platform',
+      bgColor: '#1B1722',
+      textColor: '#fff',
+      links: [
+        { label: 'Analyze Links', href: '/analyze', ariaLabel: 'Run a full risk scan instantly' },
+        { label: 'Lookup History', href: '/history', ariaLabel: 'Review and label saved results' },
+        { label: 'Dashboard', href: '/home', ariaLabel: 'Your security overview at a glance' },
+      ],
+    },
+    {
+      label: 'Public Tools',
+      bgColor: '#2F293A',
+      textColor: '#fff',
+      links: [
+        { label: 'Public Lookup', href: '/', ariaLabel: 'Shareable checks for any target' },
+        { label: 'About LinkGuard', href: '/about', ariaLabel: 'Methodology and data sources' },
+      ],
+    },
+    {
+      label: 'Resources',
+      bgColor: '#2F293A',
+      textColor: '#fff',
+      links: [
+        { label: 'About', href: '/about', ariaLabel: 'How LinkGuard evaluates risk' },
+        { label: 'Component Showcase', href: '/showcase', ariaLabel: 'Design system and UI patterns' },
+      ],
+    },
+  ];
+
   return (
     <PageContainer className="text-gray-100">
       <div className="relative overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute -top-40 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-cyan-500/10 blur-[120px]" />
-          <div className="absolute -bottom-24 right-10 h-64 w-64 rounded-full bg-blue-500/10 blur-[120px]" />
-          <div className="absolute inset-x-0 top-0 h-64 bg-gradient-to-b from-white/5 to-transparent" />
-        </div>
-
         <div className="relative z-10">
-          <PageHeader showAuth={true} isAuthenticated={false} />
+          <CardNav
+            logoAlt="LinkGuard"
+            items={cardNavItems}
+            baseColor="transparent"
+            menuColor="#fff"
+            buttonBgColor="#111"
+            buttonTextColor="#fff"
+            ctaLabel="Log In"
+            onCtaClick={() => navigate('/login')}
+          />
+          <div className="sm:hidden fixed top-4 right-4 z-50">
+            <MobileNav isAuthenticated={false} />
+          </div>
 
           <section className="pt-10 sm:pt-14 lg:pt-18 pb-10 sm:pb-12 lg:pb-16">
             <div className="text-center px-4">
