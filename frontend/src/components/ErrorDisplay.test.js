@@ -2,6 +2,15 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import ErrorDisplay from './ErrorDisplay';
 
+jest.mock(
+  'react-router-dom',
+  () => ({
+    useNavigate: () => jest.fn(),
+    useLocation: () => ({ pathname: '/' })
+  }),
+  { virtual: true }
+);
+
 describe('ErrorDisplay Component', () => {
   describe('Error Type Variants', () => {
     it('renders validation error with default title and message', () => {
@@ -189,8 +198,9 @@ describe('ErrorDisplay Component', () => {
     });
 
     it('applies error-specific border styles', () => {
-      render(<ErrorDisplay type="validation" />);
+      const { unmount } = render(<ErrorDisplay type="validation" />);
       expect(screen.getByRole('alert')).toHaveClass('border-risk-danger/40');
+      unmount();
 
       render(<ErrorDisplay type="rateLimit" />);
       expect(screen.getByRole('alert')).toHaveClass('border-risk-caution/40');

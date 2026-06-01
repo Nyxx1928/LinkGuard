@@ -34,6 +34,10 @@ jest.mock('../ui/separator', () => ({
   Separator: () => <hr data-testid="separator" />
 }));
 
+jest.mock('../ui/ThemeToggle', () => ({
+  ThemeToggle: () => <div data-testid="theme-toggle" />
+}));
+
 describe('MobileNav Component', () => {
   it('renders hamburger menu button', () => {
     render(<MobileNav />);
@@ -65,7 +69,7 @@ describe('MobileNav Component', () => {
     const menuButton = screen.getByLabelText('Open menu');
     fireEvent.click(menuButton);
     
-    expect(screen.getByText('Dashboard')).toBeInTheDocument();
+    expect(screen.getByText('Home')).toBeInTheDocument();
     expect(screen.getByText('Logout')).toBeInTheDocument();
   });
 
