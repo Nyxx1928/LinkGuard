@@ -1,11 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../ui/Button';
-import { DropdownNavigation } from '../ui/dropdown-navigation';
+import CardNav from '../ui/CardNav';
 import MobileNav from './MobileNav';
 import Container from './Container';
 import { ThemeToggle } from '../ui/ThemeToggle';
-import { Shield, User, Search, Globe, BookOpen, FileText, Clock } from 'lucide-react';
+import { Shield, User } from 'lucide-react';
 
 /**
  * PageHeader - Consistent header component for all pages
@@ -35,78 +35,35 @@ const PageHeader = ({
     }
   };
 
-  const navItems = [
+  const cardNavItems = [
     {
-      id: 1,
       label: 'Platform',
-      subMenus: [
-        {
-          title: 'Core workflow',
-          items: [
-            {
-              label: 'Analyze Links',
-              description: 'Run a full risk scan instantly.',
-              icon: Search,
-              link: '/analyze',
-            },
-            {
-              label: 'Lookup History',
-              description: 'Review and label saved results.',
-              icon: Clock,
-              link: '/history',
-            },
-            {
-              label: 'Dashboard',
-              description: 'Your security overview at a glance.',
-              icon: Shield,
-              link: '/home',
-            },
-          ],
-        },
-        {
-          title: 'Public tools',
-          items: [
-            {
-              label: 'Public Lookup',
-              description: 'Shareable checks for any target.',
-              icon: Globe,
-              link: '/',
-            },
-            {
-              label: 'About LinkGuard',
-              description: 'Methodology and data sources.',
-              icon: BookOpen,
-              link: '/about',
-            },
-          ],
-        },
+      bgColor: '#1B1722',
+      textColor: '#fff',
+      links: [
+        { label: 'Analyze Links', href: '/analyze', ariaLabel: 'Run a full risk scan instantly' },
+        { label: 'Lookup History', href: '/history', ariaLabel: 'Review and label saved results' },
+        { label: 'Dashboard', href: '/home', ariaLabel: 'Your security overview at a glance' },
       ],
     },
     {
-      id: 2,
-      label: 'Resources',
-      subMenus: [
-        {
-          title: 'Learn',
-          items: [
-            {
-              label: 'About',
-              description: 'How LinkGuard evaluates risk.',
-              icon: BookOpen,
-              link: '/about',
-            },
-            {
-              label: 'Component Showcase',
-              description: 'Design system and UI patterns.',
-              icon: FileText,
-              link: '/showcase',
-            },
-          ],
-        },
+      label: 'Public Tools',
+      bgColor: '#2F293A',
+      textColor: '#fff',
+      links: [
+        { label: 'Public Lookup', href: '/', ariaLabel: 'Shareable checks for any target' },
+        { label: 'About LinkGuard', href: '/about', ariaLabel: 'Methodology and data sources' },
       ],
     },
-    { id: 3, label: 'Dashboard', link: '/home' },
-    { id: 4, label: 'Analyze', link: '/analyze' },
+    {
+      label: 'Resources',
+      bgColor: '#2F293A',
+      textColor: '#fff',
+      links: [
+        { label: 'About', href: '/about', ariaLabel: 'How LinkGuard evaluates risk' },
+        { label: 'Component Showcase', href: '/showcase', ariaLabel: 'Design system and UI patterns' },
+      ],
+    },
   ];
 
   return (
@@ -138,9 +95,9 @@ const PageHeader = ({
           </div>
 
           <div className="hidden sm:flex items-center gap-4">
-            <DropdownNavigation
-              navItems={navItems}
-              onNavigate={(path) => navigate(path)}
+            <CardNav
+              items={cardNavItems}
+              menuColor="currentColor"
             />
 
             <ThemeToggle />
