@@ -17,6 +17,7 @@
     "axios": "^1.13.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^1.2.1",
+    "framer-motion": "^12.23.0",
     "lucide-react": "^1.8.0",
     "maplibre-gl": "^4.7.1",
     "recharts": "^2.12.7",
