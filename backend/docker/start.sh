@@ -17,5 +17,17 @@ php artisan config:clear || true
 php artisan route:clear || true
 php artisan view:clear || true
 
+# Run database migrations automatically with retries
+for i in $(seq 1 10); do
+	if php artisan migrate --force; then
+		break
+	fi
+	echo "Migration attempt ${i}/10 failed, retrying in 3s..."
+	sleep 3
+	if [ "$i" -eq 10 ]; then
+		echo "Migrations failed after 10 attempts, starting anyway..."
+	fi
+done
+
 echo "==> Starting Apache..."
 exec apache2-foreground
