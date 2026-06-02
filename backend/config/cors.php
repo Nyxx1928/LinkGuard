@@ -6,7 +6,7 @@ if ($frontendOriginsEnv === null || trim((string) $frontendOriginsEnv) === '') {
     // Backward compatibility for older FRONTEND_ORIGIN env setups.
     $frontendOriginsEnv = env(
         'FRONTEND_ORIGIN',
-        'http://localhost:3000,http://127.0.0.1:3000,https://geo-tracker-eight-blond.vercel.app'
+        'http://localhost:3000,http://127.0.0.1:3000,https://link-guard-zero.vercel.app'
     );
 }
 
