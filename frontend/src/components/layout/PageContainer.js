@@ -24,7 +24,7 @@ const PageContainer = ({
   noPadding = false, // Allow disabling padding for full-width content
 }) => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
+    <div className="dark min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
       <main
         className={`
           mx-auto
