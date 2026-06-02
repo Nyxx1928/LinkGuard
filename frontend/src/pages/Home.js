@@ -6,7 +6,10 @@ import HistoryList from '../components/HistoryList';
 import BulkLookup from '../components/BulkLookup';
 import LoadingState from '../components/LoadingState';
 import TransparencyPanel from '../components/TransparencyPanel';
-import { PageContainer, PageHeader } from '../components/layout';
+import LazyRiskChart from '../components/LazyRiskChart';
+import { PageContainer } from '../components/layout';
+import MobileNav from '../components/layout/MobileNav';
+import CardNav from '../components/ui/CardNav';
 import { Button, Input, Card } from '../components/ui';
 import { Search, List, Trash2, MapPin, History } from 'lucide-react';
 
@@ -111,13 +114,93 @@ export default function Home({ setIsLoggedIn }) {
     }
   };
 
+  const cardNavItems = [
+    {
+      label: 'Platform',
+      bgColor: '#1B1722',
+      textColor: '#fff',
+      links: [
+        { label: 'Analyze Links', href: '/analyze', ariaLabel: 'Run a full risk scan instantly' },
+        { label: 'Lookup History', href: '/history', ariaLabel: 'Review and label saved results' },
+        { label: 'Dashboard', href: '/home', ariaLabel: 'Your security overview at a glance' },
+      ],
+    },
+    {
+      label: 'Public Tools',
+      bgColor: '#2F293A',
+      textColor: '#fff',
+      links: [
+        { label: 'Public Lookup', href: '/', ariaLabel: 'Shareable checks for any target' },
+        { label: 'About LinkGuard', href: '/about', ariaLabel: 'Methodology and data sources' },
+      ],
+    },
+    {
+      label: 'Resources',
+      bgColor: '#2F293A',
+      textColor: '#fff',
+      links: [
+        { label: 'About', href: '/about', ariaLabel: 'How LinkGuard evaluates risk' },
+        { label: 'Component Showcase', href: '/showcase', ariaLabel: 'Design system and UI patterns' },
+      ],
+    },
+  ];
+
   return (
     <PageContainer>
-      <PageHeader
-        showAuth={false}
-        isAuthenticated={true}
-        onLogout={handleLogout}
+      <CardNav
+        logoAlt="LinkGuard"
+        items={cardNavItems}
+        baseColor="transparent"
+        menuColor="#fff"
+        buttonBgColor="#111"
+        buttonTextColor="#fff"
+        logoHref="/home"
+        ctaLabel="Logout"
+        onCtaClick={handleLogout}
       />
+      <div className="sm:hidden fixed top-4 right-4 z-50">
+        <MobileNav isAuthenticated={true} onLogout={handleLogout} />
+      </div>
+
+      <section className="mb-8 fade-in">
+        <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-gray-900/70 via-gray-900/60 to-gray-800/60 p-6 sm:p-8 shadow-[0_24px_60px_rgba(0,0,0,0.35)]">
+          <div className="space-y-2 mb-6">
+            <p className="text-xs uppercase tracking-[0.3em] text-gray-400">Dashboard</p>
+            <h2
+              className="text-3xl sm:text-4xl font-semibold text-white"
+              style={{ fontFamily: '"Space Grotesk", var(--font-sans)' }}
+            >
+              Recent Analysis
+              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-blue-300 to-slate-200">
+                Summary
+              </span>
+            </h2>
+            <p className="text-sm sm:text-base text-gray-300">
+              Snapshot of recent activity across your workspace.
+            </p>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 mb-6">
+            {[
+              { id: 'total', label: 'Total Lookups', value: history.length || 0 },
+              { id: 'latest', label: 'Latest Target', value: currentResult?.target || 'N/A' },
+              { id: 'risk', label: 'Latest Risk', value: currentResult?.risk_level || 'Unknown' },
+            ].map((metric) => (
+              <div key={metric.id} className="rounded-2xl border border-white/5 bg-white/5 p-4 text-center">
+                <p className="text-xs uppercase tracking-widest text-gray-400">{metric.label}</p>
+                <p className="mt-1 text-2xl font-semibold text-white">{metric.value}</p>
+              </div>
+            ))}
+          </div>
+          <LazyRiskChart
+            data={[
+              { name: 'Safe', value: 2, fill: '#7dd3fc' },
+              { name: 'Caution', value: 1, fill: '#0ea5e9' },
+              { name: 'Danger', value: 1, fill: '#0369a1' },
+              { name: 'Unknown', value: 0, fill: '#6b7280' },
+            ]}
+          />
+        </div>
+      </section>
 
       {/* Mode Toggle */}
       <Card variant="glass" padding="sm" className="inline-flex mb-8">
@@ -235,15 +318,15 @@ export default function Home({ setIsLoggedIn }) {
 
           {/* Search History */}
           {history.length > 0 && (
-            <Card variant="glass" padding="lg" className="mb-8">
+            <div className="mb-8 bg-gray-900/70 border border-white/10 rounded-2xl p-4 sm:p-6 backdrop-blur">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-brand-500 to-brand-700 rounded-xl flex items-center justify-center shadow-lg shadow-brand-500/30">
+                  <div className="w-10 h-10 bg-gradient-to-br from-cyan-500 to-cyan-700 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-500/30">
                     <History className="h-5 w-5 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-neutral-900">Search History</h3>
-                    <p className="text-xs text-neutral-600">{history.length} recent searches</p>
+                    <h3 className="text-xl font-bold text-white">Search History</h3>
+                    <p className="text-xs text-gray-400">{history.length} recent searches</p>
                   </div>
                 </div>
                 {selectedHistory.length > 0 && (
@@ -258,30 +341,30 @@ export default function Home({ setIsLoggedIn }) {
                   </Button>
                 )}
               </div>
-              <div className="mb-4 p-3 bg-neutral-100 rounded-xl border border-neutral-200">
+              <div className="mb-4 p-3 bg-white/5 rounded-xl border border-white/10">
                 <label className="flex items-center cursor-pointer">
                   <input
                     type="checkbox"
                     checked={selectedHistory.length === history.length && history.length > 0}
                     onChange={handleSelectAll}
-                    className="w-4 h-4 text-brand-500 border-neutral-400 rounded focus:ring-brand-500"
+                    className="w-4 h-4 text-cyan-500 border-white/20 rounded focus:ring-cyan-500 bg-gray-800"
                   />
-                  <span className="ml-3 text-sm font-medium text-neutral-700">Select All</span>
+                  <span className="ml-3 text-sm font-medium text-gray-300">Select All</span>
                 </label>
               </div>
               <div className="space-y-2">
                 {history.map((target, idx) => (
                   <div
                     key={idx}
-                    className="p-4 bg-neutral-50 hover:bg-neutral-100 rounded-xl border border-neutral-200 hover:border-brand-500/50 transition-all duration-200 flex items-center gap-3 group"
+                    className="p-4 bg-white/[0.03] hover:bg-white/5 rounded-xl border border-white/10 hover:border-cyan-500/50 transition-all duration-200 flex items-center gap-3 group"
                   >
                     <input
                       type="checkbox"
                       checked={selectedHistory.includes(target)}
                       onChange={() => handleCheckboxChange(target)}
-                      className="w-4 h-4 text-brand-500 border-neutral-400 rounded focus:ring-brand-500"
+                      className="w-4 h-4 text-cyan-500 border-white/20 rounded focus:ring-cyan-500 bg-gray-800"
                     />
-                    <span className="flex-1 font-mono font-semibold text-neutral-900">{target}</span>
+                    <span className="flex-1 font-mono font-semibold text-white">{target}</span>
                     <Button
                       variant="ghost"
                       size="sm"
@@ -292,7 +375,7 @@ export default function Home({ setIsLoggedIn }) {
                   </div>
                 ))}
               </div>
-            </Card>
+            </div>
           )}
 
           {/* Persistent Lookup History */}
@@ -309,6 +392,7 @@ export default function Home({ setIsLoggedIn }) {
       {lookupMode === 'bulk' && (
         <BulkLookup />
       )}
+
     </PageContainer>
   );
 }

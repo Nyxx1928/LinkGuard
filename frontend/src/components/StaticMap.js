@@ -13,17 +13,17 @@ export default function StaticMap({
   lat,
   lon,
   linkLabel = 'View larger map ->',
-  containerClassName = 'w-full h-64 sm:h-80 rounded-xl overflow-hidden border border-gray-700 shadow-lg relative',
-  emptyClassName = 'w-full h-64 sm:h-80 rounded-xl border border-gray-700 flex flex-col items-center justify-center gap-2 text-gray-300 text-sm bg-gray-900 p-4',
-  linkClassName = 'absolute bottom-2 right-2 bg-white/90 text-blue-600 text-xs px-2 py-1 rounded shadow hover:bg-white transition-colors',
+  containerClassName = 'w-full h-64 sm:h-80 rounded-xl overflow-hidden border border-white/10 shadow-lg relative bg-neutral-950',
+  emptyClassName = 'w-full h-64 sm:h-80 rounded-xl border border-white/10 flex flex-col items-center justify-center gap-2 text-neutral-200 text-sm glass-subtle p-4',
+  linkClassName = 'absolute bottom-2 right-2 glass-card text-brand-200 text-xs px-2 py-1 rounded shadow hover:text-brand-100 transition-colors',
   showRetry = false,
   onRetry
 }) {
   if (lat == null || lon == null) {
     return (
       <div className={emptyClassName}>
-        <span>Map failed to render in this browser.</span>
-        <span className="text-xs text-gray-400 text-center">Location details are still available above.</span>
+        <span>Interactive map is unavailable in this browser.</span>
+        <span className="text-xs text-neutral-400 text-center">Location details are still available above.</span>
       </div>
     );
   }
@@ -46,7 +46,7 @@ export default function StaticMap({
         <button
           type="button"
           onClick={onRetry}
-          className="absolute top-2 left-2 bg-gray-900/80 text-white text-xs px-2 py-1 rounded border border-white/20 hover:bg-gray-800 transition-colors"
+          className="absolute top-2 left-2 glass-card text-neutral-100 text-xs px-2 py-1 rounded border border-white/10 hover:text-white transition-colors"
         >
           Retry interactive map
         </button>

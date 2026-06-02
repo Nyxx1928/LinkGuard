@@ -16,7 +16,7 @@ A toggle button component that switches between light and dark themes with local
 ### Basic Usage
 
 ```jsx
-import { ThemeToggle } from '@/components/ui/ThemeToggle';
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 function Header() {
   return (
@@ -31,7 +31,7 @@ function Header() {
 ### With Navigation
 
 ```jsx
-import { ThemeToggle } from '@/components/ui/ThemeToggle';
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 function Navigation() {
   return (
@@ -62,9 +62,9 @@ This works with Tailwind CSS's dark mode configuration:
 ```javascript
 // tailwind.config.js
 module.exports = {
-  darkMode: 'class', // Enable class-based dark mode
+  darkMode: "class", // Enable class-based dark mode
   // ...
-}
+};
 ```
 
 ### localStorage Persistence
@@ -72,7 +72,7 @@ module.exports = {
 Theme preference is stored in localStorage:
 
 ```javascript
-localStorage.setItem('theme', 'dark'); // or 'light'
+localStorage.setItem("theme", "dark"); // or 'light'
 ```
 
 On component mount, it checks for a stored preference:
@@ -86,7 +86,7 @@ On component mount, it checks for a stored preference:
 If no theme is stored, the component checks the user's system preference:
 
 ```javascript
-window.matchMedia('(prefers-color-scheme: dark)').matches
+window.matchMedia("(prefers-color-scheme: dark)").matches;
 ```
 
 ## Styling
@@ -134,9 +134,9 @@ If localStorage is unavailable (quota exceeded, disabled, etc.):
 
 ```javascript
 try {
-  localStorage.setItem('theme', newTheme);
+  localStorage.setItem("theme", newTheme);
 } catch (error) {
-  console.warn('Failed to save theme preference:', error);
+  console.warn("Failed to save theme preference:", error);
   // Theme still works, just won't persist
 }
 ```
@@ -162,16 +162,16 @@ if (!mounted) {
 
 The component includes comprehensive tests:
 
-- ✓ Renders correctly
-- ✓ Initializes with correct theme
-- ✓ Loads theme from localStorage
-- ✓ Toggles between light and dark
-- ✓ Persists preference to localStorage
-- ✓ Applies dark class to document
-- ✓ Handles localStorage errors
-- ✓ Respects system preference
-- ✓ Displays correct icons
-- ✓ Has proper accessibility attributes
+- [x] Renders correctly
+- [x] Initializes with correct theme
+- [x] Loads theme from localStorage
+- [x] Toggles between light and dark
+- [x] Persists preference to localStorage
+- [x] Applies dark class to document
+- [x] Handles localStorage errors
+- [x] Respects system preference
+- [x] Displays correct icons
+- [x] Has proper accessibility attributes
 
 Run tests:
 

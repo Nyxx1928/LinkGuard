@@ -2,7 +2,7 @@ FROM php:8.4-apache
 
 # Install system dependencies and PHP extensions
 RUN apt-get update && apt-get install -y \
-    libzip-dev zip unzip git libonig-dev libpng-dev libpq-dev \
+    libzip-dev zip unzip git libonig-dev libpng-dev libpq-dev ca-certificates \
     && docker-php-ext-install pdo pdo_mysql mbstring zip bcmath gd \
     && a2dismod mpm_event \
     && a2enmod mpm_prefork rewrite headers \

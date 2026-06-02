@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import clsx from 'clsx';
-import { Card } from './ui';
+import { Info, ChevronDown, ExternalLink, AlertTriangle } from 'lucide-react';
 
 const TransparencyPanel = ({ className = '' }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -48,75 +47,50 @@ const TransparencyPanel = ({ className = '' }) => {
   ];
 
   return (
-    <Card variant="outlined" padding="md" className={clsx('border-2', className)}>
+    <div className={`rounded-2xl border border-white/10 bg-gray-900/60 backdrop-blur ${className}`}>
       <button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="w-full flex items-center justify-between text-left"
+        className="w-full flex items-center justify-between text-left p-4 sm:p-6"
         aria-expanded={isExpanded}
       >
-        <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 rounded-full bg-brand-100 flex items-center justify-center">
-            <svg
-              className="w-6 h-6 text-brand-600"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-cyan-500/20 flex items-center justify-center">
+            <Info className="h-5 w-5 text-cyan-400" />
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-neutral-900">
+            <h3 className="text-lg font-semibold text-white">
               How We Analyze Links
             </h3>
-            <p className="text-sm text-neutral-600">
+            <p className="text-sm text-gray-400">
               Learn about our methodology and data sources
             </p>
           </div>
         </div>
-        <svg
-          className={clsx(
-            'w-6 h-6 text-neutral-600 transition-transform',
-            isExpanded && 'rotate-180'
-          )}
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M19 9l-7 7-7-7"
-          />
-        </svg>
+        <ChevronDown
+          className={`h-5 w-5 text-gray-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
+        />
       </button>
 
       {isExpanded && (
-        <div className="mt-6 space-y-6">
+        <div className="px-4 sm:px-6 pb-6 space-y-6 border-t border-white/10 pt-6">
           {/* Analysis Steps */}
           <div>
-            <h4 className="text-base font-semibold text-neutral-900 mb-4">
+            <h4 className="text-base font-semibold text-white mb-4">
               Our Analysis Process
             </h4>
             <div className="space-y-4">
               {analysisSteps.map((item) => (
-                <div key={item.step} className="flex space-x-4">
+                <div key={item.step} className="flex gap-4">
                   <div className="flex-shrink-0">
-                    <div className="w-8 h-8 rounded-full bg-brand-600 text-white flex items-center justify-center text-sm font-semibold">
+                    <div className="w-8 h-8 rounded-full bg-cyan-600 text-white flex items-center justify-center text-sm font-semibold">
                       {item.step}
                     </div>
                   </div>
                   <div className="flex-1">
-                    <h5 className="font-medium text-neutral-900 mb-1">
+                    <h5 className="font-medium text-white mb-1">
                       {item.title}
                     </h5>
-                    <p className="text-sm text-neutral-600">
+                    <p className="text-sm text-gray-400">
                       {item.description}
                     </p>
                   </div>
@@ -126,21 +100,21 @@ const TransparencyPanel = ({ className = '' }) => {
           </div>
 
           {/* Data Sources */}
-          <div className="pt-6 border-t border-neutral-200">
-            <h4 className="text-base font-semibold text-neutral-900 mb-4">
+          <div className="pt-6 border-t border-white/10">
+            <h4 className="text-base font-semibold text-white mb-4">
               Data Sources
             </h4>
             <div className="space-y-3">
               {dataSources.map((source, index) => (
                 <div
                   key={index}
-                  className="flex items-start justify-between p-3 bg-neutral-50 rounded-lg"
+                  className="flex items-start justify-between p-3 bg-white/5 rounded-lg border border-white/5"
                 >
                   <div className="flex-1">
-                    <h5 className="font-medium text-neutral-900">
+                    <h5 className="font-medium text-white">
                       {source.name}
                     </h5>
-                    <p className="text-sm text-neutral-600 mt-1">
+                    <p className="text-sm text-gray-400 mt-1">
                       {source.description}
                     </p>
                   </div>
@@ -149,23 +123,11 @@ const TransparencyPanel = ({ className = '' }) => {
                       href={source.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="ml-4 text-brand-600 hover:text-brand-700 text-sm font-medium flex items-center"
+                      className="ml-4 text-cyan-400 hover:text-cyan-300 text-sm font-medium flex items-center gap-1"
                       aria-label={`Visit ${source.name} website`}
                     >
                       Visit
-                      <svg
-                        className="w-4 h-4 ml-1"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                        />
-                      </svg>
+                      <ExternalLink className="h-3.5 w-3.5" />
                     </a>
                   )}
                 </div>
@@ -174,26 +136,14 @@ const TransparencyPanel = ({ className = '' }) => {
           </div>
 
           {/* Limitations */}
-          <div className="pt-6 border-t border-neutral-200">
-            <h4 className="text-base font-semibold text-neutral-900 mb-4">
+          <div className="pt-6 border-t border-white/10">
+            <h4 className="text-base font-semibold text-white mb-4">
               Limitations & Disclaimers
             </h4>
             <ul className="space-y-2">
               {limitations.map((limitation, index) => (
-                <li key={index} className="flex items-start space-x-2 text-sm text-neutral-600">
-                  <svg
-                    className="w-5 h-5 text-neutral-400 flex-shrink-0 mt-0.5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-                    />
-                  </svg>
+                <li key={index} className="flex items-start gap-2 text-sm text-gray-400">
+                  <AlertTriangle className="h-5 w-5 text-gray-500 flex-shrink-0 mt-0.5" />
                   <span>{limitation}</span>
                 </li>
               ))}
@@ -201,12 +151,12 @@ const TransparencyPanel = ({ className = '' }) => {
           </div>
 
           {/* Last Updated */}
-          <div className="pt-6 border-t border-neutral-200 text-xs text-neutral-500">
+          <div className="pt-6 border-t border-white/10 text-xs text-gray-500">
             Last updated: April 2026
           </div>
         </div>
       )}
-    </Card>
+    </div>
   );
 };
 

@@ -6,10 +6,39 @@ import PageHeader from './PageHeader';
 jest.mock(
   'react-router-dom',
   () => ({
-    useNavigate: () => jest.fn()
+    useNavigate: () => jest.fn(),
+    useLocation: () => ({ pathname: '/' })
   }),
   { virtual: true }
 );
+
+// Mock ThemeToggle
+jest.mock('../ui/ThemeToggle', () => ({
+  ThemeToggle: () => <div data-testid="theme-toggle" />
+}));
+
+// Mock CardNav
+jest.mock('../ui/CardNav', () => ({
+  __esModule: true,
+  default: ({ items }) => (
+    <div data-testid="card-nav">
+      {items?.map((item, i) => (
+        <div key={i}>{item.label}</div>
+      ))}
+    </div>
+  )
+}));
+
+// Mock MobileNav
+jest.mock('./MobileNav', () => ({
+  __esModule: true,
+  default: ({ isAuthenticated, onLogout, userName }) => (
+    <div data-testid="mobile-nav">
+      <span>{isAuthenticated ? 'authenticated' : 'not-authenticated'}</span>
+      {userName && <span>{userName}</span>}
+    </div>
+  )
+}));
 
 describe('PageHeader Component', () => {
   describe('Branding', () => {
@@ -17,14 +46,7 @@ describe('PageHeader Component', () => {
       render(<PageHeader />);
       
       expect(screen.getByText('LinkGuard')).toBeInTheDocument();
-      expect(screen.getByText('Analyze links, domains, and IPs for security risks')).toBeInTheDocument();
-    });
-
-    it('applies brand gradient to logo', () => {
-      render(<PageHeader />);
-      
-      const logo = screen.getByText('LinkGuard');
-      expect(logo).toHaveClass('bg-gradient-to-r', 'from-cyan-400', 'to-cyan-600');
+      expect(screen.getByText('Security analysis dashboard')).toBeInTheDocument();
     });
   });
 
@@ -54,7 +76,7 @@ describe('PageHeader Component', () => {
     it('shows user name when provided', () => {
       render(<PageHeader isAuthenticated={true} userName="John Doe" />);
       
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
+      expect(screen.getAllByText('John Doe').length).toBeGreaterThan(0);
     });
 
     it('does not show auth buttons when authenticated', () => {
@@ -88,13 +110,6 @@ describe('PageHeader Component', () => {
   });
 
   describe('Responsive Layout', () => {
-    it('applies responsive flex classes', () => {
-      render(<PageHeader />);
-
-      const header = screen.getByRole('banner');
-      expect(header).toHaveClass('flex', 'flex-col', 'sm:flex-row');
-    });
-
     it('applies custom className', () => {
       render(<PageHeader className="custom-class" />);
 

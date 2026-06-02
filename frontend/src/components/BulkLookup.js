@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import api from '../api';
 import RiskBadge from './RiskBadge';
-import { countryCodeToFlag } from '../utils/formatters';
-import { List, Search, Download, Trash2, BarChart3, Check, X } from 'lucide-react';
+import { List, Search, Download, Trash2, BarChart3, Check, X, Loader2 } from 'lucide-react';
 
 /**
  * BulkLookup - Component for analyzing multiple targets at once.
@@ -184,7 +183,7 @@ const BulkLookup = () => {
           >
             {loading ? (
               <>
-                <span className="animate-spin">⏳</span>
+                <Loader2 className="h-4 w-4 animate-spin" />
                 <span>Processing... ({progress.current}/{progress.total})</span>
               </>
             ) : (
@@ -276,10 +275,7 @@ const BulkLookup = () => {
                           <div className="text-sm text-gray-300">
                             {result.data.geo?.city && result.data.geo?.countryCode ? (
                               <>
-                                <span className="mr-2">
-                                  {countryCodeToFlag(result.data.geo.countryCode)}
-                                </span>
-                                {result.data.geo.city}, {result.data.geo.countryCode}
+                                  {result.data.geo.city}, {result.data.geo.countryCode}
                               </>
                             ) : (
                               <span className="text-gray-500">Unknown</span>

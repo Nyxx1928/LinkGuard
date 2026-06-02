@@ -11,45 +11,11 @@
  * test and reason about.
  */
 
-/**
- * Convert ISO 3166-1 alpha-2 country code to flag emoji.
- * 
- * How it works:
- * 1. Each letter in the country code (e.g., "US") is converted to a
- *    Unicode Regional Indicator Symbol
- * 2. These symbols combine to form the flag emoji
- * 
- * Example: "US" → 🇺🇸
- * - U (0x55) → 🇺 (0x1F1FA)
- * - S (0x53) → 🇸 (0x1F1F8)
- * 
- * Teaching Point: This is a clever Unicode trick! Regional Indicator Symbols
- * (U+1F1E6 to U+1F1FF) represent letters A-Z. When two are placed together,
- * they form a flag emoji for that country code.
- * 
- * @param {string} countryCode - ISO 3166-1 alpha-2 code (e.g., "US", "GB", "JP")
- * @returns {string} Flag emoji or empty string if invalid
- */
 export const countryCodeToFlag = (countryCode) => {
   if (!countryCode || typeof countryCode !== 'string' || countryCode.length !== 2) {
     return '';
   }
-
-  // Convert to uppercase to handle lowercase input
-  const code = countryCode.toUpperCase();
-
-  // Regional Indicator Symbol Letter A starts at 0x1F1E6
-  // We add the offset from 'A' (0x41) to get the correct symbol
-  const REGIONAL_INDICATOR_A = 0x1F1E6;
-  const LETTER_A = 0x41;
-
-  // Convert each letter to its Regional Indicator Symbol
-  const codePoints = [...code].map(
-    (char) => REGIONAL_INDICATOR_A + (char.charCodeAt(0) - LETTER_A)
-  );
-
-  // Combine the code points into a string (the flag emoji)
-  return String.fromCodePoint(...codePoints);
+  return countryCode.toUpperCase();
 };
 
 /**

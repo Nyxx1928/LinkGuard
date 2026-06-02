@@ -1,13 +1,18 @@
 import { useState } from 'react';
-import api from '../api';
 import { useNavigate } from 'react-router-dom';
-import { Button, Input, Card, Alert, Icons } from '../ui';
+import api from '../api';
+import CardNav from '../components/ui/CardNav';
+import MobileNav from '../components/layout/MobileNav';
+import PageContainer from '../components/layout/PageContainer';
+import Button from '../components/ui/Button';
+import { AlertTriangle, Eye, EyeOff } from 'lucide-react';
 
 export default function Login({ setIsLoggedIn }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -18,6 +23,7 @@ export default function Login({ setIsLoggedIn }) {
     try {
       const res = await api.post('/api/login', { email, password });
       localStorage.setItem('auth_token', res.data.token);
+      localStorage.setItem('session_start', Date.now().toString());
       setIsLoggedIn(true);
       navigate('/home');
     } catch {
@@ -27,79 +33,157 @@ export default function Login({ setIsLoggedIn }) {
     }
   };
 
-  const LoginIcon = Icons.LogIn;
-  const LoadingIcon = Icons.Clock;
+  const cardNavItems = [
+    {
+      label: 'Platform',
+      bgColor: '#1B1722',
+      textColor: '#fff',
+      links: [
+        { label: 'Analyze Links', href: '/analyze', ariaLabel: 'Run a full risk scan instantly' },
+        { label: 'Lookup History', href: '/history', ariaLabel: 'Review and label saved results' },
+        { label: 'Dashboard', href: '/home', ariaLabel: 'Your security overview at a glance' },
+      ],
+    },
+    {
+      label: 'Public Tools',
+      bgColor: '#2F293A',
+      textColor: '#fff',
+      links: [
+        { label: 'Public Lookup', href: '/', ariaLabel: 'Shareable checks for any target' },
+        { label: 'About LinkGuard', href: '/about', ariaLabel: 'Methodology and data sources' },
+      ],
+    },
+    {
+      label: 'Resources',
+      bgColor: '#2F293A',
+      textColor: '#fff',
+      links: [
+        { label: 'About', href: '/about', ariaLabel: 'How LinkGuard evaluates risk' },
+        { label: 'Component Showcase', href: '/showcase', ariaLabel: 'Design system and UI patterns' },
+      ],
+    },
+  ];
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-950 via-black to-gray-950 p-4">
-      <div className="w-full max-w-md">
-        <form onSubmit={handleLogin}>
-          <Card className="bg-gray-900/80 backdrop-blur-md p-8 rounded-2xl shadow-2xl border border-gray-800/50">
-            <div className="text-center mb-6">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-cyan-500 to-cyan-700 rounded-2xl mb-4 shadow-lg shadow-cyan-500/30">
-                <svg className="text-white w-6 h-6" viewBox="0 0 24 24" fill="none" aria-hidden>
-                  <path d="M12 2a10 10 0 100 20 10 10 0 000-20z" stroke="white" strokeWidth="0" />
-                </svg>
-              </div>
-              <h2 className="text-3xl font-bold text-white mb-1">Welcome Back</h2>
-              <p className="text-gray-400 text-sm">Sign in to access GeoTracker</p>
-            </div>
-
-            {error && (
-              <div className="mb-4">
-                <Alert type="error">{error}</Alert>
-              </div>
-            )}
-
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Email</label>
-                <Input
-                  type="email"
-                  placeholder="Enter your email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  disabled={loading}
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Password</label>
-                <Input
-                  type="password"
-                  placeholder="Enter your password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  disabled={loading}
-                />
-              </div>
-            </div>
-
-            <div className="mt-6">
-              <Button type="submit" disabled={loading} className="w-full" variant="default">
-                {loading ? (
-                  <>
-                    <LoadingIcon className="mr-2 w-4 h-4 animate-spin" />
-                    <span>Signing In...</span>
-                  </>
-                ) : (
-                  <>
-                    <LoginIcon className="mr-2 w-4 h-4" />
-                    <span>Sign In</span>
-                  </>
-                )}
-              </Button>
-            </div>
-
-            <div className="mt-6 text-center text-xs text-gray-500">
-              <p>Demo credentials:</p>
-              <p className="mt-1 text-cyan-400 font-mono">test@example.com / password123</p>
-            </div>
-          </Card>
-        </form>
+    <PageContainer>
+      <CardNav
+        logoAlt="LinkGuard"
+        items={cardNavItems}
+        baseColor="transparent"
+        menuColor="#fff"
+        buttonBgColor="#111"
+        buttonTextColor="#fff"
+        ctaLabel="Create Account"
+        onCtaClick={() => navigate('/register')}
+      />
+      <div className="sm:hidden fixed top-4 right-4 z-50">
+        <MobileNav isAuthenticated={false} />
       </div>
-    </div>
+
+      <section className="pt-10 sm:pt-14 lg:pt-18 pb-10 sm:pb-12 lg:pb-16">
+        <div className="text-center px-4">
+          <p className="text-xs uppercase tracking-[0.35em] text-gray-400">LinkGuard security intelligence</p>
+          <h1
+            className="mt-4 text-4xl sm:text-5xl lg:text-6xl font-semibold text-white"
+            style={{ fontFamily: '"Space Grotesk", var(--font-sans)' }}
+          >
+            Welcome
+            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-blue-300 to-slate-200">
+              back.
+            </span>
+          </h1>
+          <p className="mt-4 text-base sm:text-lg text-gray-300 max-w-3xl mx-auto">
+            Sign in to your account to access your dashboard, review history, and run full analyses.
+          </p>
+        </div>
+
+        <div className="mt-8 sm:mt-10 max-w-lg mx-auto px-4">
+          <form onSubmit={handleLogin}>
+            <div className="bg-gray-900/70 border border-white/10 rounded-2xl p-4 sm:p-6 backdrop-blur">
+              {error && (
+                <div className="mb-4 p-3 sm:p-4 bg-red-900/50 border border-red-700/50 rounded-xl">
+                  <p className="text-red-300 text-sm flex items-start gap-2">
+                    <AlertTriangle className="h-5 w-5 flex-shrink-0 mt-0.5" />
+                    <span className="font-medium">{error}</span>
+                  </p>
+                </div>
+              )}
+
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Email</label>
+                  <input
+                    type="email"
+                    placeholder="Enter your email"
+                    value={email}
+                    onChange={(e) => { setEmail(e.target.value); if (error) setError(''); }}
+                    required
+                    disabled={loading}
+                    className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-gray-950/60 border border-white/10 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all outline-none disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium placeholder-gray-500 text-sm sm:text-base"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Password</label>
+                  <div className="relative">
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      placeholder="Enter your password"
+                      value={password}
+                      onChange={(e) => { setPassword(e.target.value); if (error) setError(''); }}
+                      required
+                      disabled={loading}
+                      className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-gray-950/60 border border-white/10 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all outline-none disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium placeholder-gray-500 text-sm sm:text-base pr-12"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-200 transition-colors"
+                      tabIndex={-1}
+                    >
+                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-6">
+                <Button
+                  type="submit"
+                  disabled={loading}
+                  loading={loading}
+                  variant="primary"
+                  size="lg"
+                  className="w-full min-h-[44px] bg-cyan-500 hover:bg-cyan-600 text-white border-0"
+                >
+                  {loading ? 'Signing In...' : 'Sign In'}
+                </Button>
+              </div>
+
+              <div className="mt-6 text-center">
+                <p className="text-sm text-gray-400">
+                  Don't have an account?{' '}
+                  <button
+                    type="button"
+                    onClick={() => navigate('/register')}
+                    className="text-cyan-400 hover:text-cyan-300 transition-colors font-medium"
+                  >
+                    Create one
+                  </button>
+                </p>
+              </div>
+
+              <div className="mt-6 p-3 bg-white/5 rounded-xl border border-white/5">
+                <p className="text-xs text-gray-500 text-center">
+                  Demo credentials:{' '}
+                  <span className="text-cyan-400 font-mono">test@example.com / password123</span>
+                </p>
+              </div>
+            </div>
+          </form>
+        </div>
+      </section>
+
+    </PageContainer>
   );
 }

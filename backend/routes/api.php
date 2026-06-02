@@ -6,6 +6,7 @@ use App\Http\Controllers\HistoryController;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 
+Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
 // Public endpoints (no authentication required)

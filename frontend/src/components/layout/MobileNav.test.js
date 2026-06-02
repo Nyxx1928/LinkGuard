@@ -13,8 +13,9 @@ jest.mock(
 );
 
 // Mock shadcn components
-jest.mock('../ui/button', () => ({
-  Button: ({ children, onClick, ...props }) => (
+jest.mock('../ui/Button', () => ({
+  __esModule: true,
+  default: ({ children, onClick, ...props }) => (
     <button onClick={onClick} {...props}>{children}</button>
   )
 }));
@@ -31,6 +32,10 @@ jest.mock('../ui/sheet', () => ({
 
 jest.mock('../ui/separator', () => ({
   Separator: () => <hr data-testid="separator" />
+}));
+
+jest.mock('../ui/ThemeToggle', () => ({
+  ThemeToggle: () => <div data-testid="theme-toggle" />
 }));
 
 describe('MobileNav Component', () => {
@@ -64,7 +69,7 @@ describe('MobileNav Component', () => {
     const menuButton = screen.getByLabelText('Open menu');
     fireEvent.click(menuButton);
     
-    expect(screen.getByText('Dashboard')).toBeInTheDocument();
+    expect(screen.getByText('Home')).toBeInTheDocument();
     expect(screen.getByText('Logout')).toBeInTheDocument();
   });
 

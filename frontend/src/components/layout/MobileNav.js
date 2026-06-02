@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Menu, Home, Search, LogIn, UserPlus, LogOut, User } from 'lucide-react';
+import { Menu, Home, Search, LogIn, UserPlus, LogOut, User, History, Info } from 'lucide-react';
 import {
   Sheet,
   SheetContent,
@@ -8,7 +8,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '../ui/sheet';
-import { Button } from '../ui/button';
+import Button from '../ui/Button';
 import { Separator } from '../ui/separator';
 import { ThemeToggle } from '../ui/ThemeToggle';
 
@@ -81,14 +81,36 @@ const MobileNav = ({ isAuthenticated = false, onLogout = null, userName = null }
             isActive={isActive('/')}
           />
 
-          {isAuthenticated && (
+          {isAuthenticated ? (
+            <>
+              <NavLink
+                icon={<Search className="h-5 w-5" />}
+                label="Analyze"
+                onClick={() => handleNavigation('/analyze')}
+                isActive={isActive('/analyze')}
+              />
+              <NavLink
+                icon={<History className="h-5 w-5" />}
+                label="History"
+                onClick={() => handleNavigation('/history')}
+                isActive={isActive('/history')}
+              />
+            </>
+          ) : (
             <NavLink
               icon={<Search className="h-5 w-5" />}
-              label="Dashboard"
-              onClick={() => handleNavigation('/home')}
-              isActive={isActive('/home')}
+              label="Analyze"
+              onClick={() => handleNavigation('/login')}
+              isActive={false}
             />
           )}
+
+          <NavLink
+            icon={<Info className="h-5 w-5" />}
+            label="About"
+            onClick={() => handleNavigation('/about')}
+            isActive={isActive('/about')}
+          />
 
           <Separator className="my-4" />
 

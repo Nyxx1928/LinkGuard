@@ -1,9 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../ui/Button';
+import CardNav from '../ui/CardNav';
 import MobileNav from './MobileNav';
+import Container from './Container';
 import { ThemeToggle } from '../ui/ThemeToggle';
-import { User } from 'lucide-react';
+import { Shield, User } from 'lucide-react';
 
 /**
  * PageHeader - Consistent header component for all pages
@@ -33,81 +35,110 @@ const PageHeader = ({
     }
   };
 
+  const cardNavItems = [
+    {
+      label: 'Platform',
+      bgColor: '#1B1722',
+      textColor: '#fff',
+      links: [
+        { label: 'Analyze Links', href: '/analyze', ariaLabel: 'Run a full risk scan instantly' },
+        { label: 'Lookup History', href: '/history', ariaLabel: 'Review and label saved results' },
+        { label: 'Dashboard', href: '/home', ariaLabel: 'Your security overview at a glance' },
+      ],
+    },
+    {
+      label: 'Public Tools',
+      bgColor: '#2F293A',
+      textColor: '#fff',
+      links: [
+        { label: 'Public Lookup', href: '/', ariaLabel: 'Shareable checks for any target' },
+        { label: 'About LinkGuard', href: '/about', ariaLabel: 'Methodology and data sources' },
+      ],
+    },
+    {
+      label: 'Resources',
+      bgColor: '#2F293A',
+      textColor: '#fff',
+      links: [
+        { label: 'About', href: '/about', ariaLabel: 'How LinkGuard evaluates risk' },
+        { label: 'Component Showcase', href: '/showcase', ariaLabel: 'Design system and UI patterns' },
+      ],
+    },
+  ];
+
   return (
-    <header className={`flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4 ${className}`}>
-      {/* Logo and Branding */}
-      <div className="flex-shrink-0">
-        <h1 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-cyan-400 to-cyan-600 bg-clip-text text-transparent">
-          LinkGuard
-        </h1>
-        <p className="text-gray-400 text-sm sm:text-base mt-1">
-          Analyze links, domains, and IPs for security risks
-        </p>
-      </div>
-
-      {/* Mobile Navigation - Visible on mobile (< 1024px) */}
-      <div className="lg:hidden">
-        <MobileNav
-          isAuthenticated={isAuthenticated}
-          onLogout={onLogout}
-          userName={userName}
-        />
-      </div>
-
-      {/* Desktop Actions and User Menu - Visible on desktop (>= 1024px) */}
-      <div className="hidden lg:flex items-center gap-3 flex-wrap">
-        {/* Theme Toggle */}
-        <ThemeToggle />
-
-        {/* Custom Actions */}
-        {actions && (
+    <header className={`sticky top-0 z-40 w-full glass-nav ${className}`}>
+      <Container className="py-4">
+        <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            {actions}
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-500/20">
+              <Shield className="h-5 w-5 text-brand-400" />
+            </div>
+            <div>
+              <button
+                type="button"
+                onClick={() => navigate('/')}
+                className="text-left text-lg font-semibold text-foreground"
+              >
+                LinkGuard
+              </button>
+              <p className="text-xs text-muted-foreground">Security analysis dashboard</p>
+            </div>
           </div>
-        )}
 
-        {/* Authentication Buttons */}
-        {showAuth && !isAuthenticated && (
-          <>
-            <Button
-              variant="secondary"
-              size="md"
-              onClick={() => navigate('/login')}
-              className="shadow-lg hover:shadow-cyan-500/20"
-            >
-              Log In
-            </Button>
-            <Button
-              variant="primary"
-              size="md"
-              onClick={() => navigate('/register')}
-              className="shadow-lg hover:shadow-cyan-500/20"
-            >
-              Sign Up
-            </Button>
-          </>
-        )}
+          <div className="sm:hidden">
+            <MobileNav
+              isAuthenticated={isAuthenticated}
+              onLogout={onLogout}
+              userName={userName}
+            />
+          </div>
 
-        {/* User Menu (Authenticated) */}
-        {isAuthenticated && (
-          <div className="flex items-center gap-3">
-            {userName && (
-              <div className="flex items-center gap-2 px-4 py-2 bg-gray-800/50 rounded-lg border border-gray-700">
-                <User className="h-4 w-4 text-gray-400" />
-                <span className="text-gray-300 text-sm font-medium">{userName}</span>
+          <div className="hidden sm:flex items-center gap-4">
+            <CardNav
+              items={cardNavItems}
+              menuColor="currentColor"
+            />
+
+            <ThemeToggle />
+
+            {actions && <div className="flex items-center gap-3">{actions}</div>}
+
+            {showAuth && !isAuthenticated && (
+              <>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => navigate('/login')}
+                >
+                  Log In
+                </Button>
+                <Button
+                  variant="primary"
+                  size="sm"
+                  onClick={() => navigate('/register')}
+                >
+                  Sign Up
+                </Button>
+              </>
+            )}
+
+            {isAuthenticated && (
+              <div className="flex items-center gap-3">
+                {userName && (
+                  <div className="flex items-center gap-2 rounded-full border border-white/10 px-3 py-1.5 text-xs text-muted-foreground">
+                    <User className="h-3.5 w-3.5" />
+                    <span>{userName}</span>
+                  </div>
+                )}
+                <Button variant="danger" size="sm" onClick={handleLogout}>
+                  Logout
+                </Button>
               </div>
             )}
-            <Button
-              variant="danger"
-              size="md"
-              onClick={handleLogout}
-              className="shadow-lg hover:shadow-red-500/20"
-            >
-              Logout
-            </Button>
           </div>
-        )}
-      </div>
+        </div>
+      </Container>
     </header>
   );
 };

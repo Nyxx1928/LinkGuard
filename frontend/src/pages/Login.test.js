@@ -5,7 +5,8 @@ import api from '../api';
 jest.mock(
   'react-router-dom',
   () => ({
-    useNavigate: () => jest.fn()
+    useNavigate: () => jest.fn(),
+    Link: ({ children, to, ...props }) => <a href={to} {...props}>{children}</a>,
   }),
   { virtual: true }
 );
@@ -16,6 +17,10 @@ jest.mock('../api', () => ({
     post: jest.fn()
   }
 }));
+
+jest.mock('../components/ui/CardNav', () => () => <div data-testid="card-nav" />);
+jest.mock('../components/layout/MobileNav', () => () => <div data-testid="mobile-nav" />);
+jest.mock('../components/layout/Footer', () => () => <div data-testid="footer" />);
 
 describe('Login page', () => {
   beforeEach(() => {
@@ -31,7 +36,6 @@ describe('Login page', () => {
   test('renders login form', () => {
     setupLogin();
 
-    expect(screen.getByText('Welcome Back')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Enter your email')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Enter your password')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /sign in/i })).toBeInTheDocument();
