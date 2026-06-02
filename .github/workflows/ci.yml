@@ -80,7 +80,7 @@ jobs:
 
       - name: Install frontend dependencies
         working-directory: frontend
-        run: npm ci
+        run: npm ci --include=optional
 
       - name: Validate composer.json
         working-directory: backend
@@ -236,11 +236,11 @@ jobs:
 
       - name: Install backend Node dependencies
         working-directory: backend
-        run: npm ci
+        run: npm ci --include=optional
 
       - name: Install frontend dependencies
         working-directory: frontend
-        run: npm ci
+        run: npm ci --include=optional
 
       - name: Build backend assets (Vite)
         working-directory: backend
