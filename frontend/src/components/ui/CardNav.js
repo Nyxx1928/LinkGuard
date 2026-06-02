@@ -14,6 +14,7 @@ const CardNav = ({
   menuColor,
   buttonBgColor = '#111',
   buttonTextColor = '#fff',
+  logoHref,
   ctaLabel = 'Get Started',
   onCtaClick,
 }) => {
@@ -145,7 +146,7 @@ const CardNav = ({
   };
 
   const handleLogoClick = () => {
-    navigate('/');
+    navigate(logoHref || '/');
   };
 
   return (
@@ -168,7 +169,7 @@ const CardNav = ({
             {logo ? (
               <img src={logo} alt={logoAlt} className="logo" onClick={handleLogoClick} style={{ cursor: 'pointer' }} />
             ) : (
-              <span className="logo-text" onClick={handleLogoClick} style={{ cursor: 'pointer' }}>{logoAlt}</span>
+              <span className="logo-text" onClick={handleLogoClick} style={{ cursor: 'pointer', color: menuColor || '#000' }}>{logoAlt}</span>
             )}
           </div>
 

@@ -16,7 +16,7 @@ import { Button } from './button.jsx';
  * ```
  */
 export function ThemeToggle() {
-  const [theme, setTheme] = useState('light');
+  const [theme, setTheme] = useState('dark');
   const [mounted, setMounted] = useState(false);
 
   // Initialize theme from localStorage or system preference
@@ -30,17 +30,14 @@ export function ThemeToggle() {
         setTheme(storedTheme);
         applyTheme(storedTheme);
       } else {
-        // Check system preference
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        const systemTheme = prefersDark ? 'dark' : 'light';
-        setTheme(systemTheme);
-        applyTheme(systemTheme);
+        // Default to dark mode (app UI is built with dark backgrounds)
+        setTheme('dark');
+        applyTheme('dark');
       }
     } catch (error) {
       console.warn('Failed to load theme preference:', error);
-      // Fallback to light theme
-      setTheme('light');
-      applyTheme('light');
+      setTheme('dark');
+      applyTheme('dark');
     }
   }, []);
 
