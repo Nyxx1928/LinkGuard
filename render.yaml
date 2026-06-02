@@ -15,9 +15,9 @@ services:
       - key: APP_KEY
         sync: false
       - key: FRONTEND_ORIGIN
-        value: https://link-guard-zero.vercel.app/
+        value: https://link-guard-zero.vercel.app
       - key: FRONTEND_ORIGINS
-        value: https://link-guard-zero.vercel.app/
+        value: https://link-guard-zero.vercel.app
       - key: SANCTUM_STATEFUL_DOMAINS
         value: link-guard-zero.vercel.app
       - key: SESSION_DRIVER
