@@ -19,9 +19,9 @@ services:
       - key: FRONTEND_ORIGINS
         value: https://link-guard-zero.vercel.app/
       - key: SANCTUM_STATEFUL_DOMAINS
-        value: link-guard-zero.vercel.app/
+        value: link-guard-zero.vercel.app
       - key: SESSION_DRIVER
-        value: database
+        value: file
       - key: SESSION_SECURE_COOKIE
         value: "true"
       - key: SESSION_SAME_SITE
@@ -38,10 +38,12 @@ services:
         value: 2KeXfhYXuehz95s.root # from your MySQL provider
       - key: DB_PASSWORD
         sync: false # set in dashboard
+      - key: MYSQL_ATTR_SSL_CA
+        value: /etc/ssl/certs/ca-certificates.crt
       - key: CACHE_STORE
-        value: database
+        value: file
       - key: QUEUE_CONNECTION
-        value: database
+        value: sync
       - key: LOG_CHANNEL
         value: stack
       - key: LOG_LEVEL
