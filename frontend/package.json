@@ -62,6 +62,12 @@
       "last 1 safari version"
     ]
   },
+  "overrides": {
+    "underscore": "^1.13.8",
+    "nth-check": "^2.0.1",
+    "serialize-javascript": "^7.0.3",
+    "@tootallnate/once": "^2.0.1"
+  },
   "jest": {
     "moduleNameMapper": {
       "^@/(.*)$": "<rootDir>/src/$1"

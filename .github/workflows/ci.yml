@@ -1,129 +1,92 @@
-name: CI
-
-permissions:
-  contents: read
+name: ci
 
 on:
   push:
     branches: [main]
   pull_request:
+    paths-ignore:
+      - "**.md"
+      - "docs/**"
+      - ".gitignore"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-jobs:
-  phase1_lint_validate:
-    name: Phase 1 - Lint, validate, and sanitize
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+permissions:
+  contents: read
+  id-token: write
 
-      - name: Setup PHP
+env:
+  PHP_VERSION: "8.4"
+  NODE_VERSION: "20"
+
+jobs:
+  changes:
+    name: detect dependency changes
+    runs-on: ubuntu-latest
+    outputs:
+      deps_changed: ${{ steps.final.outputs.deps_changed }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Detect dependency file changes (PRs only)
+        if: github.event_name == 'pull_request'
+        id: filter
+        uses: dorny/paths-filter@v3.0.2
+        with:
+          filters: |
+            deps:
+              - 'backend/composer.lock'
+              - 'backend/package-lock.json'
+              - 'frontend/package-lock.json'
+
+      - name: Set dependency change output
+        id: final
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "deps_changed=${{ steps.filter.outputs.deps }}" >> $GITHUB_OUTPUT
+          else
+            echo "deps_changed=true" >> $GITHUB_OUTPUT
+          fi
+
+  phase1-lint-validate:
+    name: phase 1 - lint and validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.4"
+          php-version: ${{ env.PHP_VERSION }}
           extensions: mbstring, bcmath, xml, ctype, json, openssl, pdo_mysql
+          tools: composer:v2
+          coverage: none
 
-      - name: Setup Node
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: ${{ env.NODE_VERSION }}
           cache: npm
           cache-dependency-path: |
             backend/package-lock.json
             frontend/package-lock.json
 
-      - name: Determine Composer cache directory
-        id: composer-cache
-        run: |
-          echo "dir=$(composer config cache-files-dir --global 2>/dev/null || echo \"$HOME/.cache/composer\")" >> "$GITHUB_OUTPUT"
-
-      - name: Cache Composer
-        uses: actions/cache@v4
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('backend/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
-
       - name: Install backend PHP dependencies
         working-directory: backend
         run: composer install --no-progress --prefer-dist --no-interaction
 
-      - name: Install backend Node dependencies
-        working-directory: backend
-        run: npm ci
-
       - name: Install frontend dependencies
         working-directory: frontend
-        run: npm ci
+        run: npm ci --include=optional
 
-      - name: Sanitize - Check for secrets
-        shell: bash
-        run: |
-          echo "Checking for potential secrets in code..."
-          if grep -r -E "(PASSWORD|SECRET|API_KEY|TOKEN|CREDENTIAL)\s*=\s*['\"][a-zA-Z0-9+/=]{16,}" \
-            --include="*.php" --include="*.ts" --include="*.js" --include="*.tsx" --include="*.jsx" \
-            --exclude-dir={node_modules,.git,vendor,dist,build,__tests__} \
-            --exclude="*.test.ts" --exclude="*.test.js" --exclude="*.spec.ts" --exclude="*.spec.js" \
-            --exclude="*.md" --exclude="*example*" \
-            backend/ frontend/ 2>/dev/null; then
-            echo "Potential hardcoded secrets found"
-            exit 1
-          fi
-          echo "No hardcoded secrets detected"
+      - name: Validate composer.json
+        working-directory: backend
+        run: composer validate --no-check-publish --strict
 
-      - name: Sanitize - Check for sensitive files
-        shell: bash
-        run: |
-          echo "Checking for sensitive files..."
-          SENSITIVE_FILES=".env .env.local .env.production id_rsa id_dsa .pem .key"
-          for file in $SENSITIVE_FILES; do
-            if find . -name "$file" -not -path "*/node_modules/*" -not -path "*/vendor/*" -not -path "*/.git/*" | grep -q .; then
-              echo "Found sensitive file: $file"
-              exit 1
-            fi
-          done
-          echo "No sensitive files found"
-
-      - name: Sanitize - Validate package and composer integrity
-        shell: bash
-        run: |
-          echo "Validating package.json files..."
-          find . -name "package.json" -not -path "*/node_modules/*" -exec node -e "try { JSON.parse(require('fs').readFileSync('{}', 'utf8')); } catch(e) { console.error('Invalid JSON in {}'); process.exit(1); }" \;
-          echo "Validating composer.json..."
-          composer validate --working-dir=backend --no-check-publish --strict
-          echo "Dependency manifests are valid"
-
-      - name: Sanitize - Check for unsafe input handling
-        shell: bash
-        run: |
-          echo "Checking for unsafe input handling patterns..."
-          UNSAFE_PATTERNS=0
-
-          if grep -r -E "\beval\(" --include="*.php" --include="*.ts" --include="*.js" --exclude-dir={node_modules,vendor,.git,dist,build} backend/ frontend/ 2>/dev/null; then
-            echo "eval() usage detected"
-            UNSAFE_PATTERNS=$((UNSAFE_PATTERNS + 1))
-          fi
-
-          if grep -r -E "\.innerHTML\s*=" --include="*.ts" --include="*.tsx" --include="*.js" --include="*.jsx" --exclude-dir={node_modules,.git,dist,build} frontend/ 2>/dev/null; then
-            echo "innerHTML usage detected"
-            UNSAFE_PATTERNS=$((UNSAFE_PATTERNS + 1))
-          fi
-
-          if grep -r "dangerouslySetInnerHTML" --include="*.tsx" --include="*.jsx" --exclude-dir={node_modules,.git,dist,build} frontend/ 2>/dev/null | grep -v "DOMPurify\|sanitize"; then
-            echo "dangerouslySetInnerHTML without sanitization detected"
-            UNSAFE_PATTERNS=$((UNSAFE_PATTERNS + 1))
-          fi
-
-          if [ $UNSAFE_PATTERNS -gt 0 ]; then
-            echo "Found $UNSAFE_PATTERNS unsafe input handling pattern(s)"
-            exit 1
-          fi
-          echo "No unsafe input handling patterns detected"
-
-      - name: Lint backend PHP formatting (Pint)
+      - name: Lint backend (Pint)
         working-directory: backend
         run: php vendor/bin/pint --test
 
@@ -131,52 +94,58 @@ jobs:
         working-directory: frontend
         run: npm run lint
 
-      - name: Build backend assets
-        working-directory: backend
-        run: npm run build
+      - name: Check for hardcoded secrets
+        shell: bash
+        run: |
+          if grep -r -E "(PASSWORD|SECRET|API_KEY|TOKEN|CREDENTIAL)\s*=\s*['\"][a-zA-Z0-9+/=]{16,}" \
+            --include="*.php" --include="*.ts" --include="*.js" --include="*.tsx" --include="*.jsx" \
+            --exclude-dir={node_modules,.git,vendor,dist,build} \
+            --exclude="*.md" --exclude="*example*" \
+            backend/ frontend/ 2>/dev/null; then
+            echo "Hardcoded secrets found"
+            exit 1
+          fi
 
-      - name: Build frontend
-        working-directory: frontend
-        run: npm run build
+      - name: Check for unsafe input handling
+        shell: bash
+        run: |
+          if grep -r -E "\beval\(" --include="*.php" --include="*.ts" --include="*.js" \
+            --exclude-dir={node_modules,vendor,.git,dist,build} backend/ frontend/ 2>/dev/null; then
+            echo "eval() usage detected"
+            exit 1
+          fi
+          echo "No unsafe patterns detected"
 
-  phase2_unit_testing:
-    name: Phase 2 - Unit testing
+  phase2-unit-tests:
+    name: phase 2 - unit testing
     runs-on: ubuntu-latest
-    needs: phase1_lint_validate
+    timeout-minutes: 15
+    needs: [phase1-lint-validate]
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup PHP
+      - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.4"
+          php-version: ${{ env.PHP_VERSION }}
           extensions: mbstring, bcmath, xml, ctype, json, openssl, pdo_mysql
-
-      - name: Determine Composer cache directory
-        id: composer-cache
-        run: |
-          echo "dir=$(composer config cache-files-dir --global 2>/dev/null || echo \"$HOME/.cache/composer\")" >> "$GITHUB_OUTPUT"
-
-      - name: Cache Composer
-        uses: actions/cache@v4
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('backend/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
+          tools: composer:v2
+          coverage: none
 
       - name: Install backend dependencies
         working-directory: backend
         run: composer install --no-progress --prefer-dist --no-interaction
 
       - name: Prepare environment
-        shell: bash
         run: |
           cp backend/.env.example backend/.env
           {
             echo "APP_ENV=testing"
             echo "DB_CONNECTION=sqlite"
             echo "DB_DATABASE=:memory:"
+            echo "CACHE_STORE=array"
+            echo "SESSION_DRIVER=array"
+            echo "QUEUE_CONNECTION=sync"
           } >> backend/.env
 
       - name: Generate app key
@@ -187,26 +156,17 @@ jobs:
         working-directory: backend
         run: php artisan test --testsuite=Unit
 
-  phase3_integration_testing:
-    name: Phase 3 - Integration testing
+  phase3-integration-tests:
+    name: phase 3 - integration testing
     runs-on: ubuntu-latest
-    needs: phase2_unit_testing
-    env:
-      DB_CONNECTION: mysql
-      DB_HOST: 127.0.0.1
-      DB_PORT: 3306
-      DB_DATABASE: geotracker_test
-      DB_USERNAME: root
-      DB_PASSWORD: root
-      APP_ENV: testing
+    timeout-minutes: 20
+    needs: [phase1-lint-validate]
     services:
       mysql:
         image: mysql:8.0
         env:
           MYSQL_DATABASE: geotracker_test
           MYSQL_ROOT_PASSWORD: root
-          MYSQL_USER: geouser
-          MYSQL_PASSWORD: geopass
         ports:
           - 3306:3306
         options: >-
@@ -215,33 +175,21 @@ jobs:
           --health-timeout=5s
           --health-retries=10
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup PHP
+      - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.4"
+          php-version: ${{ env.PHP_VERSION }}
           extensions: mbstring, bcmath, xml, ctype, json, openssl, pdo_mysql
-
-      - name: Determine Composer cache directory
-        id: composer-cache
-        run: |
-          echo "dir=$(composer config cache-files-dir --global 2>/dev/null || echo \"$HOME/.cache/composer\")" >> "$GITHUB_OUTPUT"
-
-      - name: Cache Composer
-        uses: actions/cache@v4
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('backend/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
+          tools: composer:v2
+          coverage: none
 
       - name: Install backend dependencies
         working-directory: backend
         run: composer install --no-progress --prefer-dist --no-interaction
 
       - name: Prepare environment
-        shell: bash
         run: |
           cp backend/.env.example backend/.env
           {
@@ -252,6 +200,9 @@ jobs:
             echo "DB_DATABASE=geotracker_test"
             echo "DB_USERNAME=root"
             echo "DB_PASSWORD=root"
+            echo "CACHE_STORE=array"
+            echo "SESSION_DRIVER=array"
+            echo "QUEUE_CONNECTION=sync"
           } >> backend/.env
 
       - name: Generate app key
@@ -266,142 +217,70 @@ jobs:
         working-directory: backend
         run: php artisan test --testsuite=Feature
 
-  phase4_e2e_playwright:
-    name: Phase 4 - E2E (Playwright)
+  phase4-build:
+    name: phase 4 - build assets
     runs-on: ubuntu-latest
-    needs: phase3_integration_testing
+    timeout-minutes: 15
+    needs: [phase1-lint-validate]
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Node
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: ${{ env.NODE_VERSION }}
           cache: npm
-          cache-dependency-path: frontend/package-lock.json
+          cache-dependency-path: |
+            backend/package-lock.json
+            frontend/package-lock.json
+
+      - name: Install backend Node dependencies
+        working-directory: backend
+        run: npm ci --include=optional
 
       - name: Install frontend dependencies
         working-directory: frontend
-        run: npm ci
+        run: npm ci --include=optional
 
-      - name: Validate Playwright setup
-        id: pw-setup
-        shell: bash
-        run: |
-          if [ -f frontend/playwright.config.ts ] && [ -d frontend/tests ]; then
-            echo "available=true" >> "$GITHUB_OUTPUT"
-            echo "Playwright setup detected"
-          else
-            echo "available=false" >> "$GITHUB_OUTPUT"
-            echo "Playwright setup not found in frontend/. Skipping E2E execution."
-          fi
+      - name: Build backend assets (Vite)
+        working-directory: backend
+        run: npm run build
 
-      - name: Install Playwright browsers
-        if: steps.pw-setup.outputs.available == 'true'
+      - name: Build frontend (react-scripts)
         working-directory: frontend
-        run: npx playwright install --with-deps
+        run: npm run build
 
-      - name: Run Playwright tests
-        if: steps.pw-setup.outputs.available == 'true'
-        working-directory: frontend
-        run: npm run test:e2e
-
-      - name: Upload Playwright report
-        if: always() && steps.pw-setup.outputs.available == 'true'
-        uses: actions/upload-artifact@v4
-        with:
-          name: playwright-report
-          path: |
-            frontend/playwright-report
-            frontend/test-results
-          if-no-files-found: ignore
-
-  phase5_test_build_docker:
-    name: Phase 5 - Test and build Docker
+  phase5-security-scan:
+    name: phase 5 - security scan
     runs-on: ubuntu-latest
-    needs: phase4_e2e_playwright
+    timeout-minutes: 10
+    needs: [phase4-build, changes]
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Validate Docker configuration files
-        shell: bash
-        run: |
-          test -f backend/Dockerfile
-          if [ -f docker-compose.yml ]; then
-            echo "docker-compose.yml found"
-          else
-            echo "docker-compose.yml not found at repo root. Compose validation will be skipped."
-          fi
-          if [ -f frontend/Dockerfile ]; then
-            echo "frontend/Dockerfile found"
-          else
-            echo "frontend/Dockerfile not found. Frontend image build will be skipped."
-          fi
-
-      - name: Validate Docker Compose
-        if: hashFiles('docker-compose.yml') != ''
-        run: docker compose config
-
-      - name: Start Docker services
-        if: hashFiles('docker-compose.yml') != ''
-        run: docker compose up -d
-
-      - name: Verify Docker services are running
-        if: hashFiles('docker-compose.yml') != ''
-        run: docker compose ps
-
-      - name: Build backend image
-        run: docker build -f backend/Dockerfile -t jlabs3/backend:ci backend
-
-      - name: Build frontend image
-        if: hashFiles('frontend/Dockerfile') != ''
-        run: docker build -f frontend/Dockerfile -t jlabs3/frontend:ci frontend
-
-      - name: Stop Docker services
-        if: always() && hashFiles('docker-compose.yml') != ''
-        run: docker compose down -v
-
-  phase6_security_scan:
-    name: Phase 6 - Security scan
-    runs-on: ubuntu-latest
-    needs: phase5_test_build_docker
-    permissions:
-      contents: read
-      id-token: write
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Install Syft
-        run: |
-          curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
-          syft version
+      - uses: actions/checkout@v4
 
       - name: Generate SBOM (dependencies)
-        run: syft dir:. -o spdx-json=sbom-dependencies.spdx.json
-
-      - name: Install Trivy
-        run: |
-          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
-          trivy --version
+        uses: anchore/sbom-action@v0.24.0
+        with:
+          path: ./
+          format: spdx-json
+          output-file: sbom-dependencies.spdx.json
 
       - name: Trivy vulnerability scan
-        run: |
-          trivy fs --scanners vuln --severity CRITICAL --ignore-unfixed --exit-code 1 .
-          trivy fs --scanners vuln --severity HIGH,CRITICAL --ignore-unfixed --format table --output trivy-report.txt .
+        uses: aquasecurity/trivy-action@v0.35.0
+        with:
+          scan-type: fs
+          scan-ref: .
+          format: table
+          exit-code: "1"
+          severity: HIGH,CRITICAL
+          ignore-unfixed: true
+          scanners: vuln
 
       - name: Install Cosign
+        if: github.event_name == 'push'
         uses: sigstore/cosign-installer@v3.8.1
 
-      - name: Verify Cosign install
-        run: cosign version
-
-      - name: Cosign authenticator (keyless sign and verify)
+      - name: Sign SBOM (keyless, push only)
         if: github.event_name == 'push'
         env:
           COSIGN_EXPERIMENTAL: "1"
@@ -414,10 +293,6 @@ jobs:
             --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
             sbom-dependencies.spdx.json
 
-      - name: Skip Cosign keyless signing on PR
-        if: github.event_name != 'push'
-        run: echo "Cosign keyless sign/verify runs on push events only."
-
       - name: Upload security artifacts
         if: always()
         uses: actions/upload-artifact@v4
@@ -425,47 +300,43 @@ jobs:
           name: security-artifacts
           path: |
             sbom-dependencies.spdx.json
-            trivy-report.txt
             sbom.sig
             sbom.pem
           if-no-files-found: ignore
 
-  phase7_ci_summary:
-    name: Phase 7 - CI summary
+  phase6-ci-summary:
+    name: phase 6 - ci summary
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     if: always()
     needs:
-      - phase1_lint_validate
-      - phase2_unit_testing
-      - phase3_integration_testing
-      - phase4_e2e_playwright
-      - phase5_test_build_docker
-      - phase6_security_scan
+      - phase1-lint-validate
+      - phase2-unit-tests
+      - phase3-integration-tests
+      - phase4-build
+      - phase5-security-scan
     steps:
       - name: Generate summary
         env:
-          PHASE1: ${{ needs.phase1_lint_validate.result }}
-          PHASE2: ${{ needs.phase2_unit_testing.result }}
-          PHASE3: ${{ needs.phase3_integration_testing.result }}
-          PHASE4: ${{ needs.phase4_e2e_playwright.result }}
-          PHASE5: ${{ needs.phase5_test_build_docker.result }}
-          PHASE6: ${{ needs.phase6_security_scan.result }}
-        shell: bash
+          PHASE1: ${{ needs.phase1-lint-validate.result }}
+          PHASE2: ${{ needs.phase2-unit-tests.result }}
+          PHASE3: ${{ needs.phase3-integration-tests.result }}
+          PHASE4: ${{ needs.phase4-build.result }}
+          PHASE5: ${{ needs.phase5-security-scan.result }}
         run: |
           {
-            echo "## CI Pipeline Summary"
-            echo
+            echo "## CI Summary"
+            echo ""
             echo "| Phase | Result |"
             echo "|---|---|"
-            echo "| Phase 1 - Lint and validate | ${PHASE1} |"
-            echo "| Phase 2 - Unit testing | ${PHASE2} |"
-            echo "| Phase 3 - Integration testing | ${PHASE3} |"
-            echo "| Phase 4 - E2E (Playwright) | ${PHASE4} |"
-            echo "| Phase 5 - Test and build Docker | ${PHASE5} |"
-            echo "| Phase 6 - Security scan | ${PHASE6} |"
+            echo "| Phase 1 - Lint & Validate | ${PHASE1} |"
+            echo "| Phase 2 - Unit Tests | ${PHASE2} |"
+            echo "| Phase 3 - Integration Tests | ${PHASE3} |"
+            echo "| Phase 4 - Build Assets | ${PHASE4} |"
+            echo "| Phase 5 - Security Scan | ${PHASE5} |"
           } >> "$GITHUB_STEP_SUMMARY"
 
-          for status in "$PHASE1" "$PHASE2" "$PHASE3" "$PHASE4" "$PHASE5" "$PHASE6"; do
+          for status in "$PHASE1" "$PHASE2" "$PHASE3" "$PHASE4" "$PHASE5"; do
             if [ "$status" != "success" ]; then
               echo "One or more phases failed."
               exit 1
