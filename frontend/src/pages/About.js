@@ -1,5 +1,5 @@
 import React from 'react';
-import { PageContainer, Footer } from '../components/layout';
+import { PageContainer } from '../components/layout';
 import MobileNav from '../components/layout/MobileNav';
 import CardNav from '../components/ui/CardNav';
 import { Card } from '../components/ui';
@@ -107,7 +107,6 @@ const About = () => {
         </Card>
       </div>
 
-      <Footer />
     </PageContainer>
   );
 };

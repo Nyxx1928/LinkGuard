@@ -1,5 +1,5 @@
 import React from 'react';
-import { PageContainer, Footer } from '../components/layout';
+import { PageContainer } from '../components/layout';
 import MobileNav from '../components/layout/MobileNav';
 import CardNav from '../components/ui/CardNav';
 import { Button, Card, Input, Badge } from '../components/ui';
@@ -121,16 +121,15 @@ const ComponentShowcase = () => {
           <h2 className="text-2xl font-semibold text-foreground">Charts</h2>
           <LazyRiskChart
             data={[
-              { name: 'Safe', value: 42, fill: '#10b981' },
-              { name: 'Caution', value: 18, fill: '#f59e0b' },
-              { name: 'Danger', value: 7, fill: '#ef4444' },
-              { name: 'Unknown', value: 3, fill: '#94a3b8' },
+              { name: 'Safe', value: 42, fill: '#7dd3fc' },
+              { name: 'Caution', value: 18, fill: '#0ea5e9' },
+              { name: 'Danger', value: 7, fill: '#0369a1' },
+              { name: 'Unknown', value: 3, fill: '#6b7280' },
             ]}
           />
         </section>
       </div>
 
-      <Footer />
     </PageContainer>
   );
 };

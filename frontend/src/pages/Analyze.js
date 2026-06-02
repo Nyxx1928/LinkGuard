@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import api from '../api';
-import { PageContainer, Footer } from '../components/layout';
+import { PageContainer } from '../components/layout';
 import MobileNav from '../components/layout/MobileNav';
 import CardNav from '../components/ui/CardNav';
 import AnalysisForm from '../components/AnalysisForm';
@@ -159,7 +159,6 @@ const Analyze = () => {
         )}
       </div>
 
-      <Footer />
     </PageContainer>
   );
 };

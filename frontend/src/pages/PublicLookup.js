@@ -156,10 +156,10 @@ const PublicLookup = () => {
             <div className="w-16 h-16 bg-risk-danger/10 rounded-full flex items-center justify-center mb-4">
               <AlertCircle className="h-9 w-9 text-risk-danger" />
             </div>
-            <h2 className="text-2xl font-bold text-neutral-900 mb-3">
+            <h2 className="text-2xl font-bold text-white mb-3">
               Lookup Not Found
             </h2>
-            <p className="text-neutral-600 mb-6 max-w-md">
+            <p className="text-gray-400 mb-6 max-w-md">
               {error}
             </p>
             <div className="flex gap-3">

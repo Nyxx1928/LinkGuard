@@ -4,7 +4,6 @@ import axios from 'axios';
 import CardNav from '../components/ui/CardNav';
 import MobileNav from '../components/layout/MobileNav';
 import PageContainer from '../components/layout/PageContainer';
-import Footer from '../components/layout/Footer';
 import Button from '../components/ui/Button';
 import ResultCard from '../components/ResultCard';
 import LoadingState from '../components/LoadingState';
@@ -495,10 +494,10 @@ const Landing = () => {
       </section>
 
       <div className="relative z-10 max-w-6xl mx-auto px-4 pb-12">
-        <div className="bg-gradient-to-r from-cyan-900/30 to-blue-900/40 backdrop-blur-md p-6 sm:p-8 lg:p-10 rounded-3xl border border-cyan-500/20 shadow-2xl shadow-cyan-500/10">
+        <div className="bg-gray-900/70 border border-white/10 backdrop-blur p-6 sm:p-8 lg:p-10 rounded-3xl">
           <div className="text-center">
-            <div className="inline-flex p-3 bg-cyan-500/20 rounded-full mb-4">
-              <Save className="h-8 w-8 sm:h-10 sm:w-10 text-cyan-300" />
+            <div className="inline-flex p-3 bg-white/10 rounded-full mb-4">
+              <Save className="h-8 w-8 sm:h-10 sm:w-10 text-gray-300" />
             </div>
             <h2
               className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-white mb-3"
@@ -514,7 +513,7 @@ const Landing = () => {
                 variant="primary"
                 size="lg"
                 onClick={() => navigate('/register')}
-                className="shadow-lg hover:shadow-cyan-500/50 min-h-[44px] w-full sm:w-auto"
+                className="shadow-lg min-h-[44px] w-full sm:w-auto"
               >
                 Create free account
               </Button>
@@ -531,7 +530,6 @@ const Landing = () => {
         </div>
       </div>
 
-      <Footer />
     </PageContainer>
   );
 };
