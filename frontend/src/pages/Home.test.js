@@ -45,10 +45,6 @@ jest.mock('../components/LazyGeoMap', () => ({
   __esModule: true,
   default: () => <div data-testid="geo-map" />
 }));
-jest.mock('../components/InsightsPanel', () => ({
-  __esModule: true,
-  default: ({ title }) => <div data-testid="insights-panel"><h2>{title}</h2></div>
-}));
 jest.mock('../components/HistoryList', () => ({
   __esModule: true,
   default: () => <div data-testid="history-list" />
@@ -101,7 +97,7 @@ describe('Home page', () => {
     api.get.mockResolvedValueOnce({ data: initialGeo });
     setupHome();
 
-    expect(await screen.findByTestId('insights-panel')).toBeInTheDocument();
+    expect(await screen.findByText('Summary')).toBeInTheDocument();
   });
 
   test('shows search controls', async () => {

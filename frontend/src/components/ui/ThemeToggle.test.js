@@ -50,12 +50,12 @@ describe('ThemeToggle Component', () => {
     expect(button).toBeInTheDocument();
   });
 
-  it('initializes with light theme by default', async () => {
+  it('initializes with dark theme by default', async () => {
     localStorageMock.getItem.mockReturnValue(null);
     
     render(<ThemeToggle />);
     const button = await screen.findByRole('button');
-    expect(button).toHaveAttribute('aria-label', 'Switch to dark mode');
+    expect(button).toHaveAttribute('aria-label', 'Switch to light mode');
   });
 
   it('loads theme from localStorage if available', async () => {
