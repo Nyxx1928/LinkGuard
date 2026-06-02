@@ -274,7 +274,7 @@ jobs:
           exit-code: "1"
           severity: HIGH,CRITICAL
           ignore-unfixed: true
-          skip-db-update: ${{ github.event_name == 'pull_request' }}
+          scanners: vuln
 
       - name: Install Cosign
         if: github.event_name == 'push'
