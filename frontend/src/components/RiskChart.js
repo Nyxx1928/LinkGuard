@@ -12,10 +12,10 @@ import {
 import { cn } from '../lib/utils';
 
 const defaultData = [
-  { name: 'Safe', value: 42, fill: '#10b981' },
-  { name: 'Caution', value: 26, fill: '#f59e0b' },
-  { name: 'Danger', value: 18, fill: '#ef4444' },
-  { name: 'Unknown', value: 14, fill: '#94a3b8' },
+  { name: 'Safe', value: 42, fill: '#7dd3fc' },
+  { name: 'Caution', value: 26, fill: '#0ea5e9' },
+  { name: 'Danger', value: 18, fill: '#0369a1' },
+  { name: 'Unknown', value: 14, fill: '#6b7280' },
 ];
 
 const CustomTooltip = ({ active, payload, label }) => {

@@ -66,10 +66,10 @@ const HistoryDashboard = () => {
   ];
 
   const chartData = [
-    { name: 'Safe', value: items.filter((item) => item.risk_level === 'LOW').length, fill: '#10b981' },
-    { name: 'Caution', value: items.filter((item) => item.risk_level === 'MEDIUM').length, fill: '#f59e0b' },
-    { name: 'Danger', value: items.filter((item) => item.risk_level === 'HIGH').length, fill: '#ef4444' },
-    { name: 'Unknown', value: items.filter((item) => item.risk_level === 'UNKNOWN').length, fill: '#94a3b8' },
+    { name: 'Safe', value: items.filter((item) => item.risk_level === 'LOW').length, fill: '#7dd3fc' },
+    { name: 'Caution', value: items.filter((item) => item.risk_level === 'MEDIUM').length, fill: '#0ea5e9' },
+    { name: 'Danger', value: items.filter((item) => item.risk_level === 'HIGH').length, fill: '#0369a1' },
+    { name: 'Unknown', value: items.filter((item) => item.risk_level === 'UNKNOWN').length, fill: '#6b7280' },
   ];
 
   return (

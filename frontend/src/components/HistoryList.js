@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import api from '../api';
 import RiskBadge from './RiskBadge';
 import CopyButton from './CopyButton';
-import { countryCodeToFlag, relativeTimestamp } from '../utils/formatters';
+import { relativeTimestamp } from '../utils/formatters';
 import { History, Edit2, Trash2 } from 'lucide-react';
 
 /**
@@ -214,12 +214,7 @@ const HistoryList = ({ onRefresh }) => {
                   <td className="py-4 px-4">
                     <div className="text-sm text-gray-300">
                       {geo.city && geo.countryCode ? (
-                        <>
-                          <span className="mr-2">
-                            {countryCodeToFlag(geo.countryCode)}
-                          </span>
-                          {geo.city}, {geo.countryCode}
-                        </>
+                        <>{geo.city}, {geo.countryCode}</>
                       ) : (
                         <span className="text-gray-500">Unknown</span>
                       )}
