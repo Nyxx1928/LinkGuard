@@ -97,7 +97,7 @@ const Landing = () => {
   const cardNavItems = [
     {
       label: 'Platform',
-      bgColor: '#1B1722',
+      bgColor: '#0f172a',
       textColor: '#fff',
       links: [
         { label: 'Analyze Links', href: '/analyze', ariaLabel: 'Run a full risk scan instantly' },
@@ -107,7 +107,7 @@ const Landing = () => {
     },
     {
       label: 'Public Tools',
-      bgColor: '#2F293A',
+      bgColor: '#1e293b',
       textColor: '#fff',
       links: [
         { label: 'Public Lookup', href: '/', ariaLabel: 'Shareable checks for any target' },
@@ -116,7 +116,7 @@ const Landing = () => {
     },
     {
       label: 'Resources',
-      bgColor: '#2F293A',
+      bgColor: '#1e293b',
       textColor: '#fff',
       links: [
         { label: 'About', href: '/about', ariaLabel: 'How LinkGuard evaluates risk' },
@@ -129,16 +129,18 @@ const Landing = () => {
     <PageContainer className="text-gray-100">
       <div className="relative overflow-hidden">
         <div className="relative z-10">
-          <CardNav
-            logoAlt="LinkGuard"
-            items={cardNavItems}
-            baseColor="transparent"
-            menuColor="#fff"
-            buttonBgColor="#111"
-            buttonTextColor="#fff"
-            ctaLabel="Log In"
-            onCtaClick={() => navigate('/login')}
-          />
+          <div className="hidden sm:block">
+            <CardNav
+              logoAlt="LinkGuard"
+              items={cardNavItems}
+              baseColor="transparent"
+              menuColor="#fff"
+              buttonBgColor="#111"
+              buttonTextColor="#fff"
+              ctaLabel="Log In"
+              onCtaClick={() => navigate('/login')}
+            />
+          </div>
           <div className="sm:hidden fixed top-4 right-4 z-50">
             <MobileNav isAuthenticated={false} />
           </div>
@@ -240,6 +242,23 @@ const Landing = () => {
               )}
             </div>
 
+            {loading && (
+              <div className="mb-8 bg-gray-900/60 backdrop-blur-md p-6 sm:p-8 rounded-3xl border border-white/10">
+                <LoadingState
+                  message="Analyzing security indicators..."
+                  steps={['Resolving domain', 'Checking geolocation', 'Analyzing network', 'Calculating risk score']}
+                  currentStep={1}
+                  size="lg"
+                />
+              </div>
+            )}
+
+            {currentResult && !loading && (
+              <div className="mb-10">
+                <ResultCard result={currentResult} showShareLink={false} />
+              </div>
+            )}
+
             <div className="mt-10 sm:mt-12 grid grid-cols-2 md:grid-cols-4 gap-4 px-4">
               {[
                 { label: 'Signals tracked', value: '106+' },
@@ -294,23 +313,6 @@ const Landing = () => {
       </div>
 
       <div className="relative z-10 max-w-6xl mx-auto px-4">
-        {loading && (
-          <div className="mb-8 bg-gray-900/60 backdrop-blur-md p-6 sm:p-8 rounded-3xl border border-white/10">
-            <LoadingState
-              message="Analyzing security indicators..."
-              steps={['Resolving domain', 'Checking geolocation', 'Analyzing network', 'Calculating risk score']}
-              currentStep={1}
-              size="lg"
-            />
-          </div>
-        )}
-
-        {currentResult && !loading && (
-          <div className="mb-10">
-            <ResultCard result={currentResult} showShareLink={false} />
-          </div>
-        )}
-
         {visitorGeo && (
           <div className="bg-gray-900/60 backdrop-blur-md p-4 sm:p-6 lg:p-8 rounded-3xl border border-white/10 shadow-2xl shadow-cyan-500/5 mb-10">
             <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
