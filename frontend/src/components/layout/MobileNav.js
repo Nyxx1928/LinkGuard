@@ -10,7 +10,6 @@ import {
 } from '../ui/sheet';
 import Button from '../ui/Button';
 import { Separator } from '../ui/separator';
-import { ThemeToggle } from '../ui/ThemeToggle';
 
 /**
  * MobileNav - Mobile navigation drawer component
@@ -51,103 +50,102 @@ const MobileNav = ({ isAuthenticated = false, onLogout = null, userName = null }
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <div className="flex items-center gap-2">
-          <ThemeToggle />
-          <Button
-            variant="ghost"
-            size="icon"
-            className="lg:hidden"
-            aria-label="Open menu"
-          >
-            <Menu className="h-6 w-6" />
-          </Button>
-        </div>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="lg:hidden"
+          aria-label="Open menu"
+        >
+          <Menu className="h-6 w-6" />
+        </Button>
       </SheetTrigger>
-      <SheetContent side="left" className="w-[280px] sm:w-[320px]">
-        <SheetHeader>
-          <SheetTitle className="text-left">
-            <span className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-cyan-600 bg-clip-text text-transparent">
-              LinkGuard
-            </span>
-          </SheetTitle>
-        </SheetHeader>
+      <SheetContent side="right" className="w-[280px] sm:w-[320px] border-l border-white/10 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-0">
+        <div className="flex flex-col h-full p-6">
+          <SheetHeader className="pb-4 border-b border-white/5">
+            <SheetTitle className="text-left">
+              <span className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-cyan-600 bg-clip-text text-transparent">
+                LinkGuard
+              </span>
+            </SheetTitle>
+          </SheetHeader>
 
-        <div className="flex flex-col gap-2 mt-6">
-          {/* Public Navigation Links */}
-          <NavLink
-            icon={<Home className="h-5 w-5" />}
-            label="Home"
-            onClick={() => handleNavigation('/')}
-            isActive={isActive('/')}
-          />
+          <div className="flex flex-col gap-2 mt-6 flex-1">
+            {/* Public Navigation Links */}
+            <NavLink
+              icon={<Home className="h-5 w-5" />}
+              label="Home"
+              onClick={() => handleNavigation('/')}
+              isActive={isActive('/')}
+            />
 
-          {isAuthenticated ? (
-            <>
+            {isAuthenticated ? (
+              <>
+                <NavLink
+                  icon={<Search className="h-5 w-5" />}
+                  label="Analyze"
+                  onClick={() => handleNavigation('/analyze')}
+                  isActive={isActive('/analyze')}
+                />
+                <NavLink
+                  icon={<History className="h-5 w-5" />}
+                  label="History"
+                  onClick={() => handleNavigation('/history')}
+                  isActive={isActive('/history')}
+                />
+              </>
+            ) : (
               <NavLink
                 icon={<Search className="h-5 w-5" />}
                 label="Analyze"
-                onClick={() => handleNavigation('/analyze')}
-                isActive={isActive('/analyze')}
-              />
-              <NavLink
-                icon={<History className="h-5 w-5" />}
-                label="History"
-                onClick={() => handleNavigation('/history')}
-                isActive={isActive('/history')}
-              />
-            </>
-          ) : (
-            <NavLink
-              icon={<Search className="h-5 w-5" />}
-              label="Analyze"
-              onClick={() => handleNavigation('/login')}
-              isActive={false}
-            />
-          )}
-
-          <NavLink
-            icon={<Info className="h-5 w-5" />}
-            label="About"
-            onClick={() => handleNavigation('/about')}
-            isActive={isActive('/about')}
-          />
-
-          <Separator className="my-4" />
-
-          {/* Authentication Section */}
-          {!isAuthenticated ? (
-            <>
-              <NavLink
-                icon={<LogIn className="h-5 w-5" />}
-                label="Log In"
                 onClick={() => handleNavigation('/login')}
-                isActive={isActive('/login')}
+                isActive={false}
               />
-              <NavLink
-                icon={<UserPlus className="h-5 w-5" />}
-                label="Sign Up"
-                onClick={() => handleNavigation('/register')}
-                isActive={isActive('/register')}
-              />
-            </>
-          ) : (
-            <>
-              {userName && (
-                <div className="flex items-center gap-3 px-4 py-3 bg-gray-100 dark:bg-gray-800 rounded-lg">
-                  <User className="h-5 w-5 text-gray-600 dark:text-gray-400" />
-                  <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                    {userName}
-                  </span>
-                </div>
-              )}
-              <NavLink
-                icon={<LogOut className="h-5 w-5" />}
-                label="Logout"
-                onClick={handleLogout}
-                variant="destructive"
-              />
-            </>
-          )}
+            )}
+
+            <NavLink
+              icon={<Info className="h-5 w-5" />}
+              label="About"
+              onClick={() => handleNavigation('/about')}
+              isActive={isActive('/about')}
+            />
+
+            <Separator className="my-4 bg-white/5" />
+
+            {/* Authentication Section */}
+            {!isAuthenticated ? (
+              <>
+                <NavLink
+                  icon={<LogIn className="h-5 w-5" />}
+                  label="Log In"
+                  onClick={() => handleNavigation('/login')}
+                  isActive={isActive('/login')}
+                />
+                <NavLink
+                  icon={<UserPlus className="h-5 w-5" />}
+                  label="Sign Up"
+                  onClick={() => handleNavigation('/register')}
+                  isActive={isActive('/register')}
+                />
+              </>
+            ) : (
+              <>
+                {userName && (
+                  <div className="flex items-center gap-3 px-4 py-3 bg-gray-900/70 border border-white/10 rounded-lg backdrop-blur">
+                    <User className="h-5 w-5 text-gray-400" />
+                    <span className="text-sm font-medium text-gray-100">
+                      {userName}
+                    </span>
+                  </div>
+                )}
+                <NavLink
+                  icon={<LogOut className="h-5 w-5" />}
+                  label="Logout"
+                  onClick={handleLogout}
+                  variant="destructive"
+                />
+              </>
+            )}
+          </div>
         </div>
       </SheetContent>
     </Sheet>
@@ -172,14 +170,14 @@ const NavLink = ({ icon, label, onClick, isActive = false, variant = 'ghost' }) 
       onClick={onClick}
       className={`
         flex items-center gap-3 w-full px-4 py-3 rounded-lg
-        min-h-[44px] text-left transition-colors
+        min-h-[44px] text-left transition-all duration-200
         ${isActive 
-          ? 'bg-cyan-100 dark:bg-cyan-900/30 text-cyan-900 dark:text-cyan-100' 
+          ? 'bg-white/10 text-cyan-300 shadow-inner' 
           : variant === 'destructive'
-          ? 'text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20'
-          : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+          ? 'text-red-400 hover:bg-red-900/20'
+          : 'text-gray-300 hover:bg-white/5 hover:text-white'
         }
-        focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2
+        focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500
       `}
     >
       {icon}

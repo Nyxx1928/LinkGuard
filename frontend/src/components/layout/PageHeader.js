@@ -4,7 +4,6 @@ import Button from '../ui/Button';
 import CardNav from '../ui/CardNav';
 import MobileNav from './MobileNav';
 import Container from './Container';
-import { ThemeToggle } from '../ui/ThemeToggle';
 import { Shield, User } from 'lucide-react';
 
 /**
@@ -99,8 +98,6 @@ const PageHeader = ({
               items={cardNavItems}
               menuColor="currentColor"
             />
-
-            <ThemeToggle />
 
             {actions && <div className="flex items-center gap-3">{actions}</div>}
 
