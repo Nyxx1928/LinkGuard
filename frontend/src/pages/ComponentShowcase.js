@@ -14,7 +14,7 @@ const ComponentShowcase = () => {
   const cardNavItems = [
     {
       label: 'Platform',
-      bgColor: '#1B1722',
+      bgColor: '#0f172a',
       textColor: '#fff',
       links: [
         { label: 'Analyze Links', href: '/analyze', ariaLabel: 'Run a full risk scan instantly' },
@@ -24,7 +24,7 @@ const ComponentShowcase = () => {
     },
     {
       label: 'Public Tools',
-      bgColor: '#2F293A',
+      bgColor: '#1e293b',
       textColor: '#fff',
       links: [
         { label: 'Public Lookup', href: '/', ariaLabel: 'Shareable checks for any target' },
@@ -33,7 +33,7 @@ const ComponentShowcase = () => {
     },
     {
       label: 'Resources',
-      bgColor: '#2F293A',
+      bgColor: '#1e293b',
       textColor: '#fff',
       links: [
         { label: 'About', href: '/about', ariaLabel: 'How LinkGuard evaluates risk' },
@@ -44,16 +44,18 @@ const ComponentShowcase = () => {
 
   return (
     <PageContainer>
-      <CardNav
-        logoAlt="LinkGuard"
-        items={cardNavItems}
-        baseColor="#fff"
-        menuColor="#000"
-        buttonBgColor="#111"
-        buttonTextColor="#fff"
-        ctaLabel="Log In"
-        onCtaClick={() => window.location.href = '/login'}
-      />
+      <div className="hidden sm:block">
+        <CardNav
+          logoAlt="LinkGuard"
+          items={cardNavItems}
+          baseColor="transparent"
+          menuColor="#fff"
+          buttonBgColor="#111"
+          buttonTextColor="#fff"
+          ctaLabel="Log In"
+          onCtaClick={() => window.location.href = '/login'}
+        />
+      </div>
       <div className="sm:hidden fixed top-4 right-4 z-50">
         <MobileNav isAuthenticated={false} />
       </div>
