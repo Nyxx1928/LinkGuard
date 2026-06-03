@@ -80,9 +80,6 @@ exports[`PageHeader Component Snapshot Tests matches snapshot for authenticated 
             </div>
           </div>
           <div
-            data-testid="theme-toggle"
-          />
-          <div
             class="flex items-center gap-3"
           >
             <div
@@ -203,9 +200,6 @@ exports[`PageHeader Component Snapshot Tests matches snapshot for unauthenticate
               Resources
             </div>
           </div>
-          <div
-            data-testid="theme-toggle"
-          />
           <button
             class="inline-flex min-h-[44px] min-w-[44px] items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-secondary text-secondary-foreground hover:bg-secondary/80 h-9 rounded-md px-3"
           >
@@ -299,9 +293,6 @@ exports[`PageHeader Component Snapshot Tests matches snapshot with custom action
               Resources
             </div>
           </div>
-          <div
-            data-testid="theme-toggle"
-          />
           <div
             class="flex items-center gap-3"
           >
