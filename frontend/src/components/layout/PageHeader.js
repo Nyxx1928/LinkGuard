@@ -70,18 +70,18 @@ const PageHeader = ({
       <Container className="py-4">
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-500/20">
-              <Shield className="h-5 w-5 text-brand-400" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/20">
+              <Shield className="h-5 w-5 text-primary" />
             </div>
             <div>
               <button
                 type="button"
                 onClick={() => navigate('/')}
-                className="text-left text-lg font-semibold text-foreground"
+                className="text-left text-lg font-semibold text-white"
               >
                 LinkGuard
               </button>
-              <p className="text-xs text-muted-foreground">Security analysis dashboard</p>
+              <p className="text-xs text-body">Security analysis dashboard</p>
             </div>
           </div>
 
@@ -104,7 +104,7 @@ const PageHeader = ({
             {showAuth && !isAuthenticated && (
               <>
                 <Button
-                  variant="secondary"
+                  variant="outline"
                   size="sm"
                   onClick={() => navigate('/login')}
                 >
@@ -123,7 +123,7 @@ const PageHeader = ({
             {isAuthenticated && (
               <div className="flex items-center gap-3">
                 {userName && (
-                  <div className="flex items-center gap-2 rounded-full border border-white/10 px-3 py-1.5 text-xs text-muted-foreground">
+                  <div className="flex items-center gap-2 rounded-full border border-white/10 px-3 py-1.5 text-xs text-body">
                     <User className="h-3.5 w-3.5" />
                     <span>{userName}</span>
                   </div>

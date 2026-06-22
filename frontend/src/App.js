@@ -90,9 +90,9 @@ function App() {
 
   return (
     <Router>
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+      <div className="min-h-screen bg-canvas text-ink">
         {sessionWarning && (
-          <div className="fixed top-0 left-0 right-0 z-[9999] bg-yellow-900/90 backdrop-blur border-b border-yellow-600/50 px-4 py-3 text-center">
+          <div className="fixed top-0 left-0 right-0 z-[9999] bg-yellow-950 border-b border-yellow-800 px-4 py-3 text-center">
             <p className="text-yellow-200 text-sm">
               Your session will expire in <strong>{remainingMinutes} minute{remainingMinutes !== 1 ? 's' : ''}</strong>.
               Please save your work.
