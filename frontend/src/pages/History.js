@@ -42,10 +42,6 @@ const History = () => {
         <CardNav
           logoAlt="LinkGuard"
           items={cardNavItems}
-          baseColor="transparent"
-          menuColor="#fff"
-          buttonBgColor="#111"
-          buttonTextColor="#fff"
           ctaLabel="Dashboard"
           onCtaClick={() => window.location.href = '/home'}
         />

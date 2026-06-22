@@ -79,10 +79,6 @@ export default function Register({ setIsLoggedIn }) {
         <CardNav
           logoAlt="LinkGuard"
           items={cardNavItems}
-          baseColor="transparent"
-          menuColor="#fff"
-          buttonBgColor="#111"
-          buttonTextColor="#fff"
           ctaLabel="Log In"
           onCtaClick={() => navigate('/login')}
         />
@@ -94,12 +90,9 @@ export default function Register({ setIsLoggedIn }) {
       <section className="pt-10 sm:pt-14 lg:pt-18 pb-10 sm:pb-12 lg:pb-16">
         <div className="text-center px-4">
           <p className="text-xs uppercase tracking-[0.35em] text-gray-400">LinkGuard security intelligence</p>
-          <h1
-            className="mt-4 text-4xl sm:text-5xl lg:text-6xl font-semibold text-white"
-            style={{ fontFamily: '"Space Grotesk", var(--font-sans)' }}
-          >
+          <h1 className="mt-4 text-4xl sm:text-5xl lg:text-6xl font-semibold text-white">
             Get
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-blue-300 to-slate-200">
+            <span className="block text-primary">
               started.
             </span>
           </h1>
@@ -110,9 +103,9 @@ export default function Register({ setIsLoggedIn }) {
 
         <div className="mt-8 sm:mt-10 max-w-lg mx-auto px-4">
           <form onSubmit={handleRegister}>
-            <div className="bg-gray-900/70 border border-white/10 rounded-2xl p-4 sm:p-6 backdrop-blur">
+            <div className="bg-canvas border border-hairline rounded-md p-4 sm:p-6">
               {error && (
-                <div className="mb-4 p-3 sm:p-4 bg-red-900/50 border border-red-700/50 rounded-xl">
+                <div className="mb-4 p-3 sm:p-4 bg-red-950 border border-red-800 rounded-md">
                   <p className="text-red-300 text-sm flex items-start gap-2">
                     <AlertTriangle className="h-5 w-5 flex-shrink-0 mt-0.5" />
                     <span className="font-medium">{error}</span>
@@ -129,11 +122,11 @@ export default function Register({ setIsLoggedIn }) {
                     value={name}
                     onChange={(e) => { setName(e.target.value); if (error) setError(''); }}
                     disabled={loading}
-                    className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-gray-950/60 border border-white/10 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all outline-none disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium placeholder-gray-500 text-sm sm:text-base"
+                    className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-canvas-soft border border-hairline rounded-sm focus:ring-2 focus:ring-primary transition-all outline-none disabled:opacity-50 disabled:cursor-not-allowed text-ink font-medium placeholder-mute text-sm sm:text-base"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Email</label>
+                  <label className="block text-sm font-medium text-body mb-2">Email</label>
                   <input
                     type="email"
                     placeholder="Enter your email"
@@ -141,12 +134,12 @@ export default function Register({ setIsLoggedIn }) {
                     onChange={(e) => { setEmail(e.target.value); if (error) setError(''); }}
                     required
                     disabled={loading}
-                    className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-gray-950/60 border border-white/10 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all outline-none disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium placeholder-gray-500 text-sm sm:text-base"
+                    className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-canvas-soft border border-hairline rounded-sm focus:ring-2 focus:ring-primary transition-all outline-none disabled:opacity-50 disabled:cursor-not-allowed text-ink font-medium placeholder-mute text-sm sm:text-base"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Password</label>
+                  <label className="block text-sm font-medium text-body mb-2">Password</label>
                   <div className="relative">
                     <input
                       type={showPassword ? 'text' : 'password'}
@@ -155,7 +148,7 @@ export default function Register({ setIsLoggedIn }) {
                       onChange={(e) => { setPassword(e.target.value); if (error) setError(''); }}
                       required
                       disabled={loading}
-                      className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-gray-950/60 border border-white/10 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all outline-none disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium placeholder-gray-500 text-sm sm:text-base pr-12"
+                      className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-canvas-soft border border-hairline rounded-sm focus:ring-2 focus:ring-primary transition-all outline-none disabled:opacity-50 disabled:cursor-not-allowed text-ink font-medium placeholder-mute text-sm sm:text-base pr-12"
                     />
                     <button
                       type="button"
@@ -169,7 +162,7 @@ export default function Register({ setIsLoggedIn }) {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Confirm Password</label>
+                  <label className="block text-sm font-medium text-body mb-2">Confirm Password</label>
                   <div className="relative">
                     <input
                       type={showConfirm ? 'text' : 'password'}
@@ -178,7 +171,7 @@ export default function Register({ setIsLoggedIn }) {
                       onChange={(e) => { setConfirmPassword(e.target.value); if (error) setError(''); }}
                       required
                       disabled={loading}
-                      className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-gray-950/60 border border-white/10 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all outline-none disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium placeholder-gray-500 text-sm sm:text-base pr-12"
+                      className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-canvas-soft border border-hairline rounded-sm focus:ring-2 focus:ring-primary transition-all outline-none disabled:opacity-50 disabled:cursor-not-allowed text-ink font-medium placeholder-mute text-sm sm:text-base pr-12"
                     />
                     <button
                       type="button"
@@ -199,7 +192,7 @@ export default function Register({ setIsLoggedIn }) {
                   loading={loading}
                   variant="primary"
                   size="lg"
-                  className="w-full min-h-[44px] bg-cyan-500 hover:bg-cyan-600 text-white border-0"
+                  className="w-full min-h-[44px]"
                 >
                   {loading ? 'Creating Account...' : 'Create Account'}
                 </Button>
@@ -211,7 +204,7 @@ export default function Register({ setIsLoggedIn }) {
                   <button
                     type="button"
                     onClick={() => navigate('/login')}
-                    className="text-cyan-400 hover:text-cyan-300 transition-colors font-medium"
+                    className="text-primary hover:text-primary-soft transition-colors font-medium"
                   >
                     Sign in
                   </button>

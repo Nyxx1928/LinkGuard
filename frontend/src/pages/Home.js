@@ -151,10 +151,6 @@ export default function Home({ setIsLoggedIn }) {
         <CardNav
           logoAlt="LinkGuard"
           items={cardNavItems}
-          baseColor="transparent"
-          menuColor="#fff"
-          buttonBgColor="#111"
-          buttonTextColor="#fff"
           logoHref="/home"
           ctaLabel="Logout"
           onCtaClick={handleLogout}
@@ -165,15 +161,12 @@ export default function Home({ setIsLoggedIn }) {
       </div>
 
       <section className="mb-8 fade-in">
-        <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-gray-900/70 via-gray-900/60 to-gray-800/60 p-6 sm:p-8 shadow-[0_24px_60px_rgba(0,0,0,0.35)]">
+        <div className="rounded-md border border-hairline bg-canvas p-6 sm:p-8">
           <div className="space-y-2 mb-6">
-            <p className="text-xs uppercase tracking-[0.3em] text-gray-400">Dashboard</p>
-            <h2
-              className="text-3xl sm:text-4xl font-semibold text-white"
-              style={{ fontFamily: '"Space Grotesk", var(--font-sans)' }}
-            >
+            <p className="text-xs uppercase tracking-[0.3em] text-mute">Dashboard</p>
+            <h2 className="text-3xl sm:text-4xl font-semibold text-white">
               Recent Analysis
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-blue-300 to-slate-200">
+              <span className="block text-primary">
                 Summary
               </span>
             </h2>
@@ -187,8 +180,8 @@ export default function Home({ setIsLoggedIn }) {
               { id: 'latest', label: 'Latest Target', value: currentResult?.target || 'N/A' },
               { id: 'risk', label: 'Latest Risk', value: currentResult?.risk_level || 'Unknown' },
             ].map((metric) => (
-              <div key={metric.id} className="rounded-2xl border border-white/5 bg-white/5 p-4 text-center">
-                <p className="text-xs uppercase tracking-widest text-gray-400">{metric.label}</p>
+              <div key={metric.id} className="rounded-md border border-hairline bg-canvas p-4 text-center">
+                <p className="text-xs uppercase tracking-widest text-mute">{metric.label}</p>
                 <p className="mt-1 text-2xl font-semibold text-white">{metric.value}</p>
               </div>
             ))}
@@ -205,7 +198,7 @@ export default function Home({ setIsLoggedIn }) {
       </section>
 
       {/* Mode Toggle */}
-      <Card variant="glass" padding="sm" className="inline-flex mb-8">
+      <Card variant="default" className="inline-flex p-sm mb-8">
         <Button
           variant={lookupMode === 'single' ? 'primary' : 'ghost'}
           size="md"
@@ -230,7 +223,7 @@ export default function Home({ setIsLoggedIn }) {
       {lookupMode === 'single' && (
         <>
           {/* Search Controls */}
-          <Card variant="glass" padding="md" className="mb-8">
+          <Card variant="default" className="mb-8">
             {loading ? (
               <LoadingState
                 message="Analyzing target..."
@@ -278,7 +271,7 @@ export default function Home({ setIsLoggedIn }) {
                     {loading ? 'Searching...' : 'Search'}
                   </Button>
                   <Button
-                    variant="secondary"
+                    variant="outline"
                     size="md"
                     onClick={clearSearch}
                     disabled={loading}
@@ -320,10 +313,10 @@ export default function Home({ setIsLoggedIn }) {
 
           {/* Search History */}
           {history.length > 0 && (
-            <div className="mb-8 bg-gray-900/70 border border-white/10 rounded-2xl p-4 sm:p-6 backdrop-blur">
+            <div className="mb-8 bg-canvas border border-hairline rounded-md p-4 sm:p-6">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-cyan-500 to-cyan-700 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-500/30">
+                  <div className="w-10 h-10 bg-primary rounded-md flex items-center justify-center">
                     <History className="h-5 w-5 text-white" />
                   </div>
                   <div>
@@ -332,10 +325,10 @@ export default function Home({ setIsLoggedIn }) {
                   </div>
                 </div>
                 {selectedHistory.length > 0 && (
-                  <Button
-                    variant="danger"
-                    size="sm"
-                    onClick={handleDeleteSelected}
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={handleDeleteSelected}
                     icon={<Trash2 className="h-4 w-4" />}
                     iconPosition="left"
                   >
@@ -343,28 +336,28 @@ export default function Home({ setIsLoggedIn }) {
                   </Button>
                 )}
               </div>
-              <div className="mb-4 p-3 bg-white/5 rounded-xl border border-white/10">
+              <div className="mb-4 p-3 bg-canvas-soft rounded-md border border-hairline">
                 <label className="flex items-center cursor-pointer">
                   <input
                     type="checkbox"
                     checked={selectedHistory.length === history.length && history.length > 0}
                     onChange={handleSelectAll}
-                    className="w-4 h-4 text-cyan-500 border-white/20 rounded focus:ring-cyan-500 bg-gray-800"
+                    className="w-4 h-4 text-primary border-hairline rounded focus:ring-primary bg-canvas"
                   />
-                  <span className="ml-3 text-sm font-medium text-gray-300">Select All</span>
+                  <span className="ml-3 text-sm font-medium text-body">Select All</span>
                 </label>
               </div>
               <div className="space-y-2">
                 {history.map((target, idx) => (
                   <div
                     key={idx}
-                    className="p-4 bg-white/[0.03] hover:bg-white/5 rounded-xl border border-white/10 hover:border-cyan-500/50 transition-all duration-200 flex items-center gap-3 group"
+                    className="p-4 bg-canvas hover:bg-canvas-soft rounded-md border border-hairline hover:border-primary transition-all duration-200 flex items-center gap-3 group"
                   >
                     <input
                       type="checkbox"
                       checked={selectedHistory.includes(target)}
                       onChange={() => handleCheckboxChange(target)}
-                      className="w-4 h-4 text-cyan-500 border-white/20 rounded focus:ring-cyan-500 bg-gray-800"
+                      className="w-4 h-4 text-primary border-hairline rounded focus:ring-primary bg-canvas"
                     />
                     <span className="flex-1 font-mono font-semibold text-white">{target}</span>
                     <Button

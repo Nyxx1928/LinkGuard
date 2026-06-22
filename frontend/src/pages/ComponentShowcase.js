@@ -48,10 +48,6 @@ const ComponentShowcase = () => {
         <CardNav
           logoAlt="LinkGuard"
           items={cardNavItems}
-          baseColor="transparent"
-          menuColor="#fff"
-          buttonBgColor="#111"
-          buttonTextColor="#fff"
           ctaLabel="Log In"
           onCtaClick={() => window.location.href = '/login'}
         />
@@ -62,10 +58,10 @@ const ComponentShowcase = () => {
 
       <div className="space-y-10">
         <section className="space-y-4">
-          <h2 className="text-2xl font-semibold text-foreground">Buttons</h2>
+          <h2 className="text-2xl font-semibold text-white">Buttons</h2>
           <div className="flex flex-wrap gap-3">
             <Button variant="primary">Primary</Button>
-            <Button variant="secondary">Secondary</Button>
+            <Button variant="outline">Secondary</Button>
             <Button variant="ghost">Ghost</Button>
             <Button variant="outline">Outline</Button>
             <Button variant="danger">Danger</Button>
@@ -73,7 +69,7 @@ const ComponentShowcase = () => {
         </section>
 
         <section className="space-y-4">
-          <h2 className="text-2xl font-semibold text-foreground">Inputs and Badges</h2>
+          <h2 className="text-2xl font-semibold text-white">Inputs and Badges</h2>
           <div className="grid gap-4 sm:grid-cols-2">
             <Input label="Target" placeholder="example.com" />
             <div className="flex items-center gap-2">
@@ -85,7 +81,7 @@ const ComponentShowcase = () => {
         </section>
 
         <section className="space-y-4">
-          <h2 className="text-2xl font-semibold text-foreground">Metric Cards</h2>
+          <h2 className="text-2xl font-semibold text-white">Metric Cards</h2>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <MetricCard
               icon={ShieldCheck}
@@ -99,15 +95,15 @@ const ComponentShowcase = () => {
               value="9"
               trend={{ value: '-4%', direction: 'down', label: 'this week' }}
             />
-            <Card variant="subtle" padding="md" className="flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">Trend</span>
+            <Card variant="default" className="flex items-center justify-between p-4">
+              <span className="text-sm text-body">Trend</span>
               <TrendIndicator value="+8%" direction="up" />
             </Card>
           </div>
         </section>
 
         <section className="space-y-4">
-          <h2 className="text-2xl font-semibold text-foreground">Risk Surfaces</h2>
+          <h2 className="text-2xl font-semibold text-white">Risk Surfaces</h2>
           <div className="grid gap-6 lg:grid-cols-2">
             <RiskDisplay level="MEDIUM" score={52} confidence={78} />
             <RiskFactors
@@ -120,7 +116,7 @@ const ComponentShowcase = () => {
         </section>
 
         <section className="space-y-4">
-          <h2 className="text-2xl font-semibold text-foreground">Charts</h2>
+          <h2 className="text-2xl font-semibold text-white">Charts</h2>
           <LazyRiskChart
             data={[
               { name: 'Safe', value: 42, fill: '#7dd3fc' },
