@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api';
 import ResultCard from '../components/ResultCard';
@@ -7,11 +7,12 @@ import BulkLookup from '../components/BulkLookup';
 import LoadingState from '../components/LoadingState';
 import TransparencyPanel from '../components/TransparencyPanel';
 import LazyRiskChart from '../components/LazyRiskChart';
+import TrendIndicator from '../components/TrendIndicator';
 import { PageContainer } from '../components/layout';
 import MobileNav from '../components/layout/MobileNav';
 import CardNav from '../components/ui/CardNav';
 import { Button, Input, Card } from '../components/ui';
-import { Search, List, Trash2, MapPin, History } from 'lucide-react';
+import { Search, List, Trash2, MapPin, History, ShieldCheck, AlertTriangle, AlertCircle } from 'lucide-react';
 
 export default function Home({ setIsLoggedIn }) {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ export default function Home({ setIsLoggedIn }) {
   const [currentResult, setCurrentResult] = useState(null);
   const [history, setHistory] = useState([]);
   const [selectedHistory, setSelectedHistory] = useState([]);
+  const [resultHistory, setResultHistory] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [historyRefreshKey, setHistoryRefreshKey] = useState(0);
@@ -54,10 +56,13 @@ export default function Home({ setIsLoggedIn }) {
       const res = await api.post('/api/analyze', { target });
       if (res.data) {
         setCurrentResult(res.data);
-        setHistory(prev => [...new Set([target, ...prev])].slice(0, 10));
+        setHistory(prev => [target, ...prev.filter(t => t !== target)].slice(0, 10));
+        setResultHistory(prev => {
+          const entry = { target, risk_level: res.data.risk_level || 'UNKNOWN' };
+          return [entry, ...prev.filter(e => e.target !== target)].slice(0, 50);
+        });
         setError('');
         setSearchTarget(target);
-        // Refresh the HistoryList component
         setHistoryRefreshKey(prev => prev + 1);
       } else {
         setError('Analysis data not available for this target');
@@ -74,6 +79,33 @@ export default function Home({ setIsLoggedIn }) {
       setLoading(false);
     }
   };
+
+  const chartData = useMemo(() => {
+    const counts = { LOW: 0, MEDIUM: 0, HIGH: 0, UNKNOWN: 0 };
+    resultHistory.forEach(r => { counts[r.risk_level]++; });
+    return [
+      { name: 'Safe', value: counts.LOW, fill: '#10b981' },
+      { name: 'Caution', value: counts.MEDIUM, fill: '#f59e0b' },
+      { name: 'Danger', value: counts.HIGH, fill: '#ef4444' },
+      { name: 'Unknown', value: counts.UNKNOWN, fill: '#8b949e' },
+    ];
+  }, [resultHistory]);
+
+  const riskSummary = useMemo(() => {
+    const total = resultHistory.length;
+    if (!total) return null;
+    const high = resultHistory.filter(r => r.risk_level === 'HIGH').length;
+    const low = resultHistory.filter(r => r.risk_level === 'LOW').length;
+    const med = resultHistory.filter(r => r.risk_level === 'MEDIUM').length;
+    return {
+      total,
+      high,
+      med,
+      low,
+      cleanRate: total ? Math.round((low / total) * 100) : 0,
+      riskRate: total ? Math.round(((high + med) / total) * 100) : 0,
+    };
+  }, [resultHistory]);
 
   const clearSearch = () => {
     setSearchTarget('');
@@ -93,6 +125,7 @@ export default function Home({ setIsLoggedIn }) {
 
   const handleDeleteSelected = () => {
     setHistory(prev => prev.filter(target => !selectedHistory.includes(target)));
+    setResultHistory(prev => prev.filter(r => !selectedHistory.includes(r.target)));
     setSelectedHistory([]);
   };
 
@@ -117,8 +150,6 @@ export default function Home({ setIsLoggedIn }) {
   const cardNavItems = [
     {
       label: 'Platform',
-      bgColor: '#0f172a',
-      textColor: '#fff',
       links: [
         { label: 'Analyze Links', href: '/analyze', ariaLabel: 'Run a full risk scan instantly' },
         { label: 'Lookup History', href: '/history', ariaLabel: 'Review and label saved results' },
@@ -127,8 +158,7 @@ export default function Home({ setIsLoggedIn }) {
     },
     {
       label: 'Public Tools',
-      bgColor: '#1e293b',
-      textColor: '#fff',
+
       links: [
         { label: 'Public Lookup', href: '/', ariaLabel: 'Shareable checks for any target' },
         { label: 'About LinkGuard', href: '/about', ariaLabel: 'Methodology and data sources' },
@@ -136,8 +166,7 @@ export default function Home({ setIsLoggedIn }) {
     },
     {
       label: 'Resources',
-      bgColor: '#1e293b',
-      textColor: '#fff',
+
       links: [
         { label: 'About', href: '/about', ariaLabel: 'How LinkGuard evaluates risk' },
         { label: 'Component Showcase', href: '/showcase', ariaLabel: 'Design system and UI patterns' },
@@ -174,26 +203,26 @@ export default function Home({ setIsLoggedIn }) {
               Snapshot of recent activity across your workspace.
             </p>
           </div>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 mb-6">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-6">
             {[
-              { id: 'total', label: 'Total Lookups', value: history.length || 0 },
-              { id: 'latest', label: 'Latest Target', value: currentResult?.target || 'N/A' },
-              { id: 'risk', label: 'Latest Risk', value: currentResult?.risk_level || 'Unknown' },
+              { id: 'total', label: 'Total Lookups', value: resultHistory.length, icon: History },
+              { id: 'clean', label: 'Clean Rate', value: riskSummary ? `${riskSummary.cleanRate}%` : '--', icon: ShieldCheck, trend: riskSummary ? { value: `${riskSummary.cleanRate}%`, direction: riskSummary.cleanRate >= 70 ? 'up' : 'down' } : null },
+              { id: 'risk', label: 'High Risk', value: riskSummary ? riskSummary.high : '--', icon: AlertTriangle },
+              { id: 'latest', label: 'Latest Risk', value: currentResult?.risk_level || 'Unknown', icon: AlertCircle },
             ].map((metric) => (
-              <div key={metric.id} className="rounded-md border border-hairline bg-canvas p-4 text-center">
-                <p className="text-xs uppercase tracking-widest text-mute">{metric.label}</p>
-                <p className="mt-1 text-2xl font-semibold text-white">{metric.value}</p>
+              <div key={metric.id} className="rounded-md border border-hairline bg-canvas p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <p className="text-xs uppercase tracking-widest text-mute">{metric.label}</p>
+                  <metric.icon className="h-4 w-4 text-primary" />
+                </div>
+                <p className="text-2xl font-semibold text-white">{metric.value}</p>
+                {metric.trend && (
+                  <TrendIndicator value={metric.trend.value} direction={metric.trend.direction} label="of lookups" />
+                )}
               </div>
             ))}
           </div>
-          <LazyRiskChart
-            data={[
-              { name: 'Safe', value: 2, fill: '#7dd3fc' },
-              { name: 'Caution', value: 1, fill: '#0ea5e9' },
-              { name: 'Danger', value: 1, fill: '#0369a1' },
-              { name: 'Unknown', value: 0, fill: '#6b7280' },
-            ]}
-          />
+          <LazyRiskChart data={chartData} />
         </div>
       </section>
 

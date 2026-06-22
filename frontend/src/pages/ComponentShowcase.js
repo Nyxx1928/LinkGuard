@@ -14,8 +14,6 @@ const ComponentShowcase = () => {
   const cardNavItems = [
     {
       label: 'Platform',
-      bgColor: '#0f172a',
-      textColor: '#fff',
       links: [
         { label: 'Analyze Links', href: '/analyze', ariaLabel: 'Run a full risk scan instantly' },
         { label: 'Lookup History', href: '/history', ariaLabel: 'Review and label saved results' },
@@ -24,8 +22,7 @@ const ComponentShowcase = () => {
     },
     {
       label: 'Public Tools',
-      bgColor: '#1e293b',
-      textColor: '#fff',
+
       links: [
         { label: 'Public Lookup', href: '/', ariaLabel: 'Shareable checks for any target' },
         { label: 'About LinkGuard', href: '/about', ariaLabel: 'Methodology and data sources' },
@@ -33,8 +30,7 @@ const ComponentShowcase = () => {
     },
     {
       label: 'Resources',
-      bgColor: '#1e293b',
-      textColor: '#fff',
+
       links: [
         { label: 'About', href: '/about', ariaLabel: 'How LinkGuard evaluates risk' },
         { label: 'Component Showcase', href: '/showcase', ariaLabel: 'Design system and UI patterns' },
@@ -119,10 +115,10 @@ const ComponentShowcase = () => {
           <h2 className="text-2xl font-semibold text-white">Charts</h2>
           <LazyRiskChart
             data={[
-              { name: 'Safe', value: 42, fill: '#7dd3fc' },
-              { name: 'Caution', value: 18, fill: '#0ea5e9' },
-              { name: 'Danger', value: 7, fill: '#0369a1' },
-              { name: 'Unknown', value: 3, fill: '#6b7280' },
+              { name: 'Safe', value: 42, fill: '#10b981' },
+              { name: 'Caution', value: 18, fill: '#f59e0b' },
+              { name: 'Danger', value: 7, fill: '#ef4444' },
+              { name: 'Unknown', value: 3, fill: '#8b949e' },
             ]}
           />
         </section>
