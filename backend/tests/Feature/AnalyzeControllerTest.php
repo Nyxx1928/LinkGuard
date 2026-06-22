@@ -73,6 +73,8 @@ class AnalyzeControllerTest extends TestCase
                     'hosting',
                 ],
                 'risk_level',
+                'risk_score',
+                'risk_breakdown',
                 'dns_records',
                 'uuid',
                 'created_at',
