@@ -1,0 +1,197 @@
+/* ============================================
+   VOLTAGENT ELEVATION SYSTEM
+   Replaces glassmorphism.css
+   ============================================ */
+
+/* --- Interactive Hover Glow (Level 2) --- */
+.card-hover-glow {
+  transition: box-shadow 200ms ease-in-out;
+}
+.card-hover-glow:hover {
+  box-shadow: 0 0 15px rgba(92, 88, 85, 0.2);
+}
+
+/* --- Hairline Utilities --- */
+.hairline {
+  border: 1px solid #3d3a39;
+}
+.hairline-dashed {
+  border: 1px dashed rgba(79, 93, 117, 0.4);
+}
+
+/* --- Green Divider Band --- */
+.green-divider {
+  border-top: 2px solid #00d992;
+  border-bottom: 2px solid #00d992;
+}
+
+/* --- Modal/Dialog Shadow (Level 3) --- */
+.modal-shadow {
+  box-shadow: 0 20px 60px rgba(0,0,0,0.7), 0 0 0 1px rgba(148,163,184,0.1) inset;
+}
+
+/* ============================================
+   SKELETON LOADING STATES
+   ============================================ */
+@keyframes shimmer {
+  0% { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
+}
+
+.shimmer {
+  animation: shimmer 2s infinite linear;
+  background: linear-gradient(
+    90deg,
+    rgba(31, 41, 55, 0.5) 0%,
+    rgba(55, 65, 81, 0.5) 50%,
+    rgba(31, 41, 55, 0.5) 100%
+  );
+  background-size: 1000px 100%;
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(31, 41, 55, 0.5) 0%,
+    rgba(55, 65, 81, 0.5) 50%,
+    rgba(31, 41, 55, 0.5) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+  border-radius: 0.375rem;
+}
+
+.skeleton-text {
+  height: 1rem;
+  width: 100%;
+}
+.skeleton-heading {
+  height: 2rem;
+  width: 60%;
+}
+.skeleton-circle {
+  border-radius: 50%;
+  aspect-ratio: 1;
+}
+.skeleton-card {
+  height: 200px;
+  width: 100%;
+}
+
+/* ============================================
+   CUSTOM ANIMATIONS
+   ============================================ */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.fade-in {
+  animation: fadeIn 300ms ease-in-out;
+}
+
+@keyframes slideInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.slide-in-up {
+  animation: slideInUp 400ms ease-out;
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(100%); }
+  to { opacity: 1; transform: translateX(0); }
+}
+.slide-in-right {
+  animation: slideInRight 300ms ease-out;
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+.scale-in {
+  animation: scaleIn 200ms ease-out;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+/* ============================================
+   HOVER TRANSFORMS
+   ============================================ */
+.hover-lift {
+  transition: transform 200ms ease-in-out;
+}
+.hover-lift:hover {
+  transform: translateY(-4px);
+}
+.hover-scale {
+  transition: transform 200ms ease-in-out;
+}
+.hover-scale:hover {
+  transform: scale(1.05);
+}
+.hover-scale-sm {
+  transition: transform 200ms ease-in-out;
+}
+.hover-scale-sm:hover {
+  transform: scale(1.02);
+}
+
+/* ============================================
+   INTERACTIVE FEEDBACK
+   ============================================ */
+.active-press {
+  transition: transform 100ms ease-in-out;
+}
+.active-press:active {
+  transform: scale(0.98);
+}
+
+.focus-ring {
+  outline: none;
+  transition: box-shadow 200ms ease-in-out;
+}
+.focus-ring:focus-visible {
+  box-shadow: 0 0 0 2px rgba(0, 217, 146, 0.5);
+}
+
+/* ============================================
+   MAP POPUP STYLING
+   ============================================ */
+.maplibregl-popup-content {
+  background: rgba(16, 16, 16, 0.95);
+  border: 1px solid #3d3a39;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+  border-radius: 0.75rem;
+  color: #e2e8f0;
+}
+.maplibregl-popup-tip {
+  border-top-color: rgba(16, 16, 16, 0.95);
+}
+
+/* ============================================
+   REDUCED MOTION SUPPORT
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  .shimmer,
+  .fade-in,
+  .slide-in-up,
+  .slide-in-right,
+  .scale-in,
+  .spin {
+    animation: none;
+  }
+
+  .hover-lift,
+  .hover-scale,
+  .hover-scale-sm,
+  .card-hover-glow {
+    transition: none;
+  }
+}
