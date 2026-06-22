@@ -3,7 +3,7 @@
 exports[`PageHeader Component Snapshot Tests matches snapshot for authenticated state 1`] = `
 <DocumentFragment>
   <header
-    class="sticky top-0 z-40 w-full glass-nav "
+    class="sticky top-0 z-40 w-full bg-canvas border-b hairline "
   >
     <div
       class="mx-auto w-full px-4 sm:px-6 lg:px-8 max-w-7xl py-4"
@@ -15,11 +15,11 @@ exports[`PageHeader Component Snapshot Tests matches snapshot for authenticated 
           class="flex items-center gap-3"
         >
           <div
-            class="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-500/20"
+            class="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/20"
           >
             <svg
               aria-hidden="true"
-              class="lucide lucide-shield h-5 w-5 text-brand-400"
+              class="lucide lucide-shield h-5 w-5 text-primary"
               fill="none"
               height="24"
               stroke="currentColor"
@@ -37,13 +37,13 @@ exports[`PageHeader Component Snapshot Tests matches snapshot for authenticated 
           </div>
           <div>
             <button
-              class="text-left text-lg font-semibold text-foreground"
+              class="text-left text-lg font-semibold text-white"
               type="button"
             >
               LinkGuard
             </button>
             <p
-              class="text-xs text-muted-foreground"
+              class="text-xs text-body"
             >
               Security analysis dashboard
             </p>
@@ -83,7 +83,7 @@ exports[`PageHeader Component Snapshot Tests matches snapshot for authenticated 
             class="flex items-center gap-3"
           >
             <div
-              class="flex items-center gap-2 rounded-full border border-white/10 px-3 py-1.5 text-xs text-muted-foreground"
+              class="flex items-center gap-2 rounded-full border border-white/10 px-3 py-1.5 text-xs text-body"
             >
               <svg
                 aria-hidden="true"
@@ -127,7 +127,7 @@ exports[`PageHeader Component Snapshot Tests matches snapshot for authenticated 
 exports[`PageHeader Component Snapshot Tests matches snapshot for unauthenticated state 1`] = `
 <DocumentFragment>
   <header
-    class="sticky top-0 z-40 w-full glass-nav "
+    class="sticky top-0 z-40 w-full bg-canvas border-b hairline "
   >
     <div
       class="mx-auto w-full px-4 sm:px-6 lg:px-8 max-w-7xl py-4"
@@ -139,11 +139,11 @@ exports[`PageHeader Component Snapshot Tests matches snapshot for unauthenticate
           class="flex items-center gap-3"
         >
           <div
-            class="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-500/20"
+            class="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/20"
           >
             <svg
               aria-hidden="true"
-              class="lucide lucide-shield h-5 w-5 text-brand-400"
+              class="lucide lucide-shield h-5 w-5 text-primary"
               fill="none"
               height="24"
               stroke="currentColor"
@@ -161,13 +161,13 @@ exports[`PageHeader Component Snapshot Tests matches snapshot for unauthenticate
           </div>
           <div>
             <button
-              class="text-left text-lg font-semibold text-foreground"
+              class="text-left text-lg font-semibold text-white"
               type="button"
             >
               LinkGuard
             </button>
             <p
-              class="text-xs text-muted-foreground"
+              class="text-xs text-body"
             >
               Security analysis dashboard
             </p>
@@ -201,7 +201,7 @@ exports[`PageHeader Component Snapshot Tests matches snapshot for unauthenticate
             </div>
           </div>
           <button
-            class="inline-flex min-h-[44px] min-w-[44px] items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-secondary text-secondary-foreground hover:bg-secondary/80 h-9 rounded-md px-3"
+            class="inline-flex min-h-[44px] min-w-[44px] items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3"
           >
             Log In
           </button>
@@ -220,7 +220,7 @@ exports[`PageHeader Component Snapshot Tests matches snapshot for unauthenticate
 exports[`PageHeader Component Snapshot Tests matches snapshot with custom actions 1`] = `
 <DocumentFragment>
   <header
-    class="sticky top-0 z-40 w-full glass-nav "
+    class="sticky top-0 z-40 w-full bg-canvas border-b hairline "
   >
     <div
       class="mx-auto w-full px-4 sm:px-6 lg:px-8 max-w-7xl py-4"
@@ -232,11 +232,11 @@ exports[`PageHeader Component Snapshot Tests matches snapshot with custom action
           class="flex items-center gap-3"
         >
           <div
-            class="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-500/20"
+            class="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/20"
           >
             <svg
               aria-hidden="true"
-              class="lucide lucide-shield h-5 w-5 text-brand-400"
+              class="lucide lucide-shield h-5 w-5 text-primary"
               fill="none"
               height="24"
               stroke="currentColor"
@@ -254,13 +254,13 @@ exports[`PageHeader Component Snapshot Tests matches snapshot with custom action
           </div>
           <div>
             <button
-              class="text-left text-lg font-semibold text-foreground"
+              class="text-left text-lg font-semibold text-white"
               type="button"
             >
               LinkGuard
             </button>
             <p
-              class="text-xs text-muted-foreground"
+              class="text-xs text-body"
             >
               Security analysis dashboard
             </p>

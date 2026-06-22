@@ -97,8 +97,6 @@ const Landing = () => {
   const cardNavItems = [
     {
       label: 'Platform',
-      bgColor: '#0f172a',
-      textColor: '#fff',
       links: [
         { label: 'Analyze Links', href: '/analyze', ariaLabel: 'Run a full risk scan instantly' },
         { label: 'Lookup History', href: '/history', ariaLabel: 'Review and label saved results' },
@@ -107,8 +105,7 @@ const Landing = () => {
     },
     {
       label: 'Public Tools',
-      bgColor: '#1e293b',
-      textColor: '#fff',
+
       links: [
         { label: 'Public Lookup', href: '/', ariaLabel: 'Shareable checks for any target' },
         { label: 'About LinkGuard', href: '/about', ariaLabel: 'Methodology and data sources' },
@@ -116,8 +113,7 @@ const Landing = () => {
     },
     {
       label: 'Resources',
-      bgColor: '#1e293b',
-      textColor: '#fff',
+
       links: [
         { label: 'About', href: '/about', ariaLabel: 'How LinkGuard evaluates risk' },
         { label: 'Component Showcase', href: '/showcase', ariaLabel: 'Design system and UI patterns' },
@@ -126,34 +122,30 @@ const Landing = () => {
   ];
 
   return (
-    <PageContainer className="text-gray-100">
+    <PageContainer
+      nav={
+        <div className="hidden sm:block">
+          <CardNav
+            logoAlt="LinkGuard"
+            items={cardNavItems}
+            ctaLabel="Log In"
+            onCtaClick={() => navigate('/login')}
+          />
+        </div>
+      }
+    >
+      <div className="sm:hidden fixed top-4 right-4 z-50">
+        <MobileNav isAuthenticated={false} />
+      </div>
       <div className="relative overflow-hidden">
         <div className="relative z-10">
-          <div className="hidden sm:block">
-            <CardNav
-              logoAlt="LinkGuard"
-              items={cardNavItems}
-              baseColor="transparent"
-              menuColor="#fff"
-              buttonBgColor="#111"
-              buttonTextColor="#fff"
-              ctaLabel="Log In"
-              onCtaClick={() => navigate('/login')}
-            />
-          </div>
-          <div className="sm:hidden fixed top-4 right-4 z-50">
-            <MobileNav isAuthenticated={false} />
-          </div>
 
           <section className="pt-10 sm:pt-14 lg:pt-18 pb-10 sm:pb-12 lg:pb-16">
             <div className="text-center px-4">
               <p className="text-xs uppercase tracking-[0.35em] text-gray-400">LinkGuard security intelligence</p>
-              <h1
-                className="mt-4 text-4xl sm:text-5xl lg:text-6xl font-semibold text-white"
-                style={{ fontFamily: '"Space Grotesk", var(--font-sans)' }}
-              >
+              <h1 className="mt-4 text-4xl sm:text-5xl lg:text-6xl font-semibold text-white">
                 Validate links you can
-                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-blue-300 to-slate-200">
+                <span className="block text-primary">
                   actually trust.
                 </span>
               </h1>
@@ -163,7 +155,7 @@ const Landing = () => {
             </div>
 
             <div className="mt-8 sm:mt-10 max-w-4xl mx-auto px-4">
-              <div className="bg-gray-900/70 border border-white/10 rounded-2xl p-4 sm:p-6 backdrop-blur">
+              <div className="bg-canvas border border-hairline rounded-md p-4 sm:p-6">
                 <div className="flex flex-col lg:flex-row gap-3">
                   <div className="flex-1 relative">
                     <input
@@ -178,7 +170,7 @@ const Landing = () => {
                         if (e.key === 'Enter' && !loading) handleSearch();
                       }}
                       disabled={loading}
-                      className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-gray-950/60 border border-white/10 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all outline-none disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium placeholder-gray-500 text-sm sm:text-base"
+                      className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-canvas-soft border border-hairline rounded-sm focus:ring-2 focus:ring-primary transition-all outline-none disabled:opacity-50 disabled:cursor-not-allowed text-ink font-medium placeholder-mute text-sm sm:text-base"
                     />
                   </div>
                   <Button
@@ -195,11 +187,11 @@ const Landing = () => {
                   </Button>
                 </div>
 
-                <div className="mt-4 flex flex-wrap items-center gap-2 text-xs sm:text-sm text-gray-400">
+                <div className="mt-4 flex flex-wrap items-center gap-2 text-xs sm:text-sm text-mute">
                   {['Phishing', 'Malware', 'Brand Abuse', 'OSINT', 'Network Intel'].map((label) => (
                     <span
                       key={label}
-                      className="px-3 py-1 rounded-full border border-white/10 bg-white/5 text-gray-300"
+                      className="px-3 py-1 rounded-pill border border-hairline bg-canvas text-body"
                     >
                       {label}
                     </span>
@@ -209,7 +201,7 @@ const Landing = () => {
 
               <div className="mt-4 flex flex-col sm:flex-row gap-3">
                 <Button
-                  variant="secondary"
+                  variant="outline"
                   size="md"
                   onClick={handleWhatsMyIP}
                   disabled={loading || !visitorGeo}
@@ -233,8 +225,8 @@ const Landing = () => {
               </div>
 
               {error && (
-                <div className="mt-4 p-3 sm:p-4 bg-red-900/50 border border-red-700/50 rounded-xl">
-                  <p className="text-red-300 text-sm flex items-start sm:items-center gap-2">
+                <div className="mt-4 p-3 sm:p-4 bg-red-950 border border-red-800 rounded-md">
+                  <p className="text-red-200 text-sm flex items-start sm:items-center gap-2">
                     <AlertTriangle className="h-5 w-5 flex-shrink-0 mt-0.5 sm:mt-0" />
                     <span className="font-medium">{error}</span>
                   </p>
@@ -243,7 +235,7 @@ const Landing = () => {
             </div>
 
             {loading && (
-              <div className="mb-8 bg-gray-900/60 backdrop-blur-md p-6 sm:p-8 rounded-3xl border border-white/10">
+              <div className="mb-8 bg-canvas border border-hairline rounded-md p-6 sm:p-8">
                 <LoadingState
                   message="Analyzing security indicators..."
                   steps={['Resolving domain', 'Checking geolocation', 'Analyzing network', 'Calculating risk score']}
@@ -266,16 +258,16 @@ const Landing = () => {
                 { label: 'Risk categories', value: '11' },
                 { label: 'Score dimensions', value: '5' }
               ].map((stat) => (
-                <div key={stat.label} className="rounded-2xl border border-white/5 bg-gray-900/50 p-4 text-center">
+                <div key={stat.label} className="rounded-md border border-hairline bg-canvas p-4 text-center">
                   <p className="text-2xl sm:text-3xl font-semibold text-white">{stat.value}</p>
-                  <p className="text-xs uppercase tracking-widest text-gray-400 mt-1">{stat.label}</p>
+                  <p className="text-xs uppercase tracking-widest text-mute mt-1">{stat.label}</p>
                 </div>
               ))}
             </div>
 
             <div className="mt-10 sm:mt-12 px-4">
-              <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-gray-900/80 via-gray-900/70 to-gray-800/60 p-6 sm:p-8">
-                <div className="flex items-center justify-between text-xs uppercase tracking-[0.3em] text-gray-400">
+              <div className="rounded-md border border-hairline bg-canvas p-6 sm:p-8">
+                <div className="flex items-center justify-between text-xs uppercase tracking-[0.3em] text-mute">
                   <span>LinkGuard score</span>
                   <span>LG-2049</span>
                 </div>
@@ -289,18 +281,18 @@ const Landing = () => {
                   </div>
                   <div className="space-y-4">
                     {[
-                      { label: 'Infrastructure', value: '92%', color: 'from-slate-200 to-slate-500' },
-                      { label: 'Reputation', value: '84%', color: 'from-cyan-300 to-blue-500' },
-                      { label: 'Velocity', value: '88%', color: 'from-pink-400 to-purple-500' },
-                      { label: 'Content Risk', value: '79%', color: 'from-lime-300 to-emerald-500' }
+                      { label: 'Infrastructure', value: '92%' },
+                      { label: 'Reputation', value: '84%' },
+                      { label: 'Velocity', value: '88%' },
+                      { label: 'Content Risk', value: '79%' }
                     ].map((metric) => (
-                      <div key={metric.label} className="rounded-2xl border border-white/5 bg-white/5 p-4">
-                        <div className="flex items-center justify-between text-sm text-gray-300">
+                      <div key={metric.label} className="rounded-md border border-hairline bg-canvas p-4">
+                        <div className="flex items-center justify-between text-sm text-ink">
                           <span>{metric.label}</span>
                           <span className="text-white font-semibold">{metric.value}</span>
                         </div>
                         <div className="mt-3 h-2 rounded-full bg-white/10">
-                          <div className={`h-2 rounded-full bg-gradient-to-r ${metric.color}`} style={{ width: metric.value }} />
+                          <div className={`h-2 rounded-full bg-primary`} style={{ width: metric.value }} />
                         </div>
                       </div>
                     ))}
@@ -314,32 +306,32 @@ const Landing = () => {
 
       <div className="relative z-10 max-w-6xl mx-auto px-4">
         {visitorGeo && (
-          <div className="bg-gray-900/60 backdrop-blur-md p-4 sm:p-6 lg:p-8 rounded-3xl border border-white/10 shadow-2xl shadow-cyan-500/5 mb-10">
+          <div className="bg-canvas border border-hairline rounded-md p-4 sm:p-6 lg:p-8 mb-10">
             <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
-              <MapPin className="h-6 w-6 sm:h-7 sm:w-7 text-cyan-300 flex-shrink-0" />
+              <MapPin className="h-6 w-6 sm:h-7 sm:w-7 text-primary flex-shrink-0" />
               <div>
-                <h3 className="text-lg sm:text-xl font-semibold text-white" style={{ fontFamily: '"Space Grotesk", var(--font-sans)' }}>
+                <h3 className="text-lg sm:text-xl font-semibold text-white">
                   Your current location
                 </h3>
-                <p className="text-xs sm:text-sm text-gray-400">Automatically detected from your IP address</p>
+                <p className="text-xs sm:text-sm text-mute">Automatically detected from your IP address</p>
               </div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-              <div className="bg-white/5 p-3 sm:p-4 rounded-xl border border-white/5">
-                <span className="text-gray-400 text-xs uppercase tracking-wide">IP Address</span>
+              <div className="bg-canvas-soft p-3 sm:p-4 rounded-md border border-hairline">
+                <span className="text-mute text-xs uppercase tracking-wide">IP Address</span>
                 <p className="font-mono font-semibold text-white text-base sm:text-lg mt-1 break-all">{visitorGeo.query}</p>
               </div>
               {visitorGeo.city && (
-                <div className="bg-white/5 p-3 sm:p-4 rounded-xl border border-white/5">
-                  <span className="text-gray-400 text-xs uppercase tracking-wide">Location</span>
+                <div className="bg-canvas-soft p-3 sm:p-4 rounded-md border border-hairline">
+                  <span className="text-mute text-xs uppercase tracking-wide">Location</span>
                   <p className="font-semibold text-white text-base sm:text-lg mt-1">
                     {visitorGeo.city}, {visitorGeo.country}
                   </p>
                 </div>
               )}
               {visitorGeo.isp && (
-                <div className="bg-white/5 p-3 sm:p-4 rounded-xl border border-white/5 sm:col-span-2 lg:col-span-1">
-                  <span className="text-gray-400 text-xs uppercase tracking-wide">ISP</span>
+                <div className="bg-canvas-soft p-3 sm:p-4 rounded-md border border-hairline sm:col-span-2 lg:col-span-1">
+                  <span className="text-mute text-xs uppercase tracking-wide">ISP</span>
                   <p className="font-semibold text-white text-base sm:text-lg mt-1">{visitorGeo.isp}</p>
                 </div>
               )}
@@ -349,21 +341,18 @@ const Landing = () => {
       </div>
 
       <section className="relative z-10 max-w-6xl mx-auto px-4 mb-12">
-        <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-gray-900/70 via-gray-900/60 to-gray-800/60 p-6 sm:p-8 shadow-[0_24px_60px_rgba(0,0,0,0.35)]">
+        <div className="rounded-md border border-hairline bg-canvas p-6 sm:p-8">
           <div className="flex items-center justify-between gap-4">
             <div>
-              <p className="text-xs uppercase tracking-[0.3em] text-gray-400">Latest detections</p>
-              <h2
-                className="mt-2 text-3xl sm:text-4xl font-semibold text-white"
-                style={{ fontFamily: '"Space Grotesk", var(--font-sans)' }}
-              >
+              <p className="text-xs uppercase tracking-[0.3em] text-mute">Latest detections</p>
+              <h2 className="mt-2 text-3xl sm:text-4xl font-semibold text-white">
                 Fresh signals, reviewed
                 <span className="block">with context you can act on.</span>
               </h2>
             </div>
             <div className="hidden md:flex items-center gap-2 text-xs text-gray-300">
               {['Newest', 'High Risk', 'Resolved'].map((tab) => (
-                <span key={tab} className="px-3 py-1 rounded-full border border-white/10 bg-white/5">
+                <span key={tab} className="px-3 py-1 rounded-pill border border-hairline bg-canvas text-body">
                   {tab}
                 </span>
               ))}
@@ -378,12 +367,12 @@ const Landing = () => {
               { title: 'Email Spoofing', desc: 'Sender mismatch flagged across multiple domains.', tag: 'Email' },
               { title: 'New Sinkhole', desc: 'Resolved infrastructure and verified takedown status.', tag: 'Resolved' }
             ].map((card) => (
-              <div key={card.title} className="rounded-2xl border border-white/10 bg-gray-950/50 p-5">
+              <div key={card.title} className="rounded-md border border-hairline bg-canvas p-5">
                 <div className="flex items-center justify-between">
-                  <div className="h-10 w-10 rounded-xl bg-white/10 flex items-center justify-center text-cyan-300">
+                  <div className="h-10 w-10 rounded-md bg-canvas-soft flex items-center justify-center text-primary">
                     <Shield className="h-5 w-5" />
                   </div>
-                  <span className="text-xs text-gray-400 border border-white/10 rounded-full px-2 py-1">
+                  <span className="text-xs text-mute border border-hairline rounded-pill px-2 py-1">
                     {card.tag}
                   </span>
                 </div>
@@ -397,12 +386,9 @@ const Landing = () => {
 
       <section className="relative z-10 max-w-6xl mx-auto px-4 mb-12">
         <div className="grid gap-6 lg:grid-cols-[1.2fr_1fr]">
-          <div className="rounded-3xl border border-white/10 bg-gray-900/60 p-6 sm:p-8">
-            <p className="text-xs uppercase tracking-[0.3em] text-gray-400">LinkGuard scoring model</p>
-            <h2
-              className="mt-2 text-3xl sm:text-4xl font-semibold text-white"
-              style={{ fontFamily: '"Space Grotesk", var(--font-sans)' }}
-            >
+          <div className="rounded-md border border-hairline bg-canvas p-6 sm:p-8">
+            <p className="text-xs uppercase tracking-[0.3em] text-mute">LinkGuard scoring model</p>
+            <h2 className="mt-2 text-3xl sm:text-4xl font-semibold text-white">
               A clearer way to compare risk.
             </h2>
             <p className="mt-4 text-sm sm:text-base text-gray-300">
@@ -417,7 +403,7 @@ const Landing = () => {
               { value: '10%', label: 'First-Seen', desc: 'Newly observed assets and volatility.' },
               { value: '10%', label: 'Velocity', desc: 'Rapid changes across domains and IPs.' }
             ].map((item) => (
-              <div key={item.label} className="rounded-2xl border border-white/10 bg-gray-950/50 p-4">
+              <div key={item.label} className="rounded-md border border-hairline bg-canvas p-4">
                 <p className="text-2xl font-semibold text-white">{item.value}</p>
                 <p className="text-sm font-semibold text-gray-200 mt-2">{item.label}</p>
                 <p className="text-xs text-gray-400 mt-1">{item.desc}</p>
@@ -428,20 +414,17 @@ const Landing = () => {
       </section>
 
       <section className="relative z-10 max-w-6xl mx-auto px-4 mb-10">
-        <div className="rounded-3xl border border-white/10 bg-gray-900/60 p-4 sm:p-6">
+        <div className="rounded-md border border-hairline bg-canvas p-4 sm:p-6">
           <div className="flex items-center justify-between gap-4">
             <div>
-              <p className="text-xs uppercase tracking-[0.3em] text-gray-400">Frequently asked questions</p>
-              <h3
-                className="mt-2 text-2xl sm:text-3xl font-semibold text-white"
-                style={{ fontFamily: '"Space Grotesk", var(--font-sans)' }}
-              >
+              <p className="text-xs uppercase tracking-[0.3em] text-mute">Frequently asked questions</p>
+              <h3 className="mt-2 text-2xl sm:text-3xl font-semibold text-white">
                 How we analyze links
               </h3>
             </div>
           </div>
 
-          <div className="mt-6 divide-y divide-white/10">
+          <div className="mt-6 divide-y divide-hairline">
             <details className="group py-4">
               <summary className="flex items-center justify-between text-white text-base sm:text-lg font-semibold cursor-pointer list-none [&::-webkit-details-marker]:hidden">
                 <span>How does LinkGuard analyze links?</span>
@@ -496,18 +479,15 @@ const Landing = () => {
       </section>
 
       <div className="relative z-10 max-w-6xl mx-auto px-4 pb-12">
-        <div className="bg-gray-900/70 border border-white/10 backdrop-blur p-6 sm:p-8 lg:p-10 rounded-3xl">
+        <div className="bg-canvas border border-hairline p-6 sm:p-8 lg:p-10 rounded-md">
           <div className="text-center">
-            <div className="inline-flex p-3 bg-white/10 rounded-full mb-4">
-              <Save className="h-8 w-8 sm:h-10 sm:w-10 text-gray-300" />
+            <div className="inline-flex p-3 bg-canvas-soft rounded-pill mb-4">
+              <Save className="h-8 w-8 sm:h-10 sm:w-10 text-body" />
             </div>
-            <h2
-              className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-white mb-3"
-              style={{ fontFamily: '"Space Grotesk", var(--font-sans)' }}
-            >
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-white mb-3">
               Want to save your lookups?
             </h2>
-            <p className="text-gray-300 text-sm sm:text-base lg:text-lg mb-6 max-w-2xl mx-auto px-4">
+            <p className="text-body text-sm sm:text-base lg:text-lg mb-6 max-w-2xl mx-auto px-4">
               Create a free account to save lookup history, add labels, and share results with your team.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 px-4">
@@ -515,12 +495,12 @@ const Landing = () => {
                 variant="primary"
                 size="lg"
                 onClick={() => navigate('/register')}
-                className="shadow-lg min-h-[44px] w-full sm:w-auto"
+                className="min-h-[44px] w-full sm:w-auto"
               >
                 Create free account
               </Button>
               <Button
-                variant="secondary"
+                variant="outline"
                 size="lg"
                 onClick={() => navigate('/login')}
                 className="min-h-[44px] w-full sm:w-auto"

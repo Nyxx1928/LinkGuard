@@ -92,8 +92,6 @@ const PublicLookup = () => {
   const cardNavItems = [
     {
       label: 'Platform',
-      bgColor: '#0f172a',
-      textColor: '#fff',
       links: [
         { label: 'Analyze Links', href: '/analyze', ariaLabel: 'Run a full risk scan instantly' },
         { label: 'Lookup History', href: '/history', ariaLabel: 'Review and label saved results' },
@@ -102,8 +100,7 @@ const PublicLookup = () => {
     },
     {
       label: 'Public Tools',
-      bgColor: '#1e293b',
-      textColor: '#fff',
+
       links: [
         { label: 'Public Lookup', href: '/', ariaLabel: 'Shareable checks for any target' },
         { label: 'About LinkGuard', href: '/about', ariaLabel: 'Methodology and data sources' },
@@ -111,8 +108,7 @@ const PublicLookup = () => {
     },
     {
       label: 'Resources',
-      bgColor: '#1e293b',
-      textColor: '#fff',
+
       links: [
         { label: 'About', href: '/about', ariaLabel: 'How LinkGuard evaluates risk' },
         { label: 'Component Showcase', href: '/showcase', ariaLabel: 'Design system and UI patterns' },
@@ -121,27 +117,25 @@ const PublicLookup = () => {
   ];
 
   return (
-    <PageContainer>
-      {/* Header */}
-      <div className="hidden sm:block">
-        <CardNav
-          logoAlt="LinkGuard"
-          items={cardNavItems}
-          baseColor="transparent"
-          menuColor="#fff"
-          buttonBgColor="#111"
-          buttonTextColor="#fff"
-          ctaLabel="Log In"
-          onCtaClick={() => navigate('/login')}
-        />
-      </div>
+    <PageContainer
+      nav={
+        <div className="hidden sm:block">
+          <CardNav
+            logoAlt="LinkGuard"
+            items={cardNavItems}
+            ctaLabel="Log In"
+            onCtaClick={() => navigate('/login')}
+          />
+        </div>
+      }
+    >
       <div className="sm:hidden fixed top-4 right-4 z-50">
         <MobileNav isAuthenticated={false} />
       </div>
 
       {/* Loading State */}
       {loading && (
-        <Card variant="elevated" padding="lg" className="text-center">
+        <Card variant="default" className="text-center p-6">
           <LoadingState
             message="Loading shared lookup..."
             steps={loadingSteps}
@@ -153,15 +147,15 @@ const PublicLookup = () => {
 
       {/* Error State */}
       {error && !loading && (
-        <Card variant="elevated" padding="lg">
-          <div className="flex flex-col items-center justify-center text-center">
+        <Card variant="default">
+          <div className="flex flex-col items-center justify-center text-center p-6">
             <div className="w-16 h-16 bg-risk-danger/10 rounded-full flex items-center justify-center mb-4">
               <AlertCircle className="h-9 w-9 text-risk-danger" />
             </div>
             <h2 className="text-2xl font-bold text-white mb-3">
               Lookup Not Found
             </h2>
-            <p className="text-gray-400 mb-6 max-w-md">
+            <p className="text-body mb-6 max-w-md">
               {error}
             </p>
             <div className="flex gap-3">
@@ -173,7 +167,7 @@ const PublicLookup = () => {
                 Go to Home Page
               </Button>
               <Button
-                variant="secondary"
+                variant="outline"
                 size="md"
                 onClick={fetchLookup}
               >
@@ -190,12 +184,12 @@ const PublicLookup = () => {
           <ResultCard result={lookup} showShareLink={true} />
           
           {/* Call to Action */}
-          <Card variant="elevated" padding="lg" className="bg-gradient-to-r from-cyan-900/20 to-blue-900/20 border-cyan-700/30">
+          <Card variant="default" className="p-6">
             <div className="text-center">
               <h2 className="text-2xl font-bold text-white mb-3">
                 Want to analyze your own links?
               </h2>
-              <p className="text-gray-300 mb-6 max-w-2xl mx-auto">
+              <p className="text-body mb-6 max-w-2xl mx-auto">
                 Create a free account to save your lookup history, add custom labels, and share results with your team.
               </p>
               <div className="flex justify-center gap-4 flex-wrap">
@@ -207,7 +201,7 @@ const PublicLookup = () => {
                   Create Free Account
                 </Button>
                 <Button
-                  variant="secondary"
+                variant="outline"
                   size="lg"
                   onClick={() => navigate('/')}
                 >

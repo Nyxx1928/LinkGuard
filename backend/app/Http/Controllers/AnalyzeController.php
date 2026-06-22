@@ -112,10 +112,13 @@ class AnalyzeController extends Controller
             ], 500);
         }
 
-        // Step 4: Compute risk level
-        $riskLevel = $this->riskScorer->score($geoResult);
+        // Step 4: Extract domain for risk scoring
+        $domain = $this->extractDomain($target);
 
-        // Step 5: Build unified response
+        // Step 5: Compute risk score with multi-signal weighted assessment
+        $riskResult = $this->riskScorer->score($domain, $resolverResult->resolvedIp, $geoResult);
+
+        // Step 6: Build unified response
         $response = [
             'target' => $target,
             'type' => $resolverResult->type,
@@ -139,11 +142,13 @@ class AnalyzeController extends Controller
                 'hosting' => $geoResult->hosting,
                 'mobile' => $geoResult->mobile,
             ],
-            'risk_level' => $riskLevel,
+            'risk_level' => $riskResult->level,
+            'risk_score' => $riskResult->score,
+            'risk_breakdown' => $riskResult->breakdown,
             'dns_records' => $resolverResult->dnsRecords,
         ];
 
-        // Step 6: Persist lookup for authenticated users (only if requested)
+        // Step 7: Persist lookup for authenticated users (only if requested)
         if ($persistHistory) {
             $user = $request->user();
             if ($user) {
@@ -156,7 +161,7 @@ class AnalyzeController extends Controller
                         'geo' => $response['geo'],
                         'dns_records' => $resolverResult->dnsRecords,
                     ],
-                    'risk_level' => $riskLevel,
+                    'risk_level' => $riskResult->level,
                 ]);
 
                 // Add uuid and created_at to response
@@ -166,5 +171,34 @@ class AnalyzeController extends Controller
         }
 
         return response()->json($response);
+    }
+
+    /**
+     * Extract domain from a target string for risk scoring.
+     *
+     * Handles URLs, emails, domains, and IPs.
+     */
+    private function extractDomain(string $target): string
+    {
+        // If it's a URL, extract the hostname
+        if (preg_match('/^https?:\/\//i', $target)) {
+            $hostname = parse_url($target, PHP_URL_HOST);
+            if ($hostname) {
+                return $hostname;
+            }
+        }
+
+        // If it's an email, extract the domain part
+        if (preg_match('/^[a-zA-Z0-9._%+-]+@([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/', $target, $matches)) {
+            return $matches[1];
+        }
+
+        // IP addresses are returned as-is
+        if (filter_var($target, FILTER_VALIDATE_IP)) {
+            return $target;
+        }
+
+        // Assume it's a domain
+        return $target;
     }
 }

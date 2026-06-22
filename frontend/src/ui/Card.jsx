@@ -1,6 +1,11 @@
 import React from 'react';
 import { cn } from './utils';
 
-export default function Card({ children, className = '' }) {
-  return <div className={cn('bg-white shadow-sm rounded-md p-4', className)}>{children}</div>;
+export default function Card({ children, variant = 'default', className = '' }) {
+  const variants = {
+    default: 'bg-canvas text-ink border border-hairline rounded-md p-2xl',
+    emphasized: 'bg-canvas text-ink border-2 border-primary rounded-md p-2xl',
+  };
+
+  return <div className={cn(variants[variant] || variants.default, className)}>{children}</div>;
 }

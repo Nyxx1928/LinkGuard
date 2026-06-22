@@ -59,11 +59,11 @@ const MobileNav = ({ isAuthenticated = false, onLogout = null, userName = null }
           <Menu className="h-6 w-6" />
         </Button>
       </SheetTrigger>
-      <SheetContent side="right" className="w-[280px] sm:w-[320px] border-l border-white/10 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-0">
+      <SheetContent side="right" className="w-[280px] sm:w-[320px] border-l border-hairline bg-canvas p-0">
         <div className="flex flex-col h-full p-6">
-          <SheetHeader className="pb-4 border-b border-white/5">
+          <SheetHeader className="pb-4 border-b border-hairline">
             <SheetTitle className="text-left">
-              <span className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-cyan-600 bg-clip-text text-transparent">
+              <span className="text-2xl font-bold text-primary">
                 LinkGuard
               </span>
             </SheetTitle>
@@ -109,7 +109,7 @@ const MobileNav = ({ isAuthenticated = false, onLogout = null, userName = null }
               isActive={isActive('/about')}
             />
 
-            <Separator className="my-4 bg-white/5" />
+            <Separator className="my-4 bg-hairline" />
 
             {/* Authentication Section */}
             {!isAuthenticated ? (
@@ -130,9 +130,9 @@ const MobileNav = ({ isAuthenticated = false, onLogout = null, userName = null }
             ) : (
               <>
                 {userName && (
-                  <div className="flex items-center gap-3 px-4 py-3 bg-gray-900/70 border border-white/10 rounded-lg backdrop-blur">
-                    <User className="h-5 w-5 text-gray-400" />
-                    <span className="text-sm font-medium text-gray-100">
+                  <div className="flex items-center gap-3 px-3 py-3 bg-canvas-soft border border-hairline rounded-sm">
+                    <User className="h-5 w-5 text-mute" />
+                    <span className="text-sm font-medium text-ink">
                       {userName}
                     </span>
                   </div>
@@ -169,15 +169,15 @@ const NavLink = ({ icon, label, onClick, isActive = false, variant = 'ghost' }) 
     <button
       onClick={onClick}
       className={`
-        flex items-center gap-3 w-full px-4 py-3 rounded-lg
+        flex items-center gap-3 w-full px-3 py-3 rounded-sm
         min-h-[44px] text-left transition-all duration-200
         ${isActive 
-          ? 'bg-white/10 text-cyan-300 shadow-inner' 
+          ? 'bg-canvas-soft text-primary' 
           : variant === 'destructive'
-          ? 'text-red-400 hover:bg-red-900/20'
-          : 'text-gray-300 hover:bg-white/5 hover:text-white'
+          ? 'text-risk-danger hover:bg-risk-danger/10'
+          : 'text-mute hover:bg-canvas-soft hover:text-ink'
         }
-        focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500
+        focus:outline-none focus-visible:ring-2 focus-visible:ring-primary
       `}
     >
       {icon}

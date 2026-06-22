@@ -12,15 +12,15 @@ import {
 
 // Define card variants using class-variance-authority
 const cardVariants = cva(
-  'rounded-xl transition-all duration-200 text-foreground',
+  'rounded-xl transition-all duration-200 text-white',
   {
     variants: {
       variant: {
-        default: 'glass-card',
-        elevated: 'glass-elevated',
-        subtle: 'glass-subtle',
-        outlined: 'bg-transparent border border-white/10 dark:border-white/5',
-        glass: 'glass-card',
+        default: 'bg-surface hairline',
+        elevated: 'bg-surface hairline',
+        subtle: 'bg-surface/80 hairline',
+        outlined: 'bg-transparent border border-white/10',
+        glass: 'bg-surface hairline',
       },
       padding: {
         none: 'p-0',

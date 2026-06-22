@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import Register from './Register';
 import api from '../api';
 
@@ -29,7 +29,7 @@ describe('Register page', () => {
   });
 
   function setupRegister(setIsLoggedIn = jest.fn()) {
-    render(<Register setIsLoggedIn={setIsLoggedIn} />);
+    render(<Register setIsLoggedIn={setIsLoggedIn} setUser={jest.fn()} />);
     return setIsLoggedIn;
   }
 
@@ -43,9 +43,9 @@ describe('Register page', () => {
     expect(screen.getByRole('button', { name: /create account/i })).toBeInTheDocument();
   });
 
-  test('submits credentials and stores auth token on success', async () => {
-    api.post.mockResolvedValue({ data: { token: 'test-token' } });
-    const setIsLoggedInMock = setupRegister();
+  test('shows verification notice after successful registration', async () => {
+    api.post.mockResolvedValue({ data: { message: 'Account created. Please check your email to verify your account.' } });
+    setupRegister();
 
     fireEvent.change(screen.getByPlaceholderText('Enter your email'), {
       target: { value: 'new@example.com' }
@@ -58,42 +58,8 @@ describe('Register page', () => {
     });
     fireEvent.click(screen.getByRole('button', { name: /create account/i }));
 
-    await waitFor(() => {
-      expect(api.post).toHaveBeenCalledWith('/api/register', {
-        email: 'new@example.com',
-        password: 'mypassword'
-      });
-    });
-
-    expect(localStorage.getItem('auth_token')).toBe('test-token');
-    expect(setIsLoggedInMock).toHaveBeenCalledWith(true);
-  });
-
-  test('submits with name when provided', async () => {
-    api.post.mockResolvedValue({ data: { token: 'test-token-2' } });
-    setupRegister();
-
-    fireEvent.change(screen.getByPlaceholderText('Enter your username'), {
-      target: { value: 'John' }
-    });
-    fireEvent.change(screen.getByPlaceholderText('Enter your email'), {
-      target: { value: 'john@example.com' }
-    });
-    fireEvent.change(screen.getByPlaceholderText('Create a password'), {
-      target: { value: 'password123' }
-    });
-    fireEvent.change(screen.getByPlaceholderText('Confirm your password'), {
-      target: { value: 'password123' }
-    });
-    fireEvent.click(screen.getByRole('button', { name: /create account/i }));
-
-    await waitFor(() => {
-      expect(api.post).toHaveBeenCalledWith('/api/register', {
-        name: 'John',
-        email: 'john@example.com',
-        password: 'password123'
-      });
-    });
+    expect(await screen.findByText('Check your email')).toBeInTheDocument();
+    expect(screen.getByText(/Account created/i)).toBeInTheDocument();
   });
 
   test('shows error when passwords do not match', async () => {

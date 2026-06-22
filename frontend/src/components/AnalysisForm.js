@@ -24,7 +24,7 @@ const AnalysisForm = ({
   helperText,
 }) => {
   return (
-    <Card variant="glass" padding="md" className="space-y-4 fade-in">
+    <Card variant="default" className="space-y-4 fade-in p-4">
       <div className="flex flex-col gap-3 sm:flex-row">
         <div className="flex-1">
           <Input
@@ -52,7 +52,7 @@ const AnalysisForm = ({
           {loading ? 'Analyzing...' : 'Analyze'}
         </Button>
         <Button
-          variant="secondary"
+          variant="outline"
           size="md"
           onClick={onClear}
           disabled={loading}
@@ -63,7 +63,7 @@ const AnalysisForm = ({
         </Button>
       </div>
       {helperText && (
-        <p className="text-xs text-muted-foreground">{helperText}</p>
+        <p className="text-xs text-body">{helperText}</p>
       )}
     </Card>
   );

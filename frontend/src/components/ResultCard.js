@@ -41,9 +41,9 @@ const ResultCard = ({ result, showShareLink = true }) => {
     : null;
 
   return (
-    <Card variant="elevated" padding="none" className="overflow-hidden">
+    <Card variant="default" className="overflow-hidden">
       {/* Risk Summary Section */}
-      <div className="p-6 bg-gradient-to-br from-gray-900/90 to-gray-800/70 border-b border-white/10">
+      <div className="p-6 bg-surface border-b border-white/10">
         <div className="flex items-start justify-between mb-4">
           <div className="flex-1 min-w-0">
             <h3 className="text-2xl font-bold text-white mb-1 truncate">
@@ -279,7 +279,7 @@ const ResultCard = ({ result, showShareLink = true }) => {
         <div className="flex flex-wrap gap-3">
           {showShareLink && shareUrl && (
             <Button
-              variant="secondary"
+              variant="outline"
               size="sm"
               onClick={() => {
                 navigator.clipboard.writeText(shareUrl);

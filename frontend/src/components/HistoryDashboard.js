@@ -66,10 +66,10 @@ const HistoryDashboard = () => {
   ];
 
   const chartData = [
-    { name: 'Safe', value: items.filter((item) => item.risk_level === 'LOW').length, fill: '#7dd3fc' },
-    { name: 'Caution', value: items.filter((item) => item.risk_level === 'MEDIUM').length, fill: '#0ea5e9' },
-    { name: 'Danger', value: items.filter((item) => item.risk_level === 'HIGH').length, fill: '#0369a1' },
-    { name: 'Unknown', value: items.filter((item) => item.risk_level === 'UNKNOWN').length, fill: '#6b7280' },
+    { name: 'Safe', value: items.filter((item) => item.risk_level === 'LOW').length, fill: '#10b981' },
+    { name: 'Caution', value: items.filter((item) => item.risk_level === 'MEDIUM').length, fill: '#f59e0b' },
+    { name: 'Danger', value: items.filter((item) => item.risk_level === 'HIGH').length, fill: '#ef4444' },
+    { name: 'Unknown', value: items.filter((item) => item.risk_level === 'UNKNOWN').length, fill: '#8b949e' },
   ];
 
   return (
@@ -90,10 +90,10 @@ const HistoryDashboard = () => {
         onSortChange={setSortBy}
       />
 
-      <Card variant="elevated" padding="lg" className="space-y-4 fade-in">
-        {loading && <p className="text-sm text-muted-foreground">Loading history...</p>}
+      <Card variant="default" className="space-y-4 fade-in p-6">
+        {loading && <p className="text-sm text-body">Loading history...</p>}
         {!loading && filtered.length === 0 && (
-          <p className="text-sm text-muted-foreground">No history results match your filters.</p>
+          <p className="text-sm text-body">No history results match your filters.</p>
         )}
         {!loading && filtered.map((item) => (
           <HistoryItem key={item.id} item={item} />

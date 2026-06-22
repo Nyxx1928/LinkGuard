@@ -3,4 +3,6 @@ export { default as Input } from './Input';
 export { default as Card } from './Card';
 export { default as Alert } from './Alert';
 export { Toast } from './Toast';
+export { default as CodeMockup } from './CodeMockup';
+export { default as CodeInlineChip } from './CodeInlineChip';
 export { Icons } from './icons';

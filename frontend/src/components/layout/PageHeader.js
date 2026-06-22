@@ -37,8 +37,6 @@ const PageHeader = ({
   const cardNavItems = [
     {
       label: 'Platform',
-      bgColor: '#1B1722',
-      textColor: '#fff',
       links: [
         { label: 'Analyze Links', href: '/analyze', ariaLabel: 'Run a full risk scan instantly' },
         { label: 'Lookup History', href: '/history', ariaLabel: 'Review and label saved results' },
@@ -47,8 +45,7 @@ const PageHeader = ({
     },
     {
       label: 'Public Tools',
-      bgColor: '#2F293A',
-      textColor: '#fff',
+
       links: [
         { label: 'Public Lookup', href: '/', ariaLabel: 'Shareable checks for any target' },
         { label: 'About LinkGuard', href: '/about', ariaLabel: 'Methodology and data sources' },
@@ -56,8 +53,7 @@ const PageHeader = ({
     },
     {
       label: 'Resources',
-      bgColor: '#2F293A',
-      textColor: '#fff',
+
       links: [
         { label: 'About', href: '/about', ariaLabel: 'How LinkGuard evaluates risk' },
         { label: 'Component Showcase', href: '/showcase', ariaLabel: 'Design system and UI patterns' },
@@ -66,22 +62,22 @@ const PageHeader = ({
   ];
 
   return (
-    <header className={`sticky top-0 z-40 w-full glass-nav ${className}`}>
+    <header className={`sticky top-0 z-40 w-full bg-canvas border-b hairline ${className}`}>
       <Container className="py-4">
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-500/20">
-              <Shield className="h-5 w-5 text-brand-400" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/20">
+              <Shield className="h-5 w-5 text-primary" />
             </div>
             <div>
               <button
                 type="button"
                 onClick={() => navigate('/')}
-                className="text-left text-lg font-semibold text-foreground"
+                className="text-left text-lg font-semibold text-white"
               >
                 LinkGuard
               </button>
-              <p className="text-xs text-muted-foreground">Security analysis dashboard</p>
+              <p className="text-xs text-body">Security analysis dashboard</p>
             </div>
           </div>
 
@@ -104,7 +100,7 @@ const PageHeader = ({
             {showAuth && !isAuthenticated && (
               <>
                 <Button
-                  variant="secondary"
+                  variant="outline"
                   size="sm"
                   onClick={() => navigate('/login')}
                 >
@@ -123,7 +119,7 @@ const PageHeader = ({
             {isAuthenticated && (
               <div className="flex items-center gap-3">
                 {userName && (
-                  <div className="flex items-center gap-2 rounded-full border border-white/10 px-3 py-1.5 text-xs text-muted-foreground">
+                  <div className="flex items-center gap-2 rounded-full border border-white/10 px-3 py-1.5 text-xs text-body">
                     <User className="h-3.5 w-3.5" />
                     <span>{userName}</span>
                   </div>

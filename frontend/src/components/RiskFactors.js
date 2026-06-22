@@ -34,9 +34,9 @@ const severityConfig = {
   info: {
     label: 'Informational Signals',
     icon: Info,
-    accent: 'text-brand-400',
-    border: 'border-brand-400/40',
-    bg: 'bg-brand-500/10',
+    accent: 'text-primary',
+    border: 'border-primary/40',
+    bg: 'bg-primary/10',
   },
 };
 
@@ -50,7 +50,7 @@ const defaultIconMap = {
 const RiskFactors = ({ factors = [], className = '' }) => {
   if (!factors.length) {
     return (
-      <Card variant="subtle" padding="md" className={cn('text-sm text-muted-foreground', className)}>
+      <Card variant="default" className={cn('text-sm text-body p-4', className)}>
         No risk factors identified for this target yet.
       </Card>
     );
@@ -75,13 +75,13 @@ const RiskFactors = ({ factors = [], className = '' }) => {
         const SectionIcon = config.icon;
 
         return (
-          <Card key={severity} variant="subtle" padding="md" className="space-y-3">
+          <Card key={severity} variant="default" className="space-y-3 p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <SectionIcon className={cn('h-4 w-4', config.accent)} />
-                <h3 className="text-sm font-semibold text-foreground">{config.label}</h3>
+                <h3 className="text-sm font-semibold text-white">{config.label}</h3>
               </div>
-              <span className="text-xs text-muted-foreground">{items.length} signals</span>
+              <span className="text-xs text-body">{items.length} signals</span>
             </div>
             <div className="space-y-2">
               {items.map((factor, index) => {
@@ -97,11 +97,11 @@ const RiskFactors = ({ factors = [], className = '' }) => {
                   >
                     <ItemIcon className={cn('mt-0.5 h-4 w-4 flex-shrink-0', config.accent)} />
                     <div>
-                      <p className="text-sm font-medium text-foreground">
+                      <p className="text-sm font-medium text-white">
                         {factor.label}
                       </p>
                       {factor.description && (
-                        <p className="text-xs text-muted-foreground">
+                        <p className="text-xs text-body">
                           {factor.description}
                         </p>
                       )}

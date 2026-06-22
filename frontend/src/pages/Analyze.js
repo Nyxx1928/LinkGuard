@@ -11,6 +11,52 @@ import NetworkInfo from '../components/NetworkInfo';
 import AnalysisResultSkeleton from '../components/AnalysisResultSkeleton';
 import { Card } from '../components/ui';
 
+const riskScoreMap = { LOW: 15, MEDIUM: 50, HIGH: 85, UNKNOWN: 50 };
+
+const buildFactors = (geo, dnsRecords) => {
+  const factors = [];
+  if (geo?.proxy === true) {
+    factors.push({
+      severity: 'high',
+      label: 'Proxy Detected',
+      description: 'This IP is flagged as a proxy or anonymizer, which can hide the true origin of the connection.',
+    });
+  }
+  if (geo?.hosting === true) {
+    factors.push({
+      severity: 'medium',
+      label: 'Hosting Provider',
+      description: 'This IP belongs to a hosting or datacenter provider, often used for automated services rather than personal connections.',
+    });
+  }
+  if (geo?.mobile === true) {
+    factors.push({
+      severity: 'info',
+      label: 'Mobile Connection',
+      description: 'This IP is associated with a mobile network carrier.',
+    });
+  }
+  if (dnsRecords && dnsRecords.length > 0) {
+    const mxCount = dnsRecords.filter(r => r.type === 'MX').length;
+    const aCount = dnsRecords.filter(r => r.type === 'A').length;
+    if (mxCount > 0) {
+      factors.push({
+        severity: 'info',
+        label: `${mxCount} Mail Server${mxCount > 1 ? 's' : ''} Found`,
+        description: `Domain has ${mxCount} configured mail exchange server${mxCount > 1 ? 's' : ''}.`,
+      });
+    }
+    if (aCount > 0) {
+      factors.push({
+        severity: 'info',
+        label: `${aCount} A Record${aCount > 1 ? 's' : ''} Found`,
+        description: `Domain resolves to ${aCount} IPv4 address${aCount > 1 ? 'es' : ''}.`,
+      });
+    }
+  }
+  return factors;
+};
+
 const Analyze = () => {
   const [target, setTarget] = useState('');
   const [result, setResult] = useState(null);
@@ -43,14 +89,13 @@ const Analyze = () => {
     }
   };
 
-  const factors = result?.result?.signals || [];
   const geo = result?.result?.geo || result?.geo || {};
+  const dnsRecords = result?.dns_records || result?.result?.dns_records || [];
+  const factors = buildFactors(geo, dnsRecords);
 
   const cardNavItems = [
     {
       label: 'Platform',
-      bgColor: '#0f172a',
-      textColor: '#fff',
       links: [
         { label: 'Analyze Links', href: '/analyze', ariaLabel: 'Run a full risk scan instantly' },
         { label: 'Lookup History', href: '/history', ariaLabel: 'Review and label saved results' },
@@ -59,8 +104,7 @@ const Analyze = () => {
     },
     {
       label: 'Public Tools',
-      bgColor: '#1e293b',
-      textColor: '#fff',
+
       links: [
         { label: 'Public Lookup', href: '/', ariaLabel: 'Shareable checks for any target' },
         { label: 'About LinkGuard', href: '/about', ariaLabel: 'Methodology and data sources' },
@@ -68,8 +112,7 @@ const Analyze = () => {
     },
     {
       label: 'Resources',
-      bgColor: '#1e293b',
-      textColor: '#fff',
+
       links: [
         { label: 'About', href: '/about', ariaLabel: 'How LinkGuard evaluates risk' },
         { label: 'Component Showcase', href: '/showcase', ariaLabel: 'Design system and UI patterns' },
@@ -78,19 +121,18 @@ const Analyze = () => {
   ];
 
   return (
-    <PageContainer>
-      <div className="hidden sm:block">
-        <CardNav
-          logoAlt="LinkGuard"
-          items={cardNavItems}
-          baseColor="transparent"
-          menuColor="#fff"
-          buttonBgColor="#111"
-          buttonTextColor="#fff"
-          ctaLabel="Dashboard"
-          onCtaClick={() => window.location.href = '/home'}
-        />
-      </div>
+    <PageContainer
+      nav={
+        <div className="hidden sm:block">
+          <CardNav
+            logoAlt="LinkGuard"
+            items={cardNavItems}
+            ctaLabel="Dashboard"
+            onCtaClick={() => window.location.href = '/home'}
+          />
+        </div>
+      }
+    >
       <div className="sm:hidden fixed top-4 right-4 z-50">
         <MobileNav isAuthenticated={true} />
       </div>
@@ -119,13 +161,13 @@ const Analyze = () => {
           <div className="grid gap-6 lg:grid-cols-2 fade-in">
             <RiskDisplay
               level={result.risk_level}
-              score={result.risk_score || null}
+              score={result.risk_score ?? riskScoreMap[result.risk_level] ?? 50}
               confidence={result.confidence || null}
             />
 
-            <Card variant="elevated" padding="lg" className="space-y-4">
+            <Card variant="default" className="space-y-4">
               <details open>
-                <summary className="cursor-pointer text-lg font-semibold text-foreground">
+                <summary className="cursor-pointer text-lg font-semibold text-ink">
                   Risk Factors
                 </summary>
                 <div className="mt-4">

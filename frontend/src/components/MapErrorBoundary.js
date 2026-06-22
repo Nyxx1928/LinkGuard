@@ -31,9 +31,9 @@ export default class MapErrorBoundary extends React.Component {
         <StaticMap
           lat={lat}
           lon={lon}
-          containerClassName="w-full h-64 sm:h-80 rounded-xl overflow-hidden border border-gray-700 shadow-lg shadow-cyan-900/20 relative"
-          emptyClassName="w-full h-64 sm:h-80 rounded-xl border border-gray-700 flex flex-col items-center justify-center gap-2 text-gray-300 text-sm bg-gray-900 p-4"
-          linkClassName="absolute bottom-2 right-2 bg-gray-900/80 text-cyan-400 text-xs px-2 py-1 rounded hover:bg-gray-800 transition-colors"
+          containerClassName="w-full h-64 sm:h-80 rounded-md overflow-hidden border hairline relative"
+          emptyClassName="w-full h-64 sm:h-80 rounded-md border hairline flex flex-col items-center justify-center gap-2 text-ink text-sm bg-surface p-4"
+          linkClassName="absolute bottom-2 right-2 bg-surface text-primary text-xs px-2 py-1 rounded border hairline hover:bg-canvas-soft transition-colors"
         />
       );
     }

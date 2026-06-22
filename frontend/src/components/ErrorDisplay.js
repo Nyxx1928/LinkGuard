@@ -67,25 +67,25 @@ const ErrorDisplay = ({
       border: 'border-risk-danger/40',
       iconBg: 'bg-risk-danger/10',
       iconText: 'text-risk-danger',
-      title: 'text-foreground',
-      body: 'text-muted-foreground',
+      title: 'text-white',
+      body: 'text-body',
       details: 'text-risk-danger',
     },
     warning: {
       border: 'border-risk-caution/40',
       iconBg: 'bg-risk-caution/10',
       iconText: 'text-risk-caution',
-      title: 'text-foreground',
-      body: 'text-muted-foreground',
+      title: 'text-white',
+      body: 'text-body',
       details: 'text-risk-caution',
     },
     info: {
-      border: 'border-brand-400/40',
+      border: 'border-primary/40',
       iconBg: 'bg-brand-500/10',
-      iconText: 'text-brand-400',
+      iconText: 'text-primary',
       title: 'text-foreground',
       body: 'text-muted-foreground',
-      details: 'text-brand-400',
+      details: 'text-primary',
     },
   };
 
@@ -123,9 +123,8 @@ const ErrorDisplay = ({
 
   return (
     <Card
-      variant="elevated"
-      padding="none"
-      className={clsx('glass-card border', variant.border, styles.container, className)}
+      variant="default"
+      className={clsx('border', variant.border, styles.container, className)}
       role="alert"
       aria-live="polite"
     >
@@ -184,7 +183,7 @@ const ErrorDisplay = ({
           {actions.map((action, index) => (
             <Button
               key={index}
-              variant={action.variant || 'secondary'}
+              variant={action.variant || 'outline'}
               size={size === 'lg' ? 'md' : 'sm'}
               onClick={action.onClick}
               icon={action.icon}

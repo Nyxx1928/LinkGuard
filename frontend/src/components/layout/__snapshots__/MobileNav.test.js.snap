@@ -52,7 +52,7 @@ exports[`MobileNav Component Snapshot Tests matches snapshot for authenticated s
             data-testid="sheet-title"
           >
             <span
-              class="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-cyan-600 bg-clip-text text-transparent"
+              class="text-2xl font-bold text-primary"
             >
               LinkGuard
             </span>
@@ -63,10 +63,10 @@ exports[`MobileNav Component Snapshot Tests matches snapshot for authenticated s
         >
           <button
             class="
-        flex items-center gap-3 w-full px-4 py-3 rounded-lg
+        flex items-center gap-3 w-full px-3 py-3 rounded-sm
         min-h-[44px] text-left transition-all duration-200
-        bg-white/10 text-cyan-300 shadow-inner
-        focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500
+        bg-canvas-soft text-primary
+        focus:outline-none focus-visible:ring-2 focus-visible:ring-primary
       "
           >
             <svg
@@ -97,10 +97,10 @@ exports[`MobileNav Component Snapshot Tests matches snapshot for authenticated s
           </button>
           <button
             class="
-        flex items-center gap-3 w-full px-4 py-3 rounded-lg
+        flex items-center gap-3 w-full px-3 py-3 rounded-sm
         min-h-[44px] text-left transition-all duration-200
-        text-gray-300 hover:bg-white/5 hover:text-white
-        focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500
+        text-mute hover:bg-canvas-soft hover:text-ink
+        focus:outline-none focus-visible:ring-2 focus-visible:ring-primary
       "
           >
             <svg
@@ -133,10 +133,10 @@ exports[`MobileNav Component Snapshot Tests matches snapshot for authenticated s
           </button>
           <button
             class="
-        flex items-center gap-3 w-full px-4 py-3 rounded-lg
+        flex items-center gap-3 w-full px-3 py-3 rounded-sm
         min-h-[44px] text-left transition-all duration-200
-        text-gray-300 hover:bg-white/5 hover:text-white
-        focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500
+        text-mute hover:bg-canvas-soft hover:text-ink
+        focus:outline-none focus-visible:ring-2 focus-visible:ring-primary
       "
           >
             <svg
@@ -170,10 +170,10 @@ exports[`MobileNav Component Snapshot Tests matches snapshot for authenticated s
           </button>
           <button
             class="
-        flex items-center gap-3 w-full px-4 py-3 rounded-lg
+        flex items-center gap-3 w-full px-3 py-3 rounded-sm
         min-h-[44px] text-left transition-all duration-200
-        text-gray-300 hover:bg-white/5 hover:text-white
-        focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500
+        text-mute hover:bg-canvas-soft hover:text-ink
+        focus:outline-none focus-visible:ring-2 focus-visible:ring-primary
       "
           >
             <svg
@@ -211,11 +211,11 @@ exports[`MobileNav Component Snapshot Tests matches snapshot for authenticated s
             data-testid="separator"
           />
           <div
-            class="flex items-center gap-3 px-4 py-3 bg-gray-900/70 border border-white/10 rounded-lg backdrop-blur"
+            class="flex items-center gap-3 px-3 py-3 bg-canvas-soft border border-hairline rounded-sm"
           >
             <svg
               aria-hidden="true"
-              class="lucide lucide-user h-5 w-5 text-gray-400"
+              class="lucide lucide-user h-5 w-5 text-mute"
               fill="none"
               height="24"
               stroke="currentColor"
@@ -236,17 +236,17 @@ exports[`MobileNav Component Snapshot Tests matches snapshot for authenticated s
               />
             </svg>
             <span
-              class="text-sm font-medium text-gray-100"
+              class="text-sm font-medium text-ink"
             >
               John Doe
             </span>
           </div>
           <button
             class="
-        flex items-center gap-3 w-full px-4 py-3 rounded-lg
+        flex items-center gap-3 w-full px-3 py-3 rounded-sm
         min-h-[44px] text-left transition-all duration-200
-        text-red-400 hover:bg-red-900/20
-        focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500
+        text-risk-danger hover:bg-risk-danger/10
+        focus:outline-none focus-visible:ring-2 focus-visible:ring-primary
       "
           >
             <svg
@@ -337,7 +337,7 @@ exports[`MobileNav Component Snapshot Tests matches snapshot for unauthenticated
             data-testid="sheet-title"
           >
             <span
-              class="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-cyan-600 bg-clip-text text-transparent"
+              class="text-2xl font-bold text-primary"
             >
               LinkGuard
             </span>
@@ -348,10 +348,10 @@ exports[`MobileNav Component Snapshot Tests matches snapshot for unauthenticated
         >
           <button
             class="
-        flex items-center gap-3 w-full px-4 py-3 rounded-lg
+        flex items-center gap-3 w-full px-3 py-3 rounded-sm
         min-h-[44px] text-left transition-all duration-200
-        bg-white/10 text-cyan-300 shadow-inner
-        focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500
+        bg-canvas-soft text-primary
+        focus:outline-none focus-visible:ring-2 focus-visible:ring-primary
       "
           >
             <svg
@@ -382,10 +382,10 @@ exports[`MobileNav Component Snapshot Tests matches snapshot for unauthenticated
           </button>
           <button
             class="
-        flex items-center gap-3 w-full px-4 py-3 rounded-lg
+        flex items-center gap-3 w-full px-3 py-3 rounded-sm
         min-h-[44px] text-left transition-all duration-200
-        text-gray-300 hover:bg-white/5 hover:text-white
-        focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500
+        text-mute hover:bg-canvas-soft hover:text-ink
+        focus:outline-none focus-visible:ring-2 focus-visible:ring-primary
       "
           >
             <svg
@@ -418,10 +418,10 @@ exports[`MobileNav Component Snapshot Tests matches snapshot for unauthenticated
           </button>
           <button
             class="
-        flex items-center gap-3 w-full px-4 py-3 rounded-lg
+        flex items-center gap-3 w-full px-3 py-3 rounded-sm
         min-h-[44px] text-left transition-all duration-200
-        text-gray-300 hover:bg-white/5 hover:text-white
-        focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500
+        text-mute hover:bg-canvas-soft hover:text-ink
+        focus:outline-none focus-visible:ring-2 focus-visible:ring-primary
       "
           >
             <svg
@@ -460,10 +460,10 @@ exports[`MobileNav Component Snapshot Tests matches snapshot for unauthenticated
           />
           <button
             class="
-        flex items-center gap-3 w-full px-4 py-3 rounded-lg
+        flex items-center gap-3 w-full px-3 py-3 rounded-sm
         min-h-[44px] text-left transition-all duration-200
-        text-gray-300 hover:bg-white/5 hover:text-white
-        focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500
+        text-mute hover:bg-canvas-soft hover:text-ink
+        focus:outline-none focus-visible:ring-2 focus-visible:ring-primary
       "
           >
             <svg
@@ -497,10 +497,10 @@ exports[`MobileNav Component Snapshot Tests matches snapshot for unauthenticated
           </button>
           <button
             class="
-        flex items-center gap-3 w-full px-4 py-3 rounded-lg
+        flex items-center gap-3 w-full px-3 py-3 rounded-sm
         min-h-[44px] text-left transition-all duration-200
-        text-gray-300 hover:bg-white/5 hover:text-white
-        focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500
+        text-mute hover:bg-canvas-soft hover:text-ink
+        focus:outline-none focus-visible:ring-2 focus-visible:ring-primary
       "
           >
             <svg

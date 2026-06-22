@@ -13,16 +13,15 @@ const HistoryItem = ({ item, onEdit, onDelete }) => {
 
   return (
     <Card
-      variant="subtle"
-      padding="md"
-      className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between hover-lift"
+      variant="default"
+      className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between hover-lift p-4"
     >
       <div>
-        <p className="text-sm font-semibold text-foreground">{label}</p>
+        <p className="text-sm font-semibold text-white">{label}</p>
         {item.label && (
-          <p className="text-xs text-muted-foreground font-mono mt-1">{item.target}</p>
+          <p className="text-xs text-body font-mono mt-1">{item.target}</p>
         )}
-        <p className="text-xs text-muted-foreground mt-2">
+        <p className="text-xs text-body mt-2">
           {relativeTimestamp(item.created_at)}
         </p>
       </div>
@@ -33,7 +32,7 @@ const HistoryItem = ({ item, onEdit, onDelete }) => {
           <button
             type="button"
             onClick={() => onEdit(item)}
-            className="p-2 text-muted-foreground hover:text-brand-400 transition-colors"
+            className="p-2 text-body hover:text-primary transition-colors"
             aria-label="Edit label"
           >
             <Edit2 className="h-4 w-4" />
@@ -43,7 +42,7 @@ const HistoryItem = ({ item, onEdit, onDelete }) => {
           <button
             type="button"
             onClick={() => onDelete(item)}
-            className="p-2 text-muted-foreground hover:text-risk-danger transition-colors"
+            className="p-2 text-body hover:text-risk-danger transition-colors"
             aria-label="Delete entry"
           >
             <Trash2 className="h-4 w-4" />

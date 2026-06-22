@@ -2,6 +2,8 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import React, { Suspense, useEffect, useState, useCallback } from 'react';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import VerifyEmail from './pages/VerifyEmail';
+import VerificationBanner from './components/auth/VerificationBanner';
 import api from './api';
 const Home = React.lazy(() => import('./pages/Home'));
 const Landing = React.lazy(() => import('./pages/Landing'));
@@ -17,6 +19,7 @@ const CHECK_INTERVAL = 15 * 1000;          // check every 15 seconds
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState(null);
   const [sessionWarning, setSessionWarning] = useState(false);
   const [remainingMinutes, setRemainingMinutes] = useState(null);
 
@@ -24,23 +27,29 @@ function App() {
     localStorage.removeItem('auth_token');
     localStorage.removeItem('session_start');
     setIsLoggedIn(false);
+    setUser(null);
     setSessionWarning(false);
   }, []);
 
-  useEffect(() => {
-    const checkSession = async () => {
-      const token = localStorage.getItem('auth_token');
-      if (!token) { setIsLoggedIn(false); return; }
-      try {
-        const res = await api.get('/api/me');
-        if (res.data?.authenticated) setIsLoggedIn(true);
-        else { logout(); }
-      } catch {
+  const refreshUser = useCallback(async () => {
+    try {
+      const res = await api.get('/api/me');
+      if (res.data?.authenticated) {
+        setIsLoggedIn(true);
+        setUser(res.data.user || null);
+      } else {
         logout();
       }
-    };
-    checkSession();
+    } catch {
+      logout();
+    }
   }, [logout]);
+
+  useEffect(() => {
+    const token = localStorage.getItem('auth_token');
+    if (!token) { setIsLoggedIn(false); return; }
+    refreshUser();
+  }, [refreshUser]);
 
   // Listen for session-expired events from api.js interceptor
   useEffect(() => {
@@ -90,14 +99,17 @@ function App() {
 
   return (
     <Router>
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+      <div className="min-h-screen bg-canvas text-ink">
         {sessionWarning && (
-          <div className="fixed top-0 left-0 right-0 z-[9999] bg-yellow-900/90 backdrop-blur border-b border-yellow-600/50 px-4 py-3 text-center">
+          <div className="fixed top-0 left-0 right-0 z-[9999] bg-yellow-950 border-b border-yellow-800 px-4 py-3 text-center">
             <p className="text-yellow-200 text-sm">
               Your session will expire in <strong>{remainingMinutes} minute{remainingMinutes !== 1 ? 's' : ''}</strong>.
               Please save your work.
             </p>
           </div>
+        )}
+        {isLoggedIn && (
+          <VerificationBanner user={user} onVerify={refreshUser} />
         )}
         <Suspense fallback={<div className="p-8 text-sm text-muted-foreground">Loading page...</div>}>
           <Routes>
@@ -106,21 +118,22 @@ function App() {
             <Route path="/lookup/:uuid" element={<PublicLookup />} />
             <Route path="/about" element={<About />} />
             <Route path="/showcase" element={<ComponentShowcase />} />
+            <Route path="/email/verify" element={<VerifyEmail />} />
 
             {/* Auth routes */}
             <Route
               path="/login"
-              element={isLoggedIn ? <Navigate to="/home" /> : <Login setIsLoggedIn={setIsLoggedIn} />}
+              element={isLoggedIn ? <Navigate to="/home" /> : <Login setIsLoggedIn={setIsLoggedIn} setUser={setUser} />}
             />
             <Route
               path="/register"
-              element={isLoggedIn ? <Navigate to="/home" /> : <Register setIsLoggedIn={setIsLoggedIn} />}
+              element={isLoggedIn ? <Navigate to="/home" /> : <Register setIsLoggedIn={setIsLoggedIn} setUser={setUser} />}
             />
 
             {/* Protected routes */}
             <Route
               path="/home"
-              element={isLoggedIn ? <Home setIsLoggedIn={setIsLoggedIn} /> : <Navigate to="/login" />}
+              element={isLoggedIn ? <Home setIsLoggedIn={setIsLoggedIn} user={user} /> : <Navigate to="/login" />}
             />
             <Route
               path="/analyze"

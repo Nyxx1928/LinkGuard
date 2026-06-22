@@ -50,12 +50,12 @@ const CopyButton = ({ text, label = 'Copy', compact = false }) => {
       onClick={handleCopy}
       className={
         compact
-          ? "p-2 text-gray-400 hover:text-cyan-400 transition-colors"
+          ? "p-2 text-body hover:text-primary transition-colors"
           : `
         inline-flex items-center px-3 py-1.5 text-sm font-medium
-        text-gray-700 bg-white border border-gray-300 rounded-md
-        hover:bg-gray-50 focus:outline-none focus:ring-2
-        focus:ring-offset-2 focus:ring-blue-500
+        text-ink bg-surface border hairline rounded-md
+        hover:bg-canvas-soft focus:outline-none focus:ring-2
+        focus:ring-offset-2 focus:ring-primary
         transition-colors duration-200
         group relative
       `
@@ -86,7 +86,7 @@ const CopyButton = ({ text, label = 'Copy', compact = false }) => {
           <div
             className="
               absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2
-              px-2 py-1 bg-gray-900 text-white text-xs rounded
+              px-2 py-1 bg-canvas text-white text-xs rounded border hairline
               opacity-0 group-hover:opacity-100 transition-opacity duration-200
               pointer-events-none whitespace-nowrap z-10
             "
@@ -95,7 +95,7 @@ const CopyButton = ({ text, label = 'Copy', compact = false }) => {
             <div
               className="
                 absolute top-full left-1/2 transform -translate-x-1/2
-                border-4 border-transparent border-t-gray-900
+                border-4 border-transparent border-t-canvas
               "
             />
           </div>

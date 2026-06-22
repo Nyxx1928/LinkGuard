@@ -57,6 +57,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: backend/vendor
+          key: composer-${{ hashFiles('backend/composer.lock') }}
+          restore-keys: |
+            composer-
+
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -74,13 +82,23 @@ jobs:
             backend/package-lock.json
             frontend/package-lock.json
 
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            backend/node_modules
+            frontend/node_modules
+          key: npm-${{ hashFiles('backend/package-lock.json', 'frontend/package-lock.json') }}
+          restore-keys: |
+            npm-
+
       - name: Install backend PHP dependencies
         working-directory: backend
         run: composer install --no-progress --prefer-dist --no-interaction
 
       - name: Install frontend dependencies
         working-directory: frontend
-        run: npm ci --include=optional
+        run: npm ci
 
       - name: Validate composer.json
         working-directory: backend
@@ -120,9 +138,16 @@ jobs:
     name: phase 2 - unit testing
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    needs: [phase1-lint-validate]
     steps:
       - uses: actions/checkout@v4
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: backend/vendor
+          key: composer-${{ hashFiles('backend/composer.lock') }}
+          restore-keys: |
+            composer-
 
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
@@ -160,7 +185,6 @@ jobs:
     name: phase 3 - integration testing
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    needs: [phase1-lint-validate]
     services:
       mysql:
         image: mysql:8.0
@@ -171,11 +195,19 @@ jobs:
           - 3306:3306
         options: >-
           --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=10
+          --health-interval=5s
+          --health-timeout=3s
+          --health-retries=5
     steps:
       - uses: actions/checkout@v4
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: backend/vendor
+          key: composer-${{ hashFiles('backend/composer.lock') }}
+          restore-keys: |
+            composer-
 
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
@@ -221,7 +253,6 @@ jobs:
     name: phase 4 - build assets
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    needs: [phase1-lint-validate]
     steps:
       - uses: actions/checkout@v4
 
@@ -234,13 +265,23 @@ jobs:
             backend/package-lock.json
             frontend/package-lock.json
 
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            backend/node_modules
+            frontend/node_modules
+          key: npm-${{ hashFiles('backend/package-lock.json', 'frontend/package-lock.json') }}
+          restore-keys: |
+            npm-
+
       - name: Install backend Node dependencies
         working-directory: backend
-        run: npm ci --include=optional
+        run: npm ci
 
       - name: Install frontend dependencies
         working-directory: frontend
-        run: npm ci --include=optional
+        run: npm ci
 
       - name: Build backend assets (Vite)
         working-directory: backend
@@ -254,7 +295,6 @@ jobs:
     name: phase 5 - security scan
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    needs: [phase4-build, changes]
     steps:
       - uses: actions/checkout@v4
 

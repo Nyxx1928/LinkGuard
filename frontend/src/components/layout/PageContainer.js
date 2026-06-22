@@ -19,18 +19,20 @@ import React from 'react';
  */
 const PageContainer = ({ 
   children, 
+  nav,
   className = '',
   maxWidth = 'max-w-7xl', // Default max-width, can be overridden
   noPadding = false, // Allow disabling padding for full-width content
 }) => {
   return (
-    <div className="dark min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
+    <div className="min-h-screen bg-canvas">
+      {nav && <div>{nav}</div>}
       <main
         className={`
           mx-auto
           ${maxWidth}
           ${noPadding ? '' : 'px-4 sm:px-6 lg:px-8'}
-          ${noPadding ? '' : 'py-6 sm:py-8 lg:py-12'}
+          ${noPadding ? '' : 'py-6 sm:pt-28 sm:pb-8 lg:pt-28 lg:pb-12'}
           ${className}
         `.trim().replace(/\s+/g, ' ')}
       >

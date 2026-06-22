@@ -33,9 +33,9 @@ const LoadingState = ({
   const styles = sizeStyles[size] || sizeStyles.md;
 
   return (
-    <div className={clsx('glass-card flex flex-col items-center justify-center gap-3', styles.container)}>
+    <div className={clsx('flex flex-col items-center justify-center gap-3', styles.container)}>
       {variant === 'spinner' && (
-        <Loader2 className={clsx('animate-spin text-brand-400', styles.spinner)} />
+        <Loader2 className={clsx('animate-spin text-primary', styles.spinner)} />
       )}
 
       {variant === 'skeleton' && (
@@ -47,7 +47,7 @@ const LoadingState = ({
       )}
 
       {/* Main Message */}
-      <p className={clsx('font-medium text-foreground', styles.text)}>
+      <p className={clsx('font-medium text-white', styles.text)}>
         {message}
       </p>
 
@@ -56,10 +56,10 @@ const LoadingState = ({
           <Progress
             value={progress || 0}
             className="h-2 bg-white/10"
-            indicatorClassName="bg-brand-500"
+            indicatorClassName="bg-primary"
           />
           {progress !== null && (
-            <p className="text-xs text-muted-foreground text-center mt-1">
+            <p className="text-xs text-body text-center mt-1">
               {progress}% complete
             </p>
           )}
@@ -86,8 +86,8 @@ const LoadingState = ({
                   className={clsx(
                     'flex-shrink-0 h-6 w-6 rounded-full flex items-center justify-center text-xs font-medium',
                     isComplete && 'bg-risk-safe text-white',
-                    isCurrent && 'bg-brand-500 text-white',
-                    isPending && 'bg-white/10 text-muted-foreground'
+                    isCurrent && 'bg-primary text-white',
+                    isPending && 'bg-white/10 text-body'
                   )}
                 >
                   {isComplete ? <Check className="h-4 w-4" /> : index + 1}
@@ -96,9 +96,9 @@ const LoadingState = ({
                 <span
                   className={clsx(
                     'text-sm',
-                    isCurrent && 'font-medium text-foreground',
-                    isComplete && 'text-muted-foreground',
-                    isPending && 'text-muted-foreground/70'
+                    isCurrent && 'font-medium text-white',
+                    isComplete && 'text-body',
+                    isPending && 'text-body/70'
                   )}
                 >
                   {step}
@@ -106,9 +106,9 @@ const LoadingState = ({
 
                 {isCurrent && (
                   <div className="flex-shrink-0 ml-auto flex gap-1">
-                    <span className="h-2 w-2 bg-brand-400 rounded-full animate-bounce" />
-                    <span className="h-2 w-2 bg-brand-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }} />
-                    <span className="h-2 w-2 bg-brand-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
+                    <span className="h-2 w-2 bg-primary rounded-full animate-bounce" />
+                    <span className="h-2 w-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.1s' }} />
+                    <span className="h-2 w-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
                   </div>
                 )}
               </div>
@@ -118,7 +118,7 @@ const LoadingState = ({
       )}
 
       {estimatedTime && (
-        <p className="text-xs text-muted-foreground mt-2">
+        <p className="text-xs text-body mt-2">
           Estimated time: {estimatedTime}
         </p>
       )}
