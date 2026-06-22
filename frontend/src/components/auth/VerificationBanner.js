@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Mail, X, Loader2 } from 'lucide-react';
+import { Mail, Loader2 } from 'lucide-react';
 import api from '../../api';
 import Button from '../ui/Button';
 

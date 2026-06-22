@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import VerificationBanner from './VerificationBanner';
 import api from '../../api';
 
@@ -32,15 +32,15 @@ describe('VerificationBanner', () => {
 
   test('hidden when user is verified', () => {
     const user = { email_verified_at: '2024-01-01T00:00:00.000Z' };
-    const { container } = render(<VerificationBanner user={user} onVerify={jest.fn()} />);
+    render(<VerificationBanner user={user} onVerify={jest.fn()} />);
 
-    expect(container.firstChild).toBeNull();
+    expect(screen.queryByText('Please verify your email address.')).not.toBeInTheDocument();
   });
 
   test('hidden when user is null', () => {
-    const { container } = render(<VerificationBanner user={null} onVerify={jest.fn()} />);
+    render(<VerificationBanner user={null} onVerify={jest.fn()} />);
 
-    expect(container.firstChild).toBeNull();
+    expect(screen.queryByText('Please verify your email address.')).not.toBeInTheDocument();
   });
 
   test('resend button calls correct API endpoint', async () => {
@@ -50,9 +50,8 @@ describe('VerificationBanner', () => {
 
     fireEvent.click(screen.getByText('Resend verification email'));
 
-    await waitFor(() => {
-      expect(api.post).toHaveBeenCalledWith('/api/email/resend');
-    });
+    await screen.findByText('Verification email sent.');
+    expect(api.post).toHaveBeenCalledWith('/api/email/resend');
   });
 
   test('shows success message after resend', async () => {

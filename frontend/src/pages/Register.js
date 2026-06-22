@@ -5,7 +5,7 @@ import CardNav from '../components/ui/CardNav';
 import MobileNav from '../components/layout/MobileNav';
 import PageContainer from '../components/layout/PageContainer';
 import Button from '../components/ui/Button';
-import { Mail, ArrowLeft, AlertTriangle, Eye, EyeOff, Loader2 } from 'lucide-react';
+import { Mail, ArrowLeft, AlertTriangle, Eye, EyeOff } from 'lucide-react';
 
 export default function Register({ setIsLoggedIn, setUser }) {
   const [name, setName] = useState('');
