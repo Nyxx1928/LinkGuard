@@ -2,278 +2,266 @@
 
 namespace Tests\Unit;
 
+use App\Services\BlocklistChecker;
+use App\Services\BlocklistResult;
+use App\Services\DomainReputationChecker;
+use App\Services\DomainReputationResult;
 use App\Services\GeoResult;
+use App\Services\KnownServicesWhitelist;
 use App\Services\RiskScorer;
+use App\Services\RiskScoreResult;
+use App\Services\TyposquattingDetector;
+use App\Services\TyposquattingResult;
+use Mockery;
 use Tests\TestCase;
 
-/**
- * Unit tests for the RiskScorer service.
- *
- * These tests verify the deterministic risk scoring algorithm with specific examples.
- * The RiskScorer assigns risk levels based on network characteristics:
- * - HIGH: Proxy IPs (can hide true origin)
- * - MEDIUM: Hosting/datacenter IPs (often used for automated activities)
- * - LOW: Residential IPs (typical user connections)
- * - UNKNOWN: No usable geo data or indeterminate flags
- *
- * Teaching Point: Deterministic algorithms should always produce the same output
- * for the same input. This makes them predictable, testable, and reliable.
- */
 class RiskScorerTest extends TestCase
 {
-    private RiskScorer $scorer;
+    private KnownServicesWhitelist $knownServices;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->scorer = new RiskScorer;
+        $this->knownServices = $this->app->make(KnownServicesWhitelist::class);
     }
 
-    /**
-     * Test HIGH risk when proxy flag is true.
-     * Proxy IPs are high risk because they can hide the true origin.
-     */
-    public function test_scores_high_when_proxy_is_true(): void
+    public function test_proxy_flag_adds_weight(): void
     {
+        $scorer = $this->makeScorer();
+
         $geo = new GeoResult(
             status: 'success',
-            query: '8.8.8.8',
+            query: '1.2.3.4',
             proxy: true,
-            hosting: false,
-            mobile: false
+            hosting: false
         );
 
-        $result = $this->scorer->score($geo);
+        $result = $scorer->score('example.com', '1.2.3.4', $geo);
 
-        $this->assertEquals('HIGH', $result);
+        $this->assertGreaterThanOrEqual(25, $result->score);
+        $this->assertContains('proxy', array_column($result->breakdown, 'signal'));
     }
 
-    /**
-     * Test HIGH risk when both proxy and hosting are true.
-     * Proxy flag takes precedence.
-     */
-    public function test_scores_high_when_proxy_and_hosting_are_true(): void
+    public function test_hosting_flag_adds_weight(): void
     {
+        $scorer = $this->makeScorer();
+
         $geo = new GeoResult(
             status: 'success',
-            query: '8.8.8.8',
-            proxy: true,
-            hosting: true,
-            mobile: false
-        );
-
-        $result = $this->scorer->score($geo);
-
-        $this->assertEquals('HIGH', $result);
-    }
-
-    /**
-     * Test MEDIUM risk when hosting is true and proxy is false.
-     * Hosting/datacenter IPs are medium risk because they're often used for automated activities.
-     */
-    public function test_scores_medium_when_hosting_is_true_and_proxy_is_false(): void
-    {
-        $geo = new GeoResult(
-            status: 'success',
-            query: '8.8.8.8',
+            query: '1.2.3.4',
             proxy: false,
-            hosting: true,
-            mobile: false
+            hosting: true
         );
 
-        $result = $this->scorer->score($geo);
+        $result = $scorer->score('example.com', '1.2.3.4', $geo);
 
-        $this->assertEquals('MEDIUM', $result);
+        $this->assertGreaterThanOrEqual(8, $result->score);
+        $this->assertContains('hosting', array_column($result->breakdown, 'signal'));
     }
 
-    /**
-     * Test LOW risk when both proxy and hosting are false.
-     * Residential IPs are low risk because they're typical user connections.
-     */
-    public function test_scores_low_when_proxy_and_hosting_are_false(): void
+    public function test_blocklist_match_adds_weight(): void
     {
+        $blocklistResult = new BlocklistResult(found: true, sources: ['google_safe_browsing', 'phishtank']);
+        $blocklistMock = Mockery::mock(BlocklistChecker::class);
+        $blocklistMock->shouldReceive('check')->andReturn($blocklistResult);
+
+        $scorer = new RiskScorer(
+            $blocklistMock,
+            new DomainReputationChecker,
+            $this->knownServices,
+            new TyposquattingDetector($this->knownServices)
+        );
+
+        $result = $scorer->score('bad-site.com', '1.2.3.4', null);
+
+        $this->assertGreaterThanOrEqual(40, $result->score);
+        $this->assertContains('on_blocklist', array_column($result->breakdown, 'signal'));
+    }
+
+    public function test_known_service_bonus_subtracts_weight(): void
+    {
+        $scorer = $this->makeScorer();
+
         $geo = new GeoResult(
             status: 'success',
-            query: '8.8.8.8',
-            proxy: false,
-            hosting: false,
-            mobile: false
-        );
-
-        $result = $this->scorer->score($geo);
-
-        $this->assertEquals('LOW', $result);
-    }
-
-    /**
-     * Test UNKNOWN risk when status is fail.
-     * If the geolocation lookup failed, we can't determine risk.
-     */
-    public function test_scores_unknown_when_status_is_fail(): void
-    {
-        $geo = new GeoResult(
-            status: 'fail',
-            message: 'API error'
-        );
-
-        $result = $this->scorer->score($geo);
-
-        $this->assertEquals('UNKNOWN', $result);
-    }
-
-    /**
-     * Test UNKNOWN risk when query is null.
-     * If no IP was queried, we can't determine risk.
-     */
-    public function test_scores_unknown_when_query_is_null(): void
-    {
-        $geo = new GeoResult(
-            status: 'success',
-            query: null,
+            query: '1.2.3.4',
             proxy: false,
             hosting: false
         );
 
-        $result = $this->scorer->score($geo);
+        $result = $scorer->score('resend.com', '1.2.3.4', $geo);
 
-        $this->assertEquals('UNKNOWN', $result);
+        $this->assertContains('known_service_bonus', array_column($result->breakdown, 'signal'));
+        $bonus = collect($result->breakdown)->firstWhere('signal', 'known_service_bonus');
+        $this->assertNotNull($bonus);
+        $this->assertLessThan(0, $bonus['weight']);
     }
 
-    /**
-     * Test UNKNOWN risk when proxy flag is null.
-     * If flags are indeterminate, we can't score accurately.
-     */
-    public function test_scores_unknown_when_proxy_is_null(): void
+    public function test_suspicious_tld_adds_weight(): void
     {
+        $scorer = $this->makeScorer();
+
+        $result = $scorer->score('some-site.xyz', null, null);
+
+        $this->assertContains('suspicious_tld', array_column($result->breakdown, 'signal'));
+    }
+
+    public function test_all_good_signals_gives_low_score(): void
+    {
+        $scorer = $this->makeScorer();
+
         $geo = new GeoResult(
             status: 'success',
-            query: '8.8.8.8',
-            proxy: null,
-            hosting: false,
-            mobile: false
+            query: '1.2.3.4',
+            proxy: false,
+            hosting: false
         );
 
-        $result = $this->scorer->score($geo);
+        $result = $scorer->score('resend.com', '1.2.3.4', $geo);
 
-        $this->assertEquals('UNKNOWN', $result);
+        $this->assertEquals('LOW', $result->level);
+        $this->assertLessThan(30, $result->score);
     }
 
-    /**
-     * Test UNKNOWN risk when hosting flag is null.
-     * If flags are indeterminate, we can't score accurately.
-     */
-    public function test_scores_unknown_when_hosting_is_null(): void
+    public function test_all_bad_signals_gives_high_score(): void
     {
+        $blocklistResult = new BlocklistResult(found: true, sources: ['google_safe_browsing']);
+        $blocklistMock = Mockery::mock(BlocklistChecker::class);
+        $blocklistMock->shouldReceive('check')->andReturn($blocklistResult);
+
+        $reputationResult = new DomainReputationResult(
+            domainAgeDays: 3,
+            sslValid: false,
+            suspiciousTld: true
+        );
+        $reputationMock = Mockery::mock(DomainReputationChecker::class);
+        $reputationMock->shouldReceive('check')->andReturn($reputationResult);
+
+        $typosquattingResult = new TyposquattingResult(
+            flagged: true,
+            matchedDomain: 'google.com',
+            distance: 1
+        );
+        $typosquattingMock = Mockery::mock(TyposquattingDetector::class);
+        $typosquattingMock->shouldReceive('detect')->andReturn($typosquattingResult);
+
+        $scorer = new RiskScorer(
+            $blocklistMock,
+            $reputationMock,
+            $this->knownServices,
+            $typosquattingMock
+        );
+
         $geo = new GeoResult(
             status: 'success',
-            query: '8.8.8.8',
-            proxy: false,
-            hosting: null,
-            mobile: false
+            query: '1.2.3.4',
+            proxy: true,
+            hosting: true
         );
 
-        $result = $this->scorer->score($geo);
+        $result = $scorer->score('go0gle.xyz', '1.2.3.4', $geo);
 
-        $this->assertEquals('UNKNOWN', $result);
+        $this->assertEquals('HIGH', $result->level);
+        $this->assertGreaterThanOrEqual(65, $result->score);
     }
 
-    /**
-     * Test UNKNOWN risk when both flags are null.
-     */
-    public function test_scores_unknown_when_both_flags_are_null(): void
+    public function test_score_clamped_to_0(): void
     {
+        $scorer = $this->makeScorer();
+
         $geo = new GeoResult(
             status: 'success',
-            query: '8.8.8.8',
-            proxy: null,
-            hosting: null,
-            mobile: false
+            query: '1.2.3.4',
+            proxy: false,
+            hosting: false
         );
 
-        $result = $this->scorer->score($geo);
+        $result = $scorer->score('resend.com', '1.2.3.4', $geo);
 
-        $this->assertEquals('UNKNOWN', $result);
+        $this->assertGreaterThanOrEqual(0, $result->score);
     }
 
-    /**
-     * Test deterministic behavior: same input produces same output.
-     * This is a critical property of the scoring algorithm.
-     */
-    public function test_deterministic_scoring(): void
+    public function test_score_clamped_to_100(): void
     {
+        $scorer = $this->makeScorer();
+
+        $score = $scorer->score('bad.xyz', null, null);
+        $this->assertLessThanOrEqual(100, $score->score);
+    }
+
+    public function test_breakdown_sum_equals_total_score(): void
+    {
+        $scorer = $this->makeScorer();
+
         $geo = new GeoResult(
             status: 'success',
-            query: '8.8.8.8',
-            proxy: false,
-            hosting: true,
-            mobile: false
+            query: '1.2.3.4',
+            proxy: true,
+            hosting: true
         );
 
-        $result1 = $this->scorer->score($geo);
-        $result2 = $this->scorer->score($geo);
+        $result = $scorer->score('example.xyz', '1.2.3.4', $geo);
 
-        $this->assertEquals($result1, $result2);
-        $this->assertEquals('MEDIUM', $result1);
+        $breakdownSum = array_reduce(
+            $result->breakdown,
+            fn (int $sum, array $item) => $sum + $item['weight'],
+            0
+        );
+
+        $clampedBreakdownSum = max(0, min(100, $breakdownSum));
+
+        if ($result->score === 100) {
+            $this->assertGreaterThanOrEqual(100, $breakdownSum);
+        } elseif ($result->score === 0) {
+            $this->assertLessThanOrEqual(0, $breakdownSum);
+        } else {
+            $this->assertEquals($result->score, $clampedBreakdownSum);
+        }
     }
 
-    /**
-     * Test that mobile flag doesn't affect scoring.
-     * Mobile flag is informational but doesn't change risk level.
-     */
-    public function test_mobile_flag_does_not_affect_scoring(): void
+    public function test_null_geo_results_in_unknown_for_low_risk(): void
     {
-        $geoMobileTrue = new GeoResult(
-            status: 'success',
-            query: '8.8.8.8',
-            proxy: false,
-            hosting: false,
-            mobile: true
-        );
+        $scorer = $this->makeScorer();
 
-        $geoMobileFalse = new GeoResult(
-            status: 'success',
-            query: '8.8.8.8',
-            proxy: false,
-            hosting: false,
-            mobile: false
-        );
+        $result = $scorer->score('good-site.com', null, null);
 
-        $result1 = $this->scorer->score($geoMobileTrue);
-        $result2 = $this->scorer->score($geoMobileFalse);
-
-        $this->assertEquals($result1, $result2);
-        $this->assertEquals('LOW', $result1);
+        $this->assertInstanceOf(RiskScoreResult::class, $result);
+        $this->assertEquals('LOW', $result->level);
     }
 
-    /**
-     * Test scoring with complete GeoResult including all fields.
-     * Verify that only proxy and hosting flags affect the score.
-     */
-    public function test_scores_with_complete_geo_result(): void
+    public function test_returns_risk_score_result(): void
     {
-        $geo = new GeoResult(
-            status: 'success',
-            message: null,
-            query: '8.8.8.8',
-            country: 'United States',
-            countryCode: 'US',
-            region: 'CA',
-            regionName: 'California',
-            city: 'Mountain View',
-            zip: '94043',
-            lat: 37.4192,
-            lon: -122.0574,
-            timezone: 'America/Los_Angeles',
-            isp: 'Google LLC',
-            org: 'Google LLC',
-            as: 'AS15169 Google LLC',
-            proxy: false,
-            hosting: true,
-            mobile: false
+        $scorer = $this->makeScorer();
+
+        $result = $scorer->score('example.com', '1.2.3.4', null);
+
+        $this->assertInstanceOf(RiskScoreResult::class, $result);
+        $this->assertIsInt($result->score);
+        $this->assertContains($result->level, ['LOW', 'MEDIUM', 'HIGH']);
+        $this->assertIsArray($result->breakdown);
+        $this->assertIsInt($result->flagCount);
+    }
+
+    public function test_to_array_returns_expected_keys(): void
+    {
+        $scorer = $this->makeScorer();
+
+        $result = $scorer->score('example.com', '1.2.3.4', null);
+        $array = $result->toArray();
+
+        $this->assertArrayHasKey('score', $array);
+        $this->assertArrayHasKey('level', $array);
+        $this->assertArrayHasKey('breakdown', $array);
+        $this->assertArrayHasKey('flag_count', $array);
+    }
+
+    private function makeScorer(): RiskScorer
+    {
+        return new RiskScorer(
+            new BlocklistChecker,
+            new DomainReputationChecker,
+            $this->knownServices,
+            new TyposquattingDetector($this->knownServices)
         );
-
-        $result = $this->scorer->score($geo);
-
-        $this->assertEquals('MEDIUM', $result);
     }
 }
