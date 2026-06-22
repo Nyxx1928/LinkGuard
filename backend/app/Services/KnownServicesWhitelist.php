@@ -36,7 +36,7 @@ class KnownServicesWhitelist
 
     private function loadServices(): void
     {
-        $path = storage_path('app/known-services.json');
+        $path = config_path('known-services.json');
 
         if (! file_exists($path)) {
             Log::warning('Known services whitelist file not found at: '.$path);
