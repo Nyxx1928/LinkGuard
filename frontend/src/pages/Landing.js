@@ -282,18 +282,18 @@ const Landing = () => {
                   </div>
                   <div className="space-y-4">
                     {[
-                      { label: 'Infrastructure', value: '92%', color: 'from-slate-200 to-slate-500' },
-                      { label: 'Reputation', value: '84%', color: 'from-cyan-300 to-blue-500' },
-                      { label: 'Velocity', value: '88%', color: 'from-pink-400 to-purple-500' },
-                      { label: 'Content Risk', value: '79%', color: 'from-lime-300 to-emerald-500' }
+                      { label: 'Infrastructure', value: '92%' },
+                      { label: 'Reputation', value: '84%' },
+                      { label: 'Velocity', value: '88%' },
+                      { label: 'Content Risk', value: '79%' }
                     ].map((metric) => (
                       <div key={metric.label} className="rounded-md border border-hairline bg-canvas p-4">
-                        <div className="flex items-center justify-between text-sm text-gray-300">
+                        <div className="flex items-center justify-between text-sm text-ink">
                           <span>{metric.label}</span>
                           <span className="text-white font-semibold">{metric.value}</span>
                         </div>
                         <div className="mt-3 h-2 rounded-full bg-white/10">
-                          <div className={`h-2 rounded-full bg-gradient-to-r ${metric.color}`} style={{ width: metric.value }} />
+                          <div className={`h-2 rounded-full bg-primary`} style={{ width: metric.value }} />
                         </div>
                       </div>
                     ))}

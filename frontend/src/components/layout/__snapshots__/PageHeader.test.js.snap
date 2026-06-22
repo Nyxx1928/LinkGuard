@@ -3,7 +3,7 @@
 exports[`PageHeader Component Snapshot Tests matches snapshot for authenticated state 1`] = `
 <DocumentFragment>
   <header
-    class="sticky top-0 z-40 w-full glass-nav "
+    class="sticky top-0 z-40 w-full bg-canvas border-b hairline "
   >
     <div
       class="mx-auto w-full px-4 sm:px-6 lg:px-8 max-w-7xl py-4"
@@ -127,7 +127,7 @@ exports[`PageHeader Component Snapshot Tests matches snapshot for authenticated 
 exports[`PageHeader Component Snapshot Tests matches snapshot for unauthenticated state 1`] = `
 <DocumentFragment>
   <header
-    class="sticky top-0 z-40 w-full glass-nav "
+    class="sticky top-0 z-40 w-full bg-canvas border-b hairline "
   >
     <div
       class="mx-auto w-full px-4 sm:px-6 lg:px-8 max-w-7xl py-4"
@@ -220,7 +220,7 @@ exports[`PageHeader Component Snapshot Tests matches snapshot for unauthenticate
 exports[`PageHeader Component Snapshot Tests matches snapshot with custom actions 1`] = `
 <DocumentFragment>
   <header
-    class="sticky top-0 z-40 w-full glass-nav "
+    class="sticky top-0 z-40 w-full bg-canvas border-b hairline "
   >
     <div
       class="mx-auto w-full px-4 sm:px-6 lg:px-8 max-w-7xl py-4"

@@ -66,7 +66,7 @@ const PageHeader = ({
   ];
 
   return (
-    <header className={`sticky top-0 z-40 w-full glass-nav ${className}`}>
+    <header className={`sticky top-0 z-40 w-full bg-canvas border-b hairline ${className}`}>
       <Container className="py-4">
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
