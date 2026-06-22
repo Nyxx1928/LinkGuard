@@ -32,6 +32,11 @@ export default function Home({ setIsLoggedIn }) {
     fetchUserGeo();
   }, []);
 
+  // Load persisted history from backend on mount for KPI cards
+  useEffect(() => {
+    fetchHistory();
+  }, []);
+
   const fetchUserGeo = async () => {
     try {
       const res = await api.get('/api/geo');
@@ -39,6 +44,22 @@ export default function Home({ setIsLoggedIn }) {
     } catch (err) {
       console.error(err);
       setError('Failed to load your location');
+    }
+  };
+
+  const fetchHistory = async () => {
+    try {
+      const res = await api.get('/api/history');
+      const items = res.data?.data;
+      if (Array.isArray(items)) {
+        const entries = items.map(item => ({
+          target: item.target,
+          risk_level: item.risk_level || 'UNKNOWN',
+        }));
+        setResultHistory(entries);
+      }
+    } catch (err) {
+      // Silent fail — KPI cards will just show empty
     }
   };
 
@@ -57,13 +78,10 @@ export default function Home({ setIsLoggedIn }) {
       if (res.data) {
         setCurrentResult(res.data);
         setHistory(prev => [target, ...prev.filter(t => t !== target)].slice(0, 10));
-        setResultHistory(prev => {
-          const entry = { target, risk_level: res.data.risk_level || 'UNKNOWN' };
-          return [entry, ...prev.filter(e => e.target !== target)].slice(0, 50);
-        });
         setError('');
         setSearchTarget(target);
         setHistoryRefreshKey(prev => prev + 1);
+        fetchHistory(); // Refresh KPI cards from backend
       } else {
         setError('Analysis data not available for this target');
       }
@@ -175,16 +193,19 @@ export default function Home({ setIsLoggedIn }) {
   ];
 
   return (
-    <PageContainer>
-      <div className="hidden sm:block">
-        <CardNav
-          logoAlt="LinkGuard"
-          items={cardNavItems}
-          logoHref="/home"
-          ctaLabel="Logout"
-          onCtaClick={handleLogout}
-        />
-      </div>
+    <PageContainer
+      nav={
+        <div className="hidden sm:block">
+          <CardNav
+            logoAlt="LinkGuard"
+            items={cardNavItems}
+            logoHref="/home"
+            ctaLabel="Logout"
+            onCtaClick={handleLogout}
+          />
+        </div>
+      }
+    >
       <div className="sm:hidden fixed top-4 right-4 z-50">
         <MobileNav isAuthenticated={true} onLogout={handleLogout} />
       </div>

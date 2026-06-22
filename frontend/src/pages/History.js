@@ -33,15 +33,18 @@ const History = () => {
   ];
 
   return (
-    <PageContainer>
-      <div className="hidden sm:block">
-        <CardNav
-          logoAlt="LinkGuard"
-          items={cardNavItems}
-          ctaLabel="Dashboard"
-          onCtaClick={() => window.location.href = '/home'}
-        />
-      </div>
+    <PageContainer
+      nav={
+        <div className="hidden sm:block">
+          <CardNav
+            logoAlt="LinkGuard"
+            items={cardNavItems}
+            ctaLabel="Dashboard"
+            onCtaClick={() => window.location.href = '/home'}
+          />
+        </div>
+      }
+    >
       <div className="sm:hidden fixed top-4 right-4 z-50">
         <MobileNav isAuthenticated={true} />
       </div>

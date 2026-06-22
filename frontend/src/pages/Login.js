@@ -7,7 +7,7 @@ import PageContainer from '../components/layout/PageContainer';
 import Button from '../components/ui/Button';
 import { AlertTriangle, Eye, EyeOff } from 'lucide-react';
 
-export default function Login({ setIsLoggedIn }) {
+export default function Login({ setIsLoggedIn, setUser }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -25,6 +25,9 @@ export default function Login({ setIsLoggedIn }) {
       localStorage.setItem('auth_token', res.data.token);
       localStorage.setItem('session_start', Date.now().toString());
       setIsLoggedIn(true);
+      if (res.data.user) {
+        setUser(res.data.user);
+      }
       navigate('/home');
     } catch {
       setError('Invalid credentials, please try again.');
@@ -61,15 +64,18 @@ export default function Login({ setIsLoggedIn }) {
   ];
 
   return (
-    <PageContainer>
-      <div className="hidden sm:block">
-        <CardNav
-          logoAlt="LinkGuard"
-          items={cardNavItems}
-          ctaLabel="Create Account"
-          onCtaClick={() => navigate('/register')}
-        />
-      </div>
+    <PageContainer
+      nav={
+        <div className="hidden sm:block">
+          <CardNav
+            logoAlt="LinkGuard"
+            items={cardNavItems}
+            ctaLabel="Create Account"
+            onCtaClick={() => navigate('/register')}
+          />
+        </div>
+      }
+    >
       <div className="sm:hidden fixed top-4 right-4 z-50">
         <MobileNav isAuthenticated={false} />
       </div>
@@ -161,13 +167,6 @@ export default function Login({ setIsLoggedIn }) {
                   >
                     Create one
                   </button>
-                </p>
-              </div>
-
-              <div className="mt-6 p-3 bg-canvas-soft rounded-md border border-hairline">
-                <p className="text-xs text-mute text-center">
-                  Demo credentials:{' '}
-                  <span className="text-primary font-mono">test@example.com / password123</span>
                 </p>
               </div>
             </div>

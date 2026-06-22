@@ -117,16 +117,18 @@ const PublicLookup = () => {
   ];
 
   return (
-    <PageContainer>
-      {/* Header */}
-      <div className="hidden sm:block">
-        <CardNav
-          logoAlt="LinkGuard"
-          items={cardNavItems}
-          ctaLabel="Log In"
-          onCtaClick={() => navigate('/login')}
-        />
-      </div>
+    <PageContainer
+      nav={
+        <div className="hidden sm:block">
+          <CardNav
+            logoAlt="LinkGuard"
+            items={cardNavItems}
+            ctaLabel="Log In"
+            onCtaClick={() => navigate('/login')}
+          />
+        </div>
+      }
+    >
       <div className="sm:hidden fixed top-4 right-4 z-50">
         <MobileNav isAuthenticated={false} />
       </div>

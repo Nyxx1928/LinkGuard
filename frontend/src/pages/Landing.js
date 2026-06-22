@@ -122,20 +122,23 @@ const Landing = () => {
   ];
 
   return (
-    <PageContainer>
+    <PageContainer
+      nav={
+        <div className="hidden sm:block">
+          <CardNav
+            logoAlt="LinkGuard"
+            items={cardNavItems}
+            ctaLabel="Log In"
+            onCtaClick={() => navigate('/login')}
+          />
+        </div>
+      }
+    >
+      <div className="sm:hidden fixed top-4 right-4 z-50">
+        <MobileNav isAuthenticated={false} />
+      </div>
       <div className="relative overflow-hidden">
         <div className="relative z-10">
-          <div className="hidden sm:block">
-            <CardNav
-              logoAlt="LinkGuard"
-              items={cardNavItems}
-              ctaLabel="Log In"
-              onCtaClick={() => navigate('/login')}
-            />
-          </div>
-          <div className="sm:hidden fixed top-4 right-4 z-50">
-            <MobileNav isAuthenticated={false} />
-          </div>
 
           <section className="pt-10 sm:pt-14 lg:pt-18 pb-10 sm:pb-12 lg:pb-16">
             <div className="text-center px-4">

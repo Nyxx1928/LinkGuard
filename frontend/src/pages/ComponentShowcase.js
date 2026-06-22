@@ -39,15 +39,18 @@ const ComponentShowcase = () => {
   ];
 
   return (
-    <PageContainer>
-      <div className="hidden sm:block">
-        <CardNav
-          logoAlt="LinkGuard"
-          items={cardNavItems}
-          ctaLabel="Log In"
-          onCtaClick={() => window.location.href = '/login'}
-        />
-      </div>
+    <PageContainer
+      nav={
+        <div className="hidden sm:block">
+          <CardNav
+            logoAlt="LinkGuard"
+            items={cardNavItems}
+            ctaLabel="Log In"
+            onCtaClick={() => window.location.href = '/login'}
+          />
+        </div>
+      }
+    >
       <div className="sm:hidden fixed top-4 right-4 z-50">
         <MobileNav isAuthenticated={false} />
       </div>

@@ -1,13 +1,13 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api';
 import CardNav from '../components/ui/CardNav';
 import MobileNav from '../components/layout/MobileNav';
 import PageContainer from '../components/layout/PageContainer';
 import Button from '../components/ui/Button';
-import { AlertTriangle, Eye, EyeOff } from 'lucide-react';
+import { Mail, ArrowLeft, AlertTriangle, Eye, EyeOff, Loader2 } from 'lucide-react';
 
-export default function Register({ setIsLoggedIn }) {
+export default function Register({ setIsLoggedIn, setUser }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -16,6 +16,12 @@ export default function Register({ setIsLoggedIn }) {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [step, setStep] = useState('form'); // 'form' | 'otp'
+  const [otp, setOtp] = useState(['', '', '', '', '', '']);
+  const [otpLoading, setOtpLoading] = useState(false);
+  const [otpError, setOtpError] = useState('');
+  const [resendCooldown, setResendCooldown] = useState(0);
+  const otpRefs = [useRef(), useRef(), useRef(), useRef(), useRef(), useRef()];
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
@@ -31,15 +37,84 @@ export default function Register({ setIsLoggedIn }) {
 
     try {
       const res = await api.post('/api/register', { name: name || undefined, email, password });
-      localStorage.setItem('auth_token', res.data.token);
-      localStorage.setItem('session_start', Date.now().toString());
-      setIsLoggedIn(true);
-      navigate('/home');
+      setEmail(res.data.email || email);
+      setStep('otp');
+      startResendCooldown();
     } catch (err) {
       setError(err.response?.data?.message || 'Registration failed. Please try again.');
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleOtpChange = (index, value) => {
+    if (value && !/^\d$/.test(value)) return;
+
+    const newOtp = [...otp];
+    newOtp[index] = value;
+    setOtp(newOtp);
+
+    if (value && index < 5) {
+      otpRefs[index + 1].current.focus();
+    }
+
+    // Auto-submit when all digits filled
+    if (newOtp.every((d) => d !== '') && value !== '') {
+      submitOtp(newOtp.join(''));
+    }
+  };
+
+  const handleOtpKeyDown = (index, e) => {
+    if (e.key === 'Backspace' && !otp[index] && index > 0) {
+      otpRefs[index - 1].current.focus();
+    }
+  };
+
+  const submitOtp = async (code) => {
+    setOtpLoading(true);
+    setOtpError('');
+
+    try {
+      const res = await api.post('/api/email/verify-code', { email, code });
+      localStorage.setItem('auth_token', res.data.token);
+      localStorage.setItem('session_start', Date.now().toString());
+      if (res.data.user) {
+        setUser(res.data.user);
+      }
+      setIsLoggedIn(true);
+      navigate('/home');
+    } catch (err) {
+      setOtpError(err.response?.data?.message || 'Invalid code. Try again.');
+      setOtp(['', '', '', '', '', '']);
+      otpRefs[0].current.focus();
+    } finally {
+      setOtpLoading(false);
+    }
+  };
+
+  const handleResend = async () => {
+    if (resendCooldown > 0) return;
+
+    try {
+      await api.post('/api/email/resend', { email });
+      startResendCooldown();
+      setOtpError('');
+    } catch {
+      setOtpError('Failed to resend code. Try again later.');
+    }
+  };
+
+  const startResendCooldown = () => {
+    setResendCooldown(60);
+    const interval = setInterval(() => {
+      setResendCooldown((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
   };
 
   const cardNavItems = [
@@ -53,7 +128,6 @@ export default function Register({ setIsLoggedIn }) {
     },
     {
       label: 'Public Tools',
-
       links: [
         { label: 'Public Lookup', href: '/', ariaLabel: 'Shareable checks for any target' },
         { label: 'About LinkGuard', href: '/about', ariaLabel: 'Methodology and data sources' },
@@ -61,13 +135,104 @@ export default function Register({ setIsLoggedIn }) {
     },
     {
       label: 'Resources',
-
       links: [
         { label: 'About', href: '/about', ariaLabel: 'How LinkGuard evaluates risk' },
         { label: 'Component Showcase', href: '/showcase', ariaLabel: 'Design system and UI patterns' },
       ],
     },
   ];
+
+  if (step === 'otp') {
+    return (
+      <PageContainer>
+        <div className="hidden sm:block">
+          <CardNav
+            logoAlt="LinkGuard"
+            items={cardNavItems}
+            ctaLabel="Log In"
+            onCtaClick={() => navigate('/login')}
+          />
+        </div>
+        <div className="sm:hidden fixed top-4 right-4 z-50">
+          <MobileNav isAuthenticated={false} />
+        </div>
+
+        <section className="pt-10 sm:pt-14 lg:pt-18 pb-10 sm:pb-12 lg:pb-16">
+          <div className="max-w-lg mx-auto px-4">
+            <div className="bg-canvas border border-hairline rounded-md p-6 sm:p-8 text-center">
+              <Mail className="h-12 w-12 text-primary mx-auto mb-4" />
+              <h2 className="text-2xl font-semibold text-white mb-2">
+                Check your email
+              </h2>
+              <p className="text-gray-400 text-sm mb-6">
+                We sent a verification code to <strong className="text-gray-200">{email}</strong>.
+                Enter the 6-digit code below.
+              </p>
+
+              {otpError && (
+                <div className="mb-4 p-3 bg-red-950 border border-red-800 rounded-md">
+                  <p className="text-red-300 text-sm">{otpError}</p>
+                </div>
+              )}
+
+              <div className="flex justify-center gap-2 mb-6">
+                {otp.map((digit, index) => (
+                  <input
+                    key={index}
+                    ref={otpRefs[index]}
+                    type="text"
+                    inputMode="numeric"
+                    maxLength={1}
+                    value={digit}
+                    onChange={(e) => handleOtpChange(index, e.target.value)}
+                    onKeyDown={(e) => handleOtpKeyDown(index, e)}
+                    disabled={otpLoading}
+                    className="w-12 h-14 text-center text-xl font-semibold bg-canvas-soft border border-hairline rounded-md focus:ring-2 focus:ring-primary outline-none disabled:opacity-50 text-ink"
+                  />
+                ))}
+              </div>
+
+              <Button
+                variant="primary"
+                size="lg"
+                className="w-full"
+                disabled={otp.some((d) => d === '') || otpLoading}
+                loading={otpLoading}
+                onClick={() => submitOtp(otp.join(''))}
+              >
+                {otpLoading ? 'Verifying...' : 'Verify Email'}
+              </Button>
+
+              <div className="mt-4 text-sm text-gray-400">
+                {resendCooldown > 0 ? (
+                  <span>Resend code in <strong className="text-gray-200">{resendCooldown}s</strong></span>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={handleResend}
+                    className="text-primary hover:text-primary-soft transition-colors"
+                  >
+                    Resend code
+                  </button>
+                )}
+              </div>
+
+              <div className="mt-6 pt-4 border-t border-hairline">
+                <button
+                  type="button"
+                  onClick={() => { setStep('form'); setOtp(['', '', '', '', '', '']); setOtpError(''); }}
+                  className="text-sm text-gray-400 hover:text-gray-200 transition-colors flex items-center justify-center gap-1"
+                >
+                  <ArrowLeft className="h-3 w-3" />
+                  Use a different email
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </PageContainer>
+    );
+  }
 
   return (
     <PageContainer>
