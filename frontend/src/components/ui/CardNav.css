@@ -1,5 +1,5 @@
 .card-nav-container {
-  position: sticky;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
@@ -8,6 +8,8 @@
   box-sizing: border-box;
   display: flex;
   justify-content: center;
+  background-color: #101010;
+  padding: 1.5rem 0;
 }
 
 .card-nav {
@@ -176,7 +178,6 @@
 @media (max-width: 768px) {
   .card-nav-container {
     width: 90%;
-    top: 1.2em;
   }
 
   .card-nav-top {
