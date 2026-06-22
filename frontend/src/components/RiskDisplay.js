@@ -85,9 +85,8 @@ const RiskDisplay = ({
 
   return (
     <Card
-      variant="elevated"
-      padding="none"
-      className={clsx('overflow-hidden bg-gradient-to-br', config.gradient)}
+      variant="default"
+      className={clsx('overflow-hidden', config.gradient)}
     >
       <div className={clsx('relative', styles.container)}>
         <div className="absolute inset-0 opacity-30 blur-2xl" />
@@ -106,19 +105,19 @@ const RiskDisplay = ({
           </div>
 
           <div>
-            <p className={clsx('font-semibold text-foreground', styles.label)}>
+            <p className={clsx('font-semibold text-white', styles.label)}>
               {config.label}
             </p>
-            <p className={clsx('mt-1 text-muted-foreground', styles.description)}>
+            <p className={clsx('mt-1 text-body', styles.description)}>
               {config.description}
             </p>
           </div>
 
           {showScore && score !== null && (
             <div className="w-full space-y-3">
-              <div className={clsx('font-bold text-foreground', styles.score)}>
+              <div className={clsx('font-bold text-white', styles.score)}>
                 {score}
-                <span className="text-base text-muted-foreground">/100</span>
+                <span className="text-base text-body">/100</span>
               </div>
               <Progress
                 value={score}
@@ -126,7 +125,7 @@ const RiskDisplay = ({
                 indicatorClassName={config.progress}
               />
               {confidence !== null && (
-                <p className="text-xs text-muted-foreground">
+                <p className="text-xs text-body">
                   Confidence: {confidence}%
                 </p>
               )}

@@ -52,7 +52,7 @@ export default function GeoMap({ lat, lon }) {
   }
 
   return (
-    <Card variant="elevated" padding="none" className="overflow-hidden">
+    <Card variant="default" className="overflow-hidden">
       <div className="w-full h-64 sm:h-80 lg:h-96 relative">
         <Map
           key={mapInstanceKey}
@@ -68,17 +68,17 @@ export default function GeoMap({ lat, lon }) {
               {/* Enhanced marker with brand colors and better visual hierarchy */}
               <div className="relative">
                 {/* Pulsing ring animation for emphasis */}
-                <div className="absolute inset-0 w-10 h-10 -top-1 -left-1 bg-brand-400 rounded-full opacity-30 animate-ping" />
+                <div className="absolute inset-0 w-10 h-10 -top-1 -left-1 bg-primary rounded-full opacity-30 animate-ping" />
                 
                 {/* Main marker pin */}
-                <div className="relative w-8 h-8 bg-gradient-to-br from-brand-400 to-brand-600 rounded-full border-2 border-white shadow-lg shadow-brand-500/50 flex items-center justify-center group-hover:scale-110 transition-all duration-200">
+                <div className="relative w-8 h-8 bg-primary rounded-full border-2 border-white flex items-center justify-center group-hover:scale-110 transition-all duration-200">
                   {/* Inner dot */}
                   <div className="w-2.5 h-2.5 bg-white rounded-full" />
                 </div>
               </div>
               
               {/* Pin stem */}
-              <div className="w-0.5 h-3 bg-gradient-to-b from-brand-500 to-brand-600" />
+              <div className="w-0.5 h-3 bg-primary/60" />
             </div>
           </Marker>
 
@@ -96,7 +96,7 @@ export default function GeoMap({ lat, lon }) {
                 <div className="text-xs font-semibold text-neutral-200 mb-1">
                   Location Coordinates
                 </div>
-                <div className="font-mono text-sm text-brand-300 font-medium">
+                <div className="font-mono text-sm text-primary/80 font-medium">
                   {lat.toFixed(4)}, {lon.toFixed(4)}
                 </div>
               </div>

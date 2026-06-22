@@ -31,28 +31,28 @@ const NetworkInfo = ({
   ];
 
   return (
-    <Card variant="subtle" padding="md" className={cn('space-y-4', className)}>
+    <Card variant="default" className={cn('space-y-4 p-4', className)}>
       <div className="flex items-center gap-2">
-        <Globe2 className="h-4 w-4 text-brand-400" />
-        <h3 className="text-sm font-semibold text-foreground">Network Intelligence</h3>
+        <Globe2 className="h-4 w-4 text-primary" />
+        <h3 className="text-sm font-semibold text-white">Network Intelligence</h3>
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2">
         <div className="space-y-1">
-          <p className="text-xs text-muted-foreground">ISP</p>
-          <p className="text-sm font-medium text-foreground">{isp || 'Unknown'}</p>
+          <p className="text-xs text-body">ISP</p>
+          <p className="text-sm font-medium text-white">{isp || 'Unknown'}</p>
         </div>
         <div className="space-y-1">
-          <p className="text-xs text-muted-foreground">Organization</p>
-          <p className="text-sm font-medium text-foreground">{organization || 'Unknown'}</p>
+          <p className="text-xs text-body">Organization</p>
+          <p className="text-sm font-medium text-white">{organization || 'Unknown'}</p>
         </div>
         <div className="space-y-1">
-          <p className="text-xs text-muted-foreground">ASN</p>
-          <p className="text-sm font-medium text-foreground">{asn || 'Unknown'}</p>
+          <p className="text-xs text-body">ASN</p>
+          <p className="text-sm font-medium text-white">{asn || 'Unknown'}</p>
         </div>
         <div className="space-y-1">
-          <p className="text-xs text-muted-foreground">Region</p>
-          <p className="text-sm font-medium text-foreground">
+          <p className="text-xs text-body">Region</p>
+          <p className="text-sm font-medium text-white">
             {[city, region, country].filter(Boolean).join(', ') || 'Unknown'}
           </p>
         </div>
@@ -82,13 +82,13 @@ const NetworkInfo = ({
       </div>
 
       {(lat != null && lon != null) && (
-        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+        <div className="flex items-center gap-2 text-xs text-body">
           <MapPin className="h-3.5 w-3.5" />
           <span className="font-mono">{lat.toFixed(4)}, {lon.toFixed(4)}</span>
         </div>
       )}
 
-      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+      <div className="flex items-center gap-2 text-xs text-body">
         <ShieldCheck className="h-3.5 w-3.5" />
         <span>Signals derived from network metadata.</span>
       </div>

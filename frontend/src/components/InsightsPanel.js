@@ -14,11 +14,11 @@ const InsightsPanel = ({
   const hasMetrics = metrics.length > 0;
 
   return (
-    <Card variant="elevated" padding="lg" className={cn('space-y-6', className)}>
+    <Card variant="default" className={cn('space-y-6 p-6', className)}>
       <div className="space-y-2">
-        <h2 className="text-xl font-semibold text-foreground">{title}</h2>
+        <h2 className="text-xl font-semibold text-white">{title}</h2>
         {description && (
-          <p className="text-sm text-muted-foreground">{description}</p>
+          <p className="text-sm text-body">{description}</p>
         )}
       </div>
 
@@ -29,7 +29,7 @@ const InsightsPanel = ({
           ))}
         </div>
       ) : (
-        <div className="rounded-xl border border-dashed border-white/10 bg-white/5 px-4 py-6 text-sm text-muted-foreground">
+        <div className="rounded-xl border border-dashed border-white/10 bg-white/5 px-4 py-6 text-sm text-body">
           {emptyMessage}
         </div>
       )}

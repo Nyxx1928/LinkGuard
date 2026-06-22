@@ -90,10 +90,10 @@ const HistoryDashboard = () => {
         onSortChange={setSortBy}
       />
 
-      <Card variant="elevated" padding="lg" className="space-y-4 fade-in">
-        {loading && <p className="text-sm text-muted-foreground">Loading history...</p>}
+      <Card variant="default" className="space-y-4 fade-in p-6">
+        {loading && <p className="text-sm text-body">Loading history...</p>}
         {!loading && filtered.length === 0 && (
-          <p className="text-sm text-muted-foreground">No history results match your filters.</p>
+          <p className="text-sm text-body">No history results match your filters.</p>
         )}
         {!loading && filtered.map((item) => (
           <HistoryItem key={item.id} item={item} />

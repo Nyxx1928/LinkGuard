@@ -17,9 +17,9 @@ const HistoryFilters = ({
   const sortOptions = ['recent', 'risk', 'target'];
 
   return (
-    <Card variant="subtle" padding="md" className="space-y-4 fade-in">
-      <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
-        <Filter className="h-4 w-4 text-brand-400" />
+    <Card variant="default" className="space-y-4 fade-in p-4">
+      <div className="flex items-center gap-2 text-sm font-semibold text-white">
+        <Filter className="h-4 w-4 text-primary" />
         Filters
       </div>
       <div className="flex flex-col gap-3 sm:flex-row">
@@ -47,7 +47,7 @@ const HistoryFilters = ({
           {sortOptions.map((option) => (
             <Button
               key={option}
-              variant={sortBy === option ? 'secondary' : 'ghost'}
+              variant={sortBy === option ? 'outline' : 'ghost'}
               size="sm"
               onClick={() => onSortChange(option)}
             >
