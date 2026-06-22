@@ -90,9 +90,9 @@ const HistoryList = ({ onRefresh }) => {
 
   if (loading) {
     return (
-      <div className="bg-gray-900/80 backdrop-blur-md p-6 rounded-2xl border border-gray-800/50 shadow-2xl">
+      <div className="bg-surface p-6 rounded-md border hairline">
         <div className="flex items-center justify-center py-8">
-          <span className="text-gray-400">Loading history...</span>
+          <span className="text-body">Loading history...</span>
         </div>
       </div>
     );
@@ -100,9 +100,9 @@ const HistoryList = ({ onRefresh }) => {
 
   if (error) {
     return (
-      <div className="bg-gray-900/80 backdrop-blur-md p-6 rounded-2xl border border-gray-800/50 shadow-2xl">
+      <div className="bg-surface p-6 rounded-md border hairline">
         <div className="flex items-center justify-center py-8">
-          <span className="text-red-400">{error}</span>
+          <span className="text-risk-danger">{error}</span>
         </div>
       </div>
     );
@@ -110,17 +110,17 @@ const HistoryList = ({ onRefresh }) => {
 
   if (history.length === 0) {
     return (
-      <div className="bg-gray-900/80 backdrop-blur-md p-6 rounded-2xl border border-gray-800/50 shadow-2xl">
+      <div className="bg-surface p-6 rounded-md border hairline">
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 bg-gradient-to-br from-cyan-500 to-cyan-700 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-500/30">
-            <History className="h-5 w-5 text-white" />
+          <div className="w-10 h-10 bg-primary/10 rounded-md flex items-center justify-center">
+            <History className="h-5 w-5 text-primary" />
           </div>
           <div>
             <h3 className="text-xl font-bold text-white">Lookup History</h3>
-            <p className="text-xs text-gray-400">Your saved lookups will appear here</p>
+            <p className="text-xs text-body">Your saved lookups will appear here</p>
           </div>
         </div>
-        <div className="text-center py-8 text-gray-400">
+        <div className="text-center py-8 text-body">
           No history yet. Perform a lookup to get started!
         </div>
       </div>
@@ -128,15 +128,15 @@ const HistoryList = ({ onRefresh }) => {
   }
 
   return (
-    <div className="bg-gray-900/80 backdrop-blur-md p-6 rounded-2xl border border-gray-800/50 shadow-2xl">
+    <div className="bg-surface p-6 rounded-md border hairline">
       {/* Header */}
       <div className="flex items-center gap-3 mb-6">
-        <div className="w-10 h-10 bg-gradient-to-br from-cyan-500 to-cyan-700 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-500/30">
-          <History className="h-5 w-5 text-white" />
+        <div className="w-10 h-10 bg-primary/10 rounded-md flex items-center justify-center">
+          <History className="h-5 w-5 text-primary" />
         </div>
         <div>
           <h3 className="text-xl font-bold text-white">Lookup History</h3>
-          <p className="text-xs text-gray-400">{history.length} saved lookups</p>
+          <p className="text-xs text-body">{history.length} saved lookups</p>
         </div>
       </div>
 
@@ -144,20 +144,20 @@ const HistoryList = ({ onRefresh }) => {
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
-            <tr className="border-b border-gray-700">
-              <th className="text-left py-3 px-4 text-sm font-semibold text-gray-300">
+            <tr className="border-b hairline">
+              <th className="text-left py-3 px-4 text-sm font-semibold text-ink">
                 Target / Label
               </th>
-              <th className="text-left py-3 px-4 text-sm font-semibold text-gray-300">
+              <th className="text-left py-3 px-4 text-sm font-semibold text-ink">
                 Location
               </th>
-              <th className="text-left py-3 px-4 text-sm font-semibold text-gray-300">
+              <th className="text-left py-3 px-4 text-sm font-semibold text-ink">
                 Risk
               </th>
-              <th className="text-left py-3 px-4 text-sm font-semibold text-gray-300">
+              <th className="text-left py-3 px-4 text-sm font-semibold text-ink">
                 Time
               </th>
-              <th className="text-right py-3 px-4 text-sm font-semibold text-gray-300">
+              <th className="text-right py-3 px-4 text-sm font-semibold text-ink">
                 Actions
               </th>
             </tr>
@@ -171,7 +171,7 @@ const HistoryList = ({ onRefresh }) => {
               return (
                 <tr
                   key={item.id}
-                  className="border-b border-gray-800 hover:bg-gray-800/50 transition-colors"
+                  className="border-b hairline hover:bg-surface transition-colors"
                 >
                   {/* Target / Label */}
                   <td className="py-4 px-4">
@@ -181,19 +181,19 @@ const HistoryList = ({ onRefresh }) => {
                           type="text"
                           value={editLabel}
                           onChange={(e) => setEditLabel(e.target.value)}
-                          className="flex-1 px-3 py-1.5 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none"
+                          className="flex-1 px-3 py-1.5 bg-canvas-soft border hairline rounded-md text-white text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none"
                           maxLength={100}
                           autoFocus
                         />
                         <button
                           onClick={() => handleEditSave(item.id)}
-                          className="px-3 py-1.5 bg-cyan-600 text-white rounded-lg text-sm hover:bg-cyan-700 transition-colors"
+                          className="px-3 py-1.5 bg-primary text-on-primary rounded-md text-sm hover:bg-primary/90 transition-colors"
                         >
                           Save
                         </button>
                         <button
                           onClick={handleEditCancel}
-                          className="px-3 py-1.5 bg-gray-700 text-gray-300 rounded-lg text-sm hover:bg-gray-600 transition-colors"
+                          className="px-3 py-1.5 bg-surface text-ink rounded-md text-sm border hairline hover:bg-canvas-soft transition-colors"
                         >
                           Cancel
                         </button>
@@ -202,7 +202,7 @@ const HistoryList = ({ onRefresh }) => {
                       <div>
                         <div className="font-medium text-white">{displayLabel}</div>
                         {item.label && (
-                          <div className="text-xs text-gray-400 font-mono mt-1">
+                          <div className="text-xs text-body font-mono mt-1">
                             {item.target}
                           </div>
                         )}
@@ -212,11 +212,11 @@ const HistoryList = ({ onRefresh }) => {
 
                   {/* Location */}
                   <td className="py-4 px-4">
-                    <div className="text-sm text-gray-300">
+                    <div className="text-sm text-ink">
                       {geo.city && geo.countryCode ? (
                         <>{geo.city}, {geo.countryCode}</>
                       ) : (
-                        <span className="text-gray-500">Unknown</span>
+                        <span className="text-mute">Unknown</span>
                       )}
                     </div>
                   </td>
@@ -228,7 +228,7 @@ const HistoryList = ({ onRefresh }) => {
 
                   {/* Time */}
                   <td className="py-4 px-4">
-                    <div className="text-sm text-gray-400">
+                    <div className="text-sm text-body">
                       {relativeTimestamp(item.created_at)}
                     </div>
                   </td>
@@ -240,7 +240,7 @@ const HistoryList = ({ onRefresh }) => {
                         <>
                           <button
                             onClick={() => handleEditStart(item)}
-                            className="p-2 text-gray-400 hover:text-cyan-400 transition-colors"
+                            className="p-2 text-body hover:text-primary transition-colors"
                             title="Edit label"
                           >
                             <Edit2 className="h-4 w-4" />
@@ -252,7 +252,7 @@ const HistoryList = ({ onRefresh }) => {
                           />
                           <button
                             onClick={() => handleDelete(item.id)}
-                            className="p-2 text-gray-400 hover:text-red-400 transition-colors"
+                            className="p-2 text-body hover:text-risk-danger transition-colors"
                             title="Delete"
                           >
                             <Trash2 className="h-4 w-4" />

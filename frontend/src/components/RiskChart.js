@@ -26,9 +26,9 @@ const CustomTooltip = ({ active, payload, label }) => {
   const value = payload[0]?.value;
 
   return (
-    <div className="glass-card px-3 py-2 text-xs text-foreground">
-      <p className="text-muted-foreground">{label}</p>
-      <p className="mt-1 text-sm font-semibold text-foreground">{value}</p>
+    <div className="bg-surface px-3 py-2 text-xs text-white border hairline rounded-md">
+      <p className="text-body">{label}</p>
+      <p className="mt-1 text-sm font-semibold text-white">{value}</p>
     </div>
   );
 };

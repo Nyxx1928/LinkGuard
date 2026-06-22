@@ -95,7 +95,7 @@ const RiskDisplay = ({
           <div className="flex w-full items-center justify-between">
             <div
               className={clsx(
-                'flex items-center justify-center rounded-full bg-white/10 backdrop-blur-sm',
+                'flex items-center justify-center rounded-full bg-white/10',
                 styles.iconWrap
               )}
             >

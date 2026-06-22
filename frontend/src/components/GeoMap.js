@@ -92,8 +92,8 @@ export default function GeoMap({ lat, lon }) {
               closeOnClick={false}
               className="rounded-lg"
             >
-              <div className="glass-card px-3 py-2 min-w-[140px]">
-                <div className="text-xs font-semibold text-neutral-200 mb-1">
+              <div className="bg-surface px-3 py-2 rounded-lg border hairline min-w-[140px]">
+                <div className="text-xs font-semibold text-ink mb-1">
                   Location Coordinates
                 </div>
                 <div className="font-mono text-sm text-primary/80 font-medium">
@@ -105,7 +105,7 @@ export default function GeoMap({ lat, lon }) {
         </Map>
         
         {/* Coordinate display overlay - always visible for better UX */}
-        <div className="absolute bottom-3 left-3 glass-subtle px-3 py-2 rounded-lg border border-white/10">
+        <div className="absolute bottom-3 left-3 bg-surface px-3 py-2 rounded-lg border hairline">
           <div className="text-xs text-neutral-300 font-medium mb-0.5">
             Coordinates
           </div>

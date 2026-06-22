@@ -156,14 +156,14 @@ const BulkLookup = () => {
   return (
     <div className="space-y-6">
       {/* Input Section */}
-      <div className="bg-gray-900/80 backdrop-blur-md p-6 rounded-2xl border border-gray-800/50 shadow-2xl">
+      <div className="bg-surface p-6 rounded-md border hairline">
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 bg-gradient-to-br from-cyan-500 to-cyan-700 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-500/30">
-            <List className="h-5 w-5 text-white" />
+          <div className="w-10 h-10 bg-primary/10 rounded-md flex items-center justify-center">
+            <List className="h-5 w-5 text-primary" />
           </div>
           <div>
             <h3 className="text-xl font-bold text-white">Bulk Lookup</h3>
-            <p className="text-sm text-gray-400">Analyze multiple targets at once (one per line)</p>
+            <p className="text-sm text-body">Analyze multiple targets at once (one per line)</p>
           </div>
         </div>
 
@@ -172,14 +172,14 @@ const BulkLookup = () => {
           onChange={(e) => setTargetsText(e.target.value)}
           placeholder="Enter targets (one per line):&#10;8.8.8.8&#10;google.com&#10;https://example.com&#10;user@example.com"
           disabled={loading}
-          className="w-full h-48 px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all outline-none disabled:opacity-50 disabled:cursor-not-allowed text-white font-mono text-sm placeholder-gray-500 resize-none"
+          className="w-full h-48 px-4 py-3 bg-canvas-soft border hairline rounded-md focus:ring-2 focus:ring-primary focus:border-primary transition-all outline-none disabled:opacity-50 disabled:cursor-not-allowed text-white font-mono text-sm placeholder-body resize-none"
         />
 
         <div className="flex gap-3 mt-4">
           <button
             onClick={processBulkLookup}
             disabled={loading || !targetsText.trim()}
-            className="px-8 py-3 bg-gradient-to-r from-cyan-600 to-cyan-700 text-white font-semibold rounded-xl hover:from-cyan-500 hover:to-cyan-600 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-cyan-500/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center gap-2"
+            className="px-8 py-3 bg-primary text-on-primary font-semibold rounded-md hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
           >
             {loading ? (
               <>
@@ -199,7 +199,7 @@ const BulkLookup = () => {
               <button
                 onClick={exportToCSV}
                 disabled={loading}
-                className="px-6 py-3 bg-green-600 text-white font-semibold rounded-xl hover:bg-green-700 transform hover:scale-105 transition-all duration-200 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center gap-2"
+                className="px-6 py-3 bg-primary/10 text-primary font-semibold rounded-md hover:bg-primary/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
               >
                 <Download className="h-4 w-4" />
                 <span>Export CSV</span>
@@ -208,7 +208,7 @@ const BulkLookup = () => {
               <button
                 onClick={clearResults}
                 disabled={loading}
-                className="px-6 py-3 bg-gray-800 text-gray-300 font-semibold rounded-xl hover:bg-gray-700 transform hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center gap-2"
+                className="px-6 py-3 bg-canvas text-ink font-semibold rounded-md border hairline hover:bg-surface disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
               >
                 <Trash2 className="h-4 w-4" />
                 <span>Clear</span>
@@ -220,15 +220,15 @@ const BulkLookup = () => {
 
       {/* Results Section */}
       {results.length > 0 && (
-        <div className="bg-gray-900/80 backdrop-blur-md p-6 rounded-2xl border border-gray-800/50 shadow-2xl">
+        <div className="bg-surface p-6 rounded-md border hairline">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-cyan-500 to-cyan-700 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-500/30">
-                <BarChart3 className="h-5 w-5 text-white" />
+              <div className="w-10 h-10 bg-primary/10 rounded-md flex items-center justify-center">
+                <BarChart3 className="h-5 w-5 text-primary" />
               </div>
               <div>
                 <h3 className="text-xl font-bold text-white">Results</h3>
-                <p className="text-sm text-gray-400">
+                <p className="text-sm text-body">
                   {results.filter(r => r.success).length} successful, {results.filter(r => !r.success).length} failed
                 </p>
               </div>
@@ -239,21 +239,21 @@ const BulkLookup = () => {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-gray-700">
-                  <th className="text-left py-3 px-4 text-sm font-semibold text-gray-300">Target</th>
-                  <th className="text-left py-3 px-4 text-sm font-semibold text-gray-300">Resolved IP</th>
-                  <th className="text-left py-3 px-4 text-sm font-semibold text-gray-300">Location</th>
-                  <th className="text-left py-3 px-4 text-sm font-semibold text-gray-300">ISP</th>
-                  <th className="text-left py-3 px-4 text-sm font-semibold text-gray-300">Risk</th>
-                  <th className="text-left py-3 px-4 text-sm font-semibold text-gray-300">Status</th>
+                <tr className="border-b hairline">
+                  <th className="text-left py-3 px-4 text-sm font-semibold text-ink">Target</th>
+                  <th className="text-left py-3 px-4 text-sm font-semibold text-ink">Resolved IP</th>
+                  <th className="text-left py-3 px-4 text-sm font-semibold text-ink">Location</th>
+                  <th className="text-left py-3 px-4 text-sm font-semibold text-ink">ISP</th>
+                  <th className="text-left py-3 px-4 text-sm font-semibold text-ink">Risk</th>
+                  <th className="text-left py-3 px-4 text-sm font-semibold text-ink">Status</th>
                 </tr>
               </thead>
               <tbody>
                 {results.map((result, idx) => (
                   <tr
                     key={idx}
-                    className={`border-b border-gray-800 ${
-                      result.success ? 'hover:bg-gray-800/50' : 'bg-red-900/20'
+                    className={`border-b hairline ${
+                      result.success ? 'hover:bg-surface' : 'bg-risk-danger/10'
                     } transition-colors`}
                   >
                     {/* Target */}
@@ -265,27 +265,27 @@ const BulkLookup = () => {
                       <>
                         {/* Resolved IP */}
                         <td className="py-4 px-4">
-                          <span className="font-mono text-sm text-gray-300">
+                          <span className="font-mono text-sm text-ink">
                             {result.data.resolved_ip}
                           </span>
                         </td>
 
                         {/* Location */}
                         <td className="py-4 px-4">
-                          <div className="text-sm text-gray-300">
+                          <div className="text-sm text-ink">
                             {result.data.geo?.city && result.data.geo?.countryCode ? (
                               <>
                                   {result.data.geo.city}, {result.data.geo.countryCode}
                               </>
                             ) : (
-                              <span className="text-gray-500">Unknown</span>
+                              <span className="text-mute">Unknown</span>
                             )}
                           </div>
                         </td>
 
                         {/* ISP */}
                         <td className="py-4 px-4">
-                          <span className="text-sm text-gray-300">
+                          <span className="text-sm text-ink">
                             {result.data.geo?.isp || 'Unknown'}
                           </span>
                         </td>
@@ -297,7 +297,7 @@ const BulkLookup = () => {
 
                         {/* Status */}
                         <td className="py-4 px-4">
-                          <span className="text-green-400 text-sm flex items-center gap-1">
+                          <span className="text-risk-safe text-sm flex items-center gap-1">
                             <Check className="h-4 w-4" /> Success
                           </span>
                         </td>
@@ -306,10 +306,10 @@ const BulkLookup = () => {
                       <>
                         {/* Error columns */}
                         <td className="py-4 px-4" colSpan="4">
-                          <span className="text-red-400 text-sm">{result.error}</span>
+                          <span className="text-risk-danger text-sm">{result.error}</span>
                         </td>
                         <td className="py-4 px-4">
-                          <span className="text-red-400 text-sm flex items-center gap-1">
+                          <span className="text-risk-danger text-sm flex items-center gap-1">
                             <X className="h-4 w-4" /> Failed
                           </span>
                         </td>

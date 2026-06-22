@@ -13,9 +13,9 @@ export default function StaticMap({
   lat,
   lon,
   linkLabel = 'View larger map ->',
-  containerClassName = 'w-full h-64 sm:h-80 rounded-xl overflow-hidden border border-white/10 shadow-lg relative bg-neutral-950',
-  emptyClassName = 'w-full h-64 sm:h-80 rounded-xl border border-white/10 flex flex-col items-center justify-center gap-2 text-neutral-200 text-sm glass-subtle p-4',
-  linkClassName = 'absolute bottom-2 right-2 glass-card text-brand-200 text-xs px-2 py-1 rounded shadow hover:text-brand-100 transition-colors',
+  containerClassName = 'w-full h-64 sm:h-80 rounded-md overflow-hidden border hairline relative bg-canvas',
+  emptyClassName = 'w-full h-64 sm:h-80 rounded-md border hairline flex flex-col items-center justify-center gap-2 text-ink text-sm bg-surface p-4',
+  linkClassName = 'absolute bottom-2 right-2 bg-surface text-body text-xs px-2 py-1 rounded border hairline hover:text-ink transition-colors',
   showRetry = false,
   onRetry
 }) {
@@ -46,7 +46,7 @@ export default function StaticMap({
         <button
           type="button"
           onClick={onRetry}
-          className="absolute top-2 left-2 glass-card text-neutral-100 text-xs px-2 py-1 rounded border border-white/10 hover:text-white transition-colors"
+          className="absolute top-2 left-2 bg-surface text-ink text-xs px-2 py-1 rounded border hairline hover:text-white transition-colors"
         >
           Retry interactive map
         </button>
