@@ -63,7 +63,7 @@ exports[`MobileNav Component Snapshot Tests matches snapshot for authenticated s
         >
           <button
             class="
-        flex items-center gap-3 w-full px-4 py-3 rounded-lg
+        flex items-center gap-3 w-full px-3 py-3 rounded-sm
         min-h-[44px] text-left transition-all duration-200
         bg-canvas-soft text-primary
         focus:outline-none focus-visible:ring-2 focus-visible:ring-primary
@@ -97,7 +97,7 @@ exports[`MobileNav Component Snapshot Tests matches snapshot for authenticated s
           </button>
           <button
             class="
-        flex items-center gap-3 w-full px-4 py-3 rounded-lg
+        flex items-center gap-3 w-full px-3 py-3 rounded-sm
         min-h-[44px] text-left transition-all duration-200
         text-mute hover:bg-canvas-soft hover:text-ink
         focus:outline-none focus-visible:ring-2 focus-visible:ring-primary
@@ -133,7 +133,7 @@ exports[`MobileNav Component Snapshot Tests matches snapshot for authenticated s
           </button>
           <button
             class="
-        flex items-center gap-3 w-full px-4 py-3 rounded-lg
+        flex items-center gap-3 w-full px-3 py-3 rounded-sm
         min-h-[44px] text-left transition-all duration-200
         text-mute hover:bg-canvas-soft hover:text-ink
         focus:outline-none focus-visible:ring-2 focus-visible:ring-primary
@@ -170,7 +170,7 @@ exports[`MobileNav Component Snapshot Tests matches snapshot for authenticated s
           </button>
           <button
             class="
-        flex items-center gap-3 w-full px-4 py-3 rounded-lg
+        flex items-center gap-3 w-full px-3 py-3 rounded-sm
         min-h-[44px] text-left transition-all duration-200
         text-mute hover:bg-canvas-soft hover:text-ink
         focus:outline-none focus-visible:ring-2 focus-visible:ring-primary
@@ -211,7 +211,7 @@ exports[`MobileNav Component Snapshot Tests matches snapshot for authenticated s
             data-testid="separator"
           />
           <div
-            class="flex items-center gap-3 px-4 py-3 bg-canvas border border-hairline rounded-md"
+            class="flex items-center gap-3 px-3 py-3 bg-canvas-soft border border-hairline rounded-sm"
           >
             <svg
               aria-hidden="true"
@@ -243,9 +243,9 @@ exports[`MobileNav Component Snapshot Tests matches snapshot for authenticated s
           </div>
           <button
             class="
-        flex items-center gap-3 w-full px-4 py-3 rounded-lg
+        flex items-center gap-3 w-full px-3 py-3 rounded-sm
         min-h-[44px] text-left transition-all duration-200
-        text-red-400 hover:bg-red-900/20
+        text-risk-danger hover:bg-risk-danger/10
         focus:outline-none focus-visible:ring-2 focus-visible:ring-primary
       "
           >
@@ -348,7 +348,7 @@ exports[`MobileNav Component Snapshot Tests matches snapshot for unauthenticated
         >
           <button
             class="
-        flex items-center gap-3 w-full px-4 py-3 rounded-lg
+        flex items-center gap-3 w-full px-3 py-3 rounded-sm
         min-h-[44px] text-left transition-all duration-200
         bg-canvas-soft text-primary
         focus:outline-none focus-visible:ring-2 focus-visible:ring-primary
@@ -382,7 +382,7 @@ exports[`MobileNav Component Snapshot Tests matches snapshot for unauthenticated
           </button>
           <button
             class="
-        flex items-center gap-3 w-full px-4 py-3 rounded-lg
+        flex items-center gap-3 w-full px-3 py-3 rounded-sm
         min-h-[44px] text-left transition-all duration-200
         text-mute hover:bg-canvas-soft hover:text-ink
         focus:outline-none focus-visible:ring-2 focus-visible:ring-primary
@@ -418,7 +418,7 @@ exports[`MobileNav Component Snapshot Tests matches snapshot for unauthenticated
           </button>
           <button
             class="
-        flex items-center gap-3 w-full px-4 py-3 rounded-lg
+        flex items-center gap-3 w-full px-3 py-3 rounded-sm
         min-h-[44px] text-left transition-all duration-200
         text-mute hover:bg-canvas-soft hover:text-ink
         focus:outline-none focus-visible:ring-2 focus-visible:ring-primary
@@ -460,7 +460,7 @@ exports[`MobileNav Component Snapshot Tests matches snapshot for unauthenticated
           />
           <button
             class="
-        flex items-center gap-3 w-full px-4 py-3 rounded-lg
+        flex items-center gap-3 w-full px-3 py-3 rounded-sm
         min-h-[44px] text-left transition-all duration-200
         text-mute hover:bg-canvas-soft hover:text-ink
         focus:outline-none focus-visible:ring-2 focus-visible:ring-primary
@@ -497,7 +497,7 @@ exports[`MobileNav Component Snapshot Tests matches snapshot for unauthenticated
           </button>
           <button
             class="
-        flex items-center gap-3 w-full px-4 py-3 rounded-lg
+        flex items-center gap-3 w-full px-3 py-3 rounded-sm
         min-h-[44px] text-left transition-all duration-200
         text-mute hover:bg-canvas-soft hover:text-ink
         focus:outline-none focus-visible:ring-2 focus-visible:ring-primary

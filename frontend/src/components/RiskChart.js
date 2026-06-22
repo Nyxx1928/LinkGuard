@@ -12,10 +12,10 @@ import {
 import { cn } from '../lib/utils';
 
 const defaultData = [
-  { name: 'Safe', value: 42, fill: '#7dd3fc' },
-  { name: 'Caution', value: 26, fill: '#0ea5e9' },
-  { name: 'Danger', value: 18, fill: '#0369a1' },
-  { name: 'Unknown', value: 14, fill: '#6b7280' },
+  { name: 'Safe', value: 42, fill: '#10b981' },
+  { name: 'Caution', value: 26, fill: '#f59e0b' },
+  { name: 'Danger', value: 18, fill: '#ef4444' },
+  { name: 'Unknown', value: 14, fill: '#8b949e' },
 ];
 
 const CustomTooltip = ({ active, payload, label }) => {
@@ -55,16 +55,16 @@ const RiskChart = ({ data = defaultData, className = '' }) => {
           <CartesianGrid stroke="rgba(148, 163, 184, 0.2)" vertical={false} />
           <XAxis
             dataKey="name"
-            tick={{ fill: '#94a3b8', fontSize: 12 }}
+            tick={{ fill: '#8b949e', fontSize: 12 }}
             axisLine={false}
             tickLine={false}
           />
           <YAxis
-            tick={{ fill: '#94a3b8', fontSize: 12 }}
+            tick={{ fill: '#8b949e', fontSize: 12 }}
             axisLine={false}
             tickLine={false}
           />
-          <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(148, 163, 184, 0.08)' }} />
+          <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(139, 148, 158, 0.1)' }} />
           <Bar dataKey="value" radius={[6, 6, 0, 0]}>
             {chartData.map((entry) => (
               <Cell key={entry.name} fill={entry.fill || '#38bdf8'} />

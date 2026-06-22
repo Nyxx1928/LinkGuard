@@ -109,7 +109,7 @@ const MobileNav = ({ isAuthenticated = false, onLogout = null, userName = null }
               isActive={isActive('/about')}
             />
 
-            <Separator className="my-4 bg-white/5" />
+            <Separator className="my-4 bg-hairline" />
 
             {/* Authentication Section */}
             {!isAuthenticated ? (
@@ -130,7 +130,7 @@ const MobileNav = ({ isAuthenticated = false, onLogout = null, userName = null }
             ) : (
               <>
                 {userName && (
-                  <div className="flex items-center gap-3 px-4 py-3 bg-canvas border border-hairline rounded-md">
+                  <div className="flex items-center gap-3 px-3 py-3 bg-canvas-soft border border-hairline rounded-sm">
                     <User className="h-5 w-5 text-mute" />
                     <span className="text-sm font-medium text-ink">
                       {userName}
@@ -169,12 +169,12 @@ const NavLink = ({ icon, label, onClick, isActive = false, variant = 'ghost' }) 
     <button
       onClick={onClick}
       className={`
-        flex items-center gap-3 w-full px-4 py-3 rounded-lg
+        flex items-center gap-3 w-full px-3 py-3 rounded-sm
         min-h-[44px] text-left transition-all duration-200
         ${isActive 
           ? 'bg-canvas-soft text-primary' 
           : variant === 'destructive'
-          ? 'text-red-400 hover:bg-red-900/20'
+          ? 'text-risk-danger hover:bg-risk-danger/10'
           : 'text-mute hover:bg-canvas-soft hover:text-ink'
         }
         focus:outline-none focus-visible:ring-2 focus-visible:ring-primary
