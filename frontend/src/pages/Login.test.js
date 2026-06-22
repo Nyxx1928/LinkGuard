@@ -29,7 +29,7 @@ describe('Login page', () => {
   });
 
   function setupLogin(setIsLoggedIn = jest.fn()) {
-    render(<Login setIsLoggedIn={setIsLoggedIn} />);
+    render(<Login setIsLoggedIn={setIsLoggedIn} setUser={jest.fn()} />);
     return setIsLoggedIn;
   }
 
