@@ -29,7 +29,7 @@ class IpApiProvider implements GeoProviderInterface
     /**
      * API endpoint for ip-api.com JSON API.
      */
-    private const API_ENDPOINT = 'http://ip-api.com/json/';
+    private const API_ENDPOINT = 'https://ip-api.com/json/';
 
     /**
      * Fields to request from the API.
@@ -67,7 +67,7 @@ class IpApiProvider implements GeoProviderInterface
             if (! $response->successful()) {
                 return new GeoResult(
                     status: 'fail',
-                    message: 'API request failed with status '.$response->status()
+                    message: 'Failed to fetch geolocation data'
                 );
             }
 
@@ -89,13 +89,13 @@ class IpApiProvider implements GeoProviderInterface
             // Handle HTTP request exceptions (timeouts, connection errors, etc.)
             return new GeoResult(
                 status: 'fail',
-                message: 'API request failed: '.$e->getMessage()
+                message: 'Failed to fetch geolocation data'
             );
         } catch (\Exception $e) {
             // Handle any other unexpected exceptions
             return new GeoResult(
                 status: 'fail',
-                message: 'Unexpected error: '.$e->getMessage()
+                message: 'Failed to fetch geolocation data'
             );
         }
     }
