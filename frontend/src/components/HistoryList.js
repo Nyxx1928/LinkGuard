@@ -51,7 +51,7 @@ const HistoryList = ({ onRefresh }) => {
       setHistory(prev => prev.filter(item => item.id !== id));
     } catch (err) {
       console.error('Failed to delete:', err);
-      alert('Failed to delete lookup');
+      setError('Failed to delete lookup');
     }
   };
 
@@ -62,7 +62,7 @@ const HistoryList = ({ onRefresh }) => {
 
   const handleEditSave = async (id) => {
     if (editLabel.length > 100) {
-      alert('Label must be 100 characters or less');
+      setError('Label must be 100 characters or less');
       return;
     }
 
@@ -75,7 +75,7 @@ const HistoryList = ({ onRefresh }) => {
       setEditLabel('');
     } catch (err) {
       console.error('Failed to update label:', err);
-      alert('Failed to update label');
+      setError('Failed to update label');
     }
   };
 
