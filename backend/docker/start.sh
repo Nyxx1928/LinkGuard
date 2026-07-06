@@ -3,7 +3,7 @@ set -e
 
 echo "==> Running Laravel startup tasks..."
 
-php artisan key:generate --force --no-interaction || true
+php artisan key:generate --no-interaction || true
 
 # Ensure Apache loads only one MPM; some base images re-enable event by default
 if command -v a2dismod >/dev/null 2>&1; then
