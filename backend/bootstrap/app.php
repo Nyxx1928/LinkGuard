@@ -23,10 +23,15 @@ return Application::configure(basePath: dirname(__DIR__))
 
         // Catch all exceptions and return safe, generic messages
         $exceptions->render(function (Throwable $e, Request $request) {
-            $status = method_exists($e, 'getStatusCode') ? $e->getStatusCode() : 500;
+            $status = match (true) {
+                method_exists($e, 'getStatusCode') => $e->getStatusCode(),
+                isset($e->statusCode) => $e->statusCode,
+                isset($e->status) => $e->status,
+                default => 500,
+            };
 
-            // Only expose validation and auth error details (Laravel exceptions)
-            if ($status < 500 && method_exists($e, 'getStatusCode')) {
+            // Only expose validation and auth error details (4xx status codes)
+            if ($status < 500) {
                 return response()->json([
                     'error' => true,
                     'message' => $e->getMessage(),
