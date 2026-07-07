@@ -1,184 +1,129 @@
 # Render Deployment Guide
 
-> **Current deployment:** Railway (`https://geotracker-production-b922.up.railway.app`)
-> **Target:** Migrate backend from Railway to Render
-
-## Prerequisites
-
-- Render account (sign up at https://render.com)
-- GitHub repo connected to Render
-- A free MySQL database from a third-party provider (see options below)
-
 ## Architecture
 
-| Service      | Provider   | Notes                                   |
-| ------------ | ---------- | --------------------------------------- |
-| **Backend**  | Render     | Laravel (Docker Web Service)            |
-| **Database** | 3rd-party  | Free MySQL from provider of your choice |
-| **Frontend** | Vercel     | Already deployed — update API URL       |
+| Service      | Provider   | URL                                        |
+| ------------ | ---------- | ------------------------------------------ |
+| **Frontend** | Vercel     | `https://link-guard-zero.vercel.app`       |
+| **Backend**  | Render     | `https://link-guard-api.onrender.com`      |
+| **Database** | TiDB Serverless | MySQL-compatible, provisioned via TiDB Cloud |
 
-## Free MySQL Providers (Recommendations)
+## How to Deploy / Redeploy
 
-| Provider        | Free Tier                           | Notes                                  |
-| --------------- | ----------------------------------- | -------------------------------------- |
-| **PlanetScale** | 1GB storage, 10M queries/month      | MySQL-compatible (Vitess). No credit card needed. Easiest option. |
-| **TiDB Serverless** | 5GB storage, 50M requests/month | MySQL-compatible. No credit card needed. |
-| **Aiven**       | 1GB storage, MySQL 8                | Requires credit card.                |
-| **AlwaysData**  | 100MB, 1 database                   | Basic, good for small projects.      |
-| **db4free.net** | 200MB, MySQL 8                      | For testing only — no SLA.           |
+### Prerequisites
 
-**Recommended: PlanetScale** — create a free database at https://planetscale.com, then grab the connection credentials (host, port, database name, username, password).
+- Render account (https://render.com)
+- GitHub repo connected to Render
+- TiDB Cloud account (https://tidbcloud.com)
 
-## Deployment Steps
+### Deployment Steps
 
-### 1. Create a Render Blueprint (render.yaml)
+1. Push changes to the `main` branch (or the branch connected to Render).
 
-Create `render.yaml` at the repo root (`C:\Users\echob\OneDrive\Desktop\JLabs3\render.yaml`):
+2. Render auto-deploys from the connected branch. Alternatively, trigger a manual deploy:
+   - Go to https://dashboard.render.com
+   - Select the `geotracker-api` service
+   - Click **Manual Deploy** → **Deploy latest commit**
 
-```yaml
-services:
-  - type: web
-    name: geotracker-api
-    env: docker
-    repo: https://github.com/YOUR_ORG/YOUR_REPO
-    dockerfilePath: ./backend/Dockerfile
-    dockerContext: ./backend
-    envVars:
-      - key: APP_ENV
-        value: production
-      - key: APP_DEBUG
-        value: "false"
-      - key: APP_URL
-        value: https://geotracker-api.onrender.com
-      - key: APP_KEY
-        sync: false
-      - key: FRONTEND_ORIGIN
-        value: https://geo-tracker-eight-blond.vercel.app
-      - key: FRONTEND_ORIGINS
-        value: https://geo-tracker-eight-blond.vercel.app
-      - key: SANCTUM_STATEFUL_DOMAINS
-        value: geo-tracker-eight-blond.vercel.app
-      - key: SESSION_DRIVER
-        value: database
-      - key: SESSION_SECURE_COOKIE
-        value: "true"
-      - key: SESSION_SAME_SITE
-        value: none
-      - key: DB_CONNECTION
-        value: mysql
-      - key: DB_HOST
-        value: YOUR_DB_HOST         # from your MySQL provider
-      - key: DB_PORT
-        value: "3306"
-      - key: DB_DATABASE
-        value: YOUR_DB_NAME         # from your MySQL provider
-      - key: DB_USERNAME
-        value: YOUR_DB_USER         # from your MySQL provider
-      - key: DB_PASSWORD
-        sync: false                 # set in dashboard
-      - key: CACHE_STORE
-        value: database
-      - key: QUEUE_CONNECTION
-        value: database
-      - key: LOG_CHANNEL
-        value: stack
-      - key: LOG_LEVEL
-        value: error
-```
+3. After deploy, run migrations if there are new ones:
 
-### 2. Generate APP_KEY
+   Via Render Shell (Dashboard → Service → Shell):
+   ```bash
+   php artisan migrate --force
+   ```
 
-Run locally from the `backend/` directory:
+   Or run remotely:
+   ```bash
+   curl -X POST https://link-guard-api.onrender.com/up
+   ```
 
-```bash
-php artisan key:generate --show
-```
+### Environment Variables (set in Render Dashboard)
 
-### 3. Set Up Your Free MySQL Database
+| Variable               | Value                                               |
+| ---------------------- | --------------------------------------------------- |
+| `APP_ENV`              | `production`                                        |
+| `APP_DEBUG`            | `false`                                             |
+| `APP_KEY`              | *(auto-generated, set via Render secret)*           |
+| `APP_URL`              | `https://link-guard-api.onrender.com`               |
+| `DB_CONNECTION`        | `mysql`                                             |
+| `DB_HOST`              | *(TiDB host, e.g. `gateway01.us-east-1.tidbcloud.com`)* |
+| `DB_PORT`              | `4000`                                              |
+| `DB_DATABASE`          | *(TiDB database name)*                              |
+| `DB_USERNAME`          | *(TiDB username)*                                   |
+| `DB_PASSWORD`          | *(TiDB password, set as secret)*                    |
+| `DB_SSLMODE`           | `required`                                          |
+| `FRONTEND_ORIGIN`      | `https://link-guard-zero.vercel.app`                 |
+| `FRONTEND_ORIGINS`     | `https://link-guard-zero.vercel.app`                 |
+| `SESSION_DRIVER`       | `database`                                          |
+| `SESSION_SECURE_COOKIE`| `true`                                              |
+| `SESSION_SAME_SITE`    | `none`                                              |
+| `CACHE_STORE`          | `database`                                          |
+| `QUEUE_CONNECTION`     | `database`                                          |
+| `LOG_LEVEL`            | `error`                                             |
+| `MAIL_MAILER`          | `smtp`                                              |
+| `MAIL_HOST`            | `smtp-relay.brevo.com`                              |
+| `MAIL_PORT`            | `587`                                               |
+| `MAIL_USERNAME`        | *(Brevo SMTP login)*                                |
+| `MAIL_PASSWORD`        | *(Brevo SMTP key, set as secret)*                   |
+| `MAIL_ENCRYPTION`      | `tls`                                               |
 
-**With PlanetScale (recommended):**
-1. Sign up at https://planetscale.com
-2. Create a new database
-3. Go to Settings → Passwords → Create password
-4. Copy the connection details (host, database name, username, password)
-5. Note: PlanetScale uses SSL — add `?ssl={"rejectUnauthorized":true}` or set `DB_SSLMODE=required` if needed
+## Frontend
 
-**With TiDB Serverless:**
-1. Sign up at https://tidbcloud.com
-2. Create a free cluster
-3. Go to Connect → Get connection string
-4. Use the provided host, port (4000), username, and password
+The frontend is deployed on **Vercel** at `https://link-guard-zero.vercel.app`.
 
-### 4. Deploy via Render Dashboard
-
-1. Go to https://dashboard.render.com
-2. Click **New +** → **Blueprint**
-3. Connect your GitHub repository
-4. Render will detect `render.yaml` and create the web service
-5. When prompted, set:
-   - `APP_KEY` — paste the value from step 2
-   - `DB_PASSWORD` — your MySQL provider's password
-   - Fill in `DB_HOST`, `DB_DATABASE`, `DB_USERNAME` with your provider's values
-6. Click **Apply**
-
-### 5. Allow Render IPs in Your Database Provider
-
-Most MySQL providers require allowlisting IPs. Add Render's outbound IPs:
-
-- `35.173.0.0/18` (us-east)
-- `54.235.0.0/16` (us-east)
-- Or use `0.0.0.0/0` for open access (not recommended for production)
-
-### 6. Run Migrations
-
-After deploy, open Render Shell (`https://dashboard.render.com → your service → Shell`):
-
-```bash
-php artisan migrate --force
-```
-
-### 7. Update Frontend API URL
-
-In `frontend/vercel.json`, change the Railway URL to the new Render URL:
-
+It points to the Render backend via the `REACT_APP_API_URL` env var in `frontend/vercel.json`:
 ```json
-"env": {
-  "REACT_APP_API_URL": "https://geotracker-api.onrender.com"
-}
+"REACT_APP_API_URL": "https://link-guard-api.onrender.com"
 ```
 
-Redeploy the frontend on Vercel.
+To redeploy the frontend after backend changes:
+- Push to the connected branch, or
+- Trigger a manual deploy in Vercel Dashboard
 
-### 8. Verify
+## TiDB Database Connection Details
+
+TiDB Serverless is fully MySQL-compatible but uses **port 4000** (not 3306) and **requires SSL**.
+
+Connection config in Render env vars:
+| Variable       | Example Value                                    |
+| -------------- | ------------------------------------------------ |
+| `DB_HOST`      | `gateway01.us-east-1.prod.aws.tidbcloud.com`     |
+| `DB_PORT`      | `4000`                                           |
+| `DB_DATABASE`  | Your TiDB database name                          |
+| `DB_USERNAME`  | Your TiDB username (e.g. `2hBzU4m2wB4Txxxx.root`) |
+| `DB_PASSWORD`  | Your TiDB password                                |
+| `DB_SSLMODE`   | `required`                                       |
+
+> **Note:** You can also use a full `DB_URL` instead of individual vars:
+> ```
+> DB_URL=mysql://username:password@host:4000/dbname?ssl-mode=VERIFY_IDENTITY
+> ```
+
+## Verification
 
 ```bash
-curl https://geotracker-api.onrender.com/api/health
+# Health check
+curl https://link-guard-api.onrender.com/api/health
+
+# Test a public endpoint
+curl https://link-guard-api.onrender.com/api/lookup/example.com
 ```
-
-## Post-Migration Cleanup
-
-1. **Remove Railway files** (optional but recommended):
-   - `backend/railway.json`
-   - `backend/railway.toml`
-   - `backend/RAILWAY_DEPLOYMENT.md`
-   - `backend/.railwayignore`
-
-2. **Remove Railway project** from https://railway.app
-
-3. **Update any docs** referencing the old Railway URL.
 
 ## Troubleshooting
 
 ### Build Fails
-- Verify `dockerfilePath: ./backend/Dockerfile` and `dockerContext: ./backend` are correct
-- Check Render build logs for errors
+- Check Render build logs: Dashboard → Service → Events
+- Verify Docker builds locally: `docker build -f backend/Dockerfile backend/`
 
 ### Database Connection Issues
-- Verify the credentials in Render environment variables
-- Ensure you've allowlisted Render IPs in your MySQL provider
-- PlanetScale/TiDB use SSL — if the connection fails, try adding `DB_SSLMODE=required` or `MYSQL_ATTR_SSL_CA` config
+- Ensure TiDB IP allowlist includes Render's outbound IP ranges:
+  - `35.173.0.0/18` (us-east)
+  - `54.235.0.0/16` (us-east)
+- TiDB requires SSL — `DB_SSLMODE=required` must be set
+- Verify credentials in Render Dashboard → Environment
 
 ### 500 Errors
-- Check Render logs: Dashboard → Service → Logs
+- Check Render runtime logs: Dashboard → Service → Logs
 - Ensure `APP_KEY` is set
 - Run `php artisan config:clear && php artisan config:cache` via Render Shell
+- Check TiDB has no storage limit issues (free tier: 5GB)
