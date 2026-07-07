@@ -43,7 +43,10 @@ class TimingSafeLoginTest extends TestCase
         ]);
 
         $response->assertStatus(422);
-        $response->assertJsonValidationErrors(['email']);
+        $response->assertJson([
+            'error' => true,
+            'message' => 'The provided credentials are incorrect.',
+        ]);
     }
 
     public function test_timing_safe_login_rejects_wrong_password(): void
@@ -59,7 +62,10 @@ class TimingSafeLoginTest extends TestCase
         ]);
 
         $response->assertStatus(422);
-        $response->assertJsonValidationErrors(['email']);
+        $response->assertJson([
+            'error' => true,
+            'message' => 'The provided credentials are incorrect.',
+        ]);
     }
 
     public function test_timing_safe_login_accepts_correct_password(): void
