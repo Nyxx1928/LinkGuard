@@ -21,6 +21,14 @@ return Application::configure(basePath: dirname(__DIR__))
             return $request->expectsJson() || $request->is('api/*');
         });
 
+        // Handle unauthenticated requests (auth:sanctum middleware)
+        $exceptions->render(function (\Illuminate\Auth\AuthenticationException $e, Request $request) {
+            return response()->json([
+                'error' => true,
+                'message' => 'Unauthenticated.',
+            ], 401);
+        });
+
         // Catch all exceptions and return safe, generic messages
         $exceptions->render(function (Throwable $e, Request $request) {
             $status = match (true) {

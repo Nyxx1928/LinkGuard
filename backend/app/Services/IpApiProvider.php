@@ -29,7 +29,7 @@ class IpApiProvider implements GeoProviderInterface
     /**
      * API endpoint for ip-api.com JSON API.
      */
-    private const API_ENDPOINT = 'https://ip-api.com/json/';
+    private const API_ENDPOINT = 'http://ip-api.com/json/';
 
     /**
      * Fields to request from the API.

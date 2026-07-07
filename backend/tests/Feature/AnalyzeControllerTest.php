@@ -39,7 +39,10 @@ class AnalyzeControllerTest extends TestCase
             ->postJson('/api/analyze', []);
 
         $response->assertStatus(422)
-            ->assertJsonValidationErrors(['target']);
+            ->assertJson([
+                'error' => true,
+                'message' => 'The target field is required.',
+            ]);
     }
 
     /**
