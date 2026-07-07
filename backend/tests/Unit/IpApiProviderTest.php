@@ -115,7 +115,7 @@ class IpApiProviderTest extends TestCase
         $this->assertEquals('fail', $result->status);
         $this->assertFalse($result->isSuccessful());
         $this->assertNotNull($result->message);
-        $this->assertStringContainsString('API request failed', $result->message);
+        $this->assertStringContainsString('Failed to fetch', $result->message);
     }
 
     /**
