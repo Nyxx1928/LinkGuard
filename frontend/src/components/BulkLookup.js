@@ -31,8 +31,7 @@ const BulkLookup = () => {
       .filter(t => t.length > 0);
 
     if (targets.length === 0) {
-      alert('Please enter at least one target');
-      return;
+      return; // Button is disabled when empty, but safeguard anyway
     }
 
     setLoading(true);
@@ -59,7 +58,7 @@ const BulkLookup = () => {
           return {
             success: false,
             target,
-            error: err.response?.data?.message || 'Failed to analyze',
+            error: 'Failed to analyze',
           };
         }
       });
@@ -94,8 +93,7 @@ const BulkLookup = () => {
    */
   const exportToCSV = () => {
     if (results.length === 0) {
-      alert('No results to export');
-      return;
+      return; // No results to export — button is conditionally rendered
     }
 
     // CSV header
@@ -129,10 +127,18 @@ const BulkLookup = () => {
       }
     });
 
-    // Combine headers and rows
+    // Combine headers and rows with proper CSV escaping
+    const escapeCsv = (val) => {
+      const str = String(val ?? '');
+      // Prevent CSV injection: prefix with apostrophe if starts with =, +, -, @
+      if (/^[=+\-@]/.test(str) && !str.startsWith("'")) {
+        return `"'${str.replace(/"/g, '""')}"`;
+      }
+      return `"${str.replace(/"/g, '""')}"`;
+    };
     const csvContent = [
       headers.join(','),
-      ...rows.map(row => row.map(cell => `"${cell}"`).join(',')),
+      ...rows.map(row => row.map(cell => escapeCsv(cell)).join(',')),
     ].join('\n');
 
     // Create download link

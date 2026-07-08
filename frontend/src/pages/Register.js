@@ -41,7 +41,7 @@ export default function Register({ setIsLoggedIn, setUser }) {
       setStep('otp');
       startResendCooldown();
     } catch (err) {
-      setError(err.response?.data?.message || 'Registration failed. Please try again.');
+      setError('Registration failed. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -84,7 +84,7 @@ export default function Register({ setIsLoggedIn, setUser }) {
       setIsLoggedIn(true);
       navigate('/home');
     } catch (err) {
-      setOtpError(err.response?.data?.message || 'Invalid code. Try again.');
+      setOtpError('Invalid code. Please try again.');
       setOtp(['', '', '', '', '', '']);
       otpRefs[0].current.focus();
     } finally {

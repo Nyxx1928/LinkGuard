@@ -27,13 +27,13 @@ Route::post('/analyze/public', [AnalyzeController::class, 'analyzePublic'])
     ->middleware('throttle:10,1');
 Route::get('/geo/public', function (Request $request) {
     $visitorIp = $request->ip();
-    $response = Http::get("http://ip-api.com/json/{$visitorIp}");
+    $response = Http::get("https://ip-api.com/json/{$visitorIp}");
 
     return response()->json($response->json(), $response->status());
 });
 
 // Proxy routes for ip-api.com — avoids browser CORS restrictions
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum', 'throttle:30,1'])->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/sessions/revoke-others', [SessionController::class, 'revokeOthers']);
@@ -50,14 +50,14 @@ Route::middleware('auth:sanctum')->group(function () {
     // Get current server/user IP geo
     Route::get('/geo', function (Request $request) {
         $visitorIp = $request->ip();
-        $response = Http::get("http://ip-api.com/json/{$visitorIp}");
+        $response = Http::get("https://ip-api.com/json/{$visitorIp}");
 
         return response()->json($response->json(), $response->status());
     });
 
     // Get geo for a specific IP
     Route::get('/geo/{ip}', function (string $ip) {
-        $response = Http::get("http://ip-api.com/json/{$ip}");
+        $response = Http::get("https://ip-api.com/json/{$ip}");
 
         return response()->json($response->json(), $response->status());
     });
